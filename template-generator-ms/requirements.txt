@@ -1,0 +1,9 @@
+chardet==5.2.0
+cssselect2==0.8.0
+lxml==5.3.2
+pillow==11.1.0
+qrcode==8.1
+reportlab==4.3.1
+svglib==1.5.1
+tinycss2==1.4.0
+webencodings==0.5.1

@@ -97,37 +97,33 @@ def calculate_question_response(contour, rows):
             x_center, y_center = center
             x_column, y_column = column
             distance = abs(x_center - x_column) + abs(y_center - y_column)
-            if distance <= 1:
-                return {"question": row_index, "response": columns[column_index]}
+            if distance <= 5:
+                return {"question": row_index, "response": columns[column_index], "center": center}
 
 
 # 7. Función principal
 def grade_exam(image_path):
-    # Preprocesamiento
     image, thresh = preprocess_image(image_path)
-    # Detección de bordes
     edges = detect_edges(thresh)
-    # # Encontrar contornos de opciones
     option_contours = find_option_contours(edges)
     contours_filled = find_contours_filled(option_contours, thresh)
     rows = group_questions(option_contours)
+    responses = []
     for c in contours_filled:
-        print(calculate_question_response(c, rows))
+        response = calculate_question_response(c, rows)
+        if response is not None:
+            responses.append(response)
     cv2.drawContours(image, contours_filled, -1, (0, 255, 0), 2)
 
-    row_index = 1
-    for row in rows:
-        index = 0
-        cv2.putText(image, f"{row_index}", (row[0][0]-50, row[0][1]), cv2.FONT_HERSHEY_SIMPLEX, 1, (0, 255, 0), 2)
-        index = index + 1
-        row_index = row_index + 1
-
+    for res in responses:
+        cv2.putText(image, f"{res.get('question')}", (res.get("center")[0]-50, res.get("center")[1]), cv2.FONT_HERSHEY_SIMPLEX, 1, (0, 0, 255), 2)
+        cv2.putText(image, f"{res.get('response')}", (res.get("center")[0]-30, res.get("center")[1]), cv2.FONT_HERSHEY_SIMPLEX, 1, (0, 0, 255), 2)
     cv2.imshow("result", image)
     cv2.waitKey(0)
     cv2.destroyAllWindows()
 
 # Ejecutar el programa
 if __name__ == "__main__":
-    path = os.path.join("./", "images", "IMG_20250316_165910.jpg")
+    path = os.path.join("./", "images", "test_04.png")
 
     grade_exam(path)
