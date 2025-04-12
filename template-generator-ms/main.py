@@ -14,7 +14,7 @@ def render_page(c:canvas.Canvas, students: List[Dict]) -> canvas.Canvas:
     for index, student in enumerate(students):
         student_info = {
             "student_id": student.get("student_id"),
-            "exam_id": student.get("exam_id"),
+            "template_response_id": student.get("template_response_id"),
             "group_id": student.get("group_id")}
         student_name = student.get("name","")
         if len(student_name)>LIMIT_CARACTERS:
@@ -55,7 +55,7 @@ def render_page(c:canvas.Canvas, students: List[Dict]) -> canvas.Canvas:
         c.drawString(x_reference, text_y - 40, f"{subject_name}")
         c.drawString(x_reference, text_y - 60, f"Fecha examen: {fecha_examen}")
 
-        c.drawImage("img/automatic-grader.drawio.png", x_reference - 30, -270)
+        c.drawImage("img/automatic-grader.jpg", x_reference - 30, -270)
         os.remove(qr_path)
 
     return c
@@ -65,7 +65,7 @@ if __name__ == "__main__":
     students = [{
         "name": "Luis Miguel Díaz Morales",
         "student_id": "43324234233444",
-        "exam_id": "fsdfasdf",
+        "template_response_id": "fsdfasdf",
         "group_id": "fasdfasdfasdf",
         "subject": "Administración de organizaciones",
         "date": "9 abril 2025"
@@ -73,7 +73,7 @@ if __name__ == "__main__":
         {
         "name": "Luis Jose Maria Cordoba Londoño uribe serrano",
         "student_id": "41234123412442",
-        "exam_id": "fsdfasdf",
+        "template_response_id": "fsdfasdf",
         "group_id": "fasdfasdfasdf",
         "subject": "Circuitos",
         "date": "9 abril 2025"
@@ -81,49 +81,9 @@ if __name__ == "__main__":
         {
         "name": "Ingri Yulieth Rojas",
         "student_id": "1423412342134",
-        "exam_id": "fsdfasdf",
+        "template_response_id": "fsdfasdf",
         "group_id": "fasdfasdfasdf",
         "subject": "Administración de organizaciones",
-        "date": "9 abril 2025"
-    },
-    {
-        "name": "Mai Nene",
-        "student_id": "43324234233444",
-        "exam_id": "fsdfasdf",
-        "group_id": "fasdfasdfasdf",
-        "subject": "Administración de organizaciones muy largo el nombre",
-        "date": "9 abril 2025"
-    },
-        {
-        "name": "Guaraná estereo",
-        "student_id": "41234123412442",
-        "exam_id": "fsdfasdf",
-        "group_id": "fasdfasdfasdf",
-        "subject": "Administración de organizaciones",
-        "date": "9 abril 2025"
-    },
-        {
-        "name": "Yoko ono",
-        "student_id": "1423412342134",
-        "exam_id": "fsdfasdf",
-        "group_id": "fasdfasdfasdf",
-        "subject": "Administración de organizaciones",
-        "date": "9 abril 2025"
-    },
-    {
-        "name": "Hipopotamo jose",
-        "student_id": "43324234233444",
-        "exam_id": "fsdfasdf",
-        "group_id": "fasdfasdfasdf",
-        "subject": "Administración de organizaciones muy largo el nombre",
-        "date": "9 abril 2025"
-    },
-        {
-        "name": "Lamborgini",
-        "student_id": "41234123412442",
-        "exam_id": "fsdfasdf",
-        "group_id": "fasdfasdfasdf",
-        "subject": "Introducción a la programación",
         "date": "9 abril 2025"
     }]
 
