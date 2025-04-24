@@ -61,3 +61,11 @@ async def create_students_group(file: UploadFile,
 async def get_groups_by_professor(professor_id: str,
                                   usecase: Annotated[IGroupUsecase, Depends(get_group_usecase)]) -> List[Group]:
     return usecase.get_groups(professor_id)
+
+
+@group_router.delete("/group", description="delete an specific group")
+async def delete_group(professor_id: str, period: str, group_name: str,
+                       usecase: Annotated[IGroupUsecase, Depends(get_group_usecase)]):
+    usecase.delete_group(professor_id=professor_id,
+                         group_name=group_name, period=period)
+    raise HTTPException(status_code=status.HTTP_204_NO_CONTENT)

@@ -6,11 +6,11 @@
     "configurations": [
 
         {
-            "name": "Launch Package",
-            "type": "go",
+            "name": "Python Debugger: Current File",
+            "type": "debugpy",
             "request": "launch",
-            "mode": "auto",
-            "program": "${workspaceFolder}/main.go",
+            "program": "${workspaceFolder}/main.py",
+            "console": "integratedTerminal",
             "envFile": "${workspaceFolder}/.env"
         }
     ]

@@ -12,7 +12,11 @@ class IGroupUsecase(ABC):
         pass
 
     @abstractmethod
-    def get_groups(self, professor_id: str)->List[Group]:
+    def get_groups(self, professor_id: str) -> List[Group]:
+        pass
+
+    @abstractmethod
+    def delete_group(self, professor_id: str, group_name: str, period: str):
         pass
 
 class GroupUsecase(IGroupUsecase):
@@ -24,3 +28,7 @@ class GroupUsecase(IGroupUsecase):
 
     def get_groups(self, professor_id: str):
         return self.group_db.get_groups(professor_id)
+
+    def delete_group(self, professor_id: str, group_name: str, period: str):
+        self.group_db.delete_group(professor_id=professor_id,
+                                   group_name=group_name, period=period)

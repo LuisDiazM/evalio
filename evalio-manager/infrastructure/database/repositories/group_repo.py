@@ -28,7 +28,7 @@ class GroupRepository(IGroupDbRepo):
         except Exception as e:
             return False
 
-    def get_groups(self, professor_id:str)-> List[Group]:
+    def get_groups(self, professor_id: str) -> List[Group]:
         try:
             cursor = self.coll.find({"professor_id": professor_id})
             results = []
@@ -37,3 +37,7 @@ class GroupRepository(IGroupDbRepo):
             return results
         except Exception as e:
             return []
+
+    def delete_group(self, professor_id: str, group_name: str, period: str):
+        self.coll.delete_one(
+            {"professor_id": professor_id, "name": group_name, "period": period})
