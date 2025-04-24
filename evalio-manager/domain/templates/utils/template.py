@@ -15,7 +15,8 @@ def render_page(c:canvas.Canvas, students: List[Dict]) -> canvas.Canvas:
         student_info = {
             "student_id": student.get("student_id"),
             "template_response_id": student.get("template_response_id"),
-            "group_id": student.get("group_id")}
+            "group_id": student.get("group_id"),
+            "student_name":student.get("name","")}
         student_name = student.get("name","")
         if len(student_name)>LIMIT_CARACTERS:
             student_name = student_name[:LIMIT_CARACTERS]
