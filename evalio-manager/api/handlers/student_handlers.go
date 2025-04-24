@@ -45,7 +45,6 @@ func AddStudents(studentService students.IStudentsService) fiber.Handler {
 		if err != nil {
 			return fiber.NewError(fiber.StatusInternalServerError, err.Error())
 		}
-
 		if err := studentService.CreateStudents(reader, groupId); err != nil {
 			return fiber.NewError(fiber.StatusInternalServerError, err.Error())
 		}
