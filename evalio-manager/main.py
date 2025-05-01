@@ -1,10 +1,9 @@
 import os
-import time
-
-from fastapi import APIRouter, FastAPI, Request
+from fastapi import APIRouter, FastAPI
 import uvicorn
 from presentation.controllers.template_controller import template_router
 from presentation.controllers.groups_controller import group_router
+from presentation.controllers.exams_controller import exams_router
 
 base = "manager"
 root = APIRouter(prefix=f"/{base}")
@@ -16,6 +15,7 @@ app = FastAPI(docs_url=f"/{base}/docs",
 
 root.include_router(template_router)
 root.include_router(group_router)
+root.include_router(exams_router)
 app.include_router(root)
 
 

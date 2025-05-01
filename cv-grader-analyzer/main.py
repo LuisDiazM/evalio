@@ -18,4 +18,4 @@ if __name__ == "__main__":
                                     summary_repo=summary_repo,
                                     logger=logger)
 
-    usecase.analyze("681392dc6f4cd587865ae0e1")
+    usecase.analyze("681402fedfa5d350c38ac963")

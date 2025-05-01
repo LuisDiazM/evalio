@@ -21,7 +21,7 @@ class TemplateResponsesRepository(ITemplateRepository):
         if response:
             try:
                 return TemplateResponses(**response)
-            except Exception as e:
+            except Exception:
                 return
 
     def get_templates_by_professor(self, professor_id: str) -> list[TemplateResponses]:
@@ -30,7 +30,7 @@ class TemplateResponsesRepository(ITemplateRepository):
         if response:
             try:
                 return [TemplateResponses(**template) for template in response]
-            except Exception as e:
+            except Exception:
                 return []
         return []
 
