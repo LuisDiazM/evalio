@@ -21,6 +21,17 @@
 ### 3.2. Vista física
 
 ### 3.3. Vista de procesos
+#### 3.3.1 Analizar una prueba
+El suscriptor del microservicio grader-analizer recibe la petición con la siguiente información:
+```
+{exam_id:str}
+```
+- Consulta en mongo el examen por el id en exams
+- Descarga la prueba por el path que se envía
+- Aplica el pipeline de procesamiento de imagenes
+- Consulta en mongo la plantilla de respuestas por el template_id que está almacenado en el exam_id
+- Compara las respuestas del OMR con las de la plantilla
+- Crea el documento summary_qualifications 
 
 ### 3.4. Vista de desarrollo
 
