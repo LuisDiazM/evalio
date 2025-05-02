@@ -8,6 +8,23 @@ from infrastructure.database.repositories.exams_repo import ExamsRepository
 from infrastructure.database.repositories.group_repo import GroupRepository
 from infrastructure.database.repositories.template_repo import TemplateResponsesRepository
 from infrastructure.logger.logger import StandardLogger
+from nats.aio.client import Client as NATS
+from infrastructure.messaging.const import EVENT_PROCESS_EXAM, STREAM_NAME
+from infrastructure.messaging.nats_publisher import NatsPublisher
+import os
+
+
+
+async def get_nats():
+    nc = NATS()
+    host = os.getenv("NATS_URL")
+    if host is None:
+        raise ValueError("NATS_URL environment variable is not set")
+    await nc.connect(host)
+    js = nc.jetstream()
+
+    await js.add_stream(name=STREAM_NAME, subjects=[EVENT_PROCESS_EXAM])
+    return NatsPublisher(nc)
 
 
 async def get_mongo():
@@ -42,5 +59,6 @@ async def get_group_usecase(group_repo=Depends(get_group_repo)):
 
 async def get_exam_usecase(exam_repo=Depends(get_exam_repo),
                            group_repo=Depends(get_group_repo),
-                           logger=Depends(get_logger)):
-    return ExamsUsecase(exam_repo=exam_repo, group_repo=group_repo, logger_repo=logger)
+                           logger=Depends(get_logger),
+                           nats=Depends(get_nats)):
+    return ExamsUsecase(exam_repo=exam_repo, group_repo=group_repo, logger_repo=logger, event_publisher=nats)

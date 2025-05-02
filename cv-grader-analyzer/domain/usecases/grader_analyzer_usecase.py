@@ -1,5 +1,6 @@
 from abc import ABC, abstractmethod
 import os
+import json
 from domain.entities.exams import Exam
 from domain.entities.summary_qualifications import Grade, SummaryQualifications
 from domain.entities.templates import TemplateResponses
@@ -13,7 +14,7 @@ from domain.usecases.utilities.omr import grade_exam
 
 class IGraderAnalyzerUseCase(ABC):
     @abstractmethod
-    def analyze(self, exam_id: str):
+    def analyze(self, message: str):
         pass
 
 
@@ -28,8 +29,11 @@ class GraderAnalyzerUsecase(IGraderAnalyzerUseCase):
         self.summary_repo = summary_repo
         self.logger = logger
 
-    def analyze(self, exam_id):
+    def analyze(self, message:str):
         try:
+            self.logger.info(f"message: {message}")
+            data = json.loads(message)
+            exam_id = data.get("exam_id")
             exam = self.exam_repo.get_exam_by_id(exam_id)
             if not exam:
                 return

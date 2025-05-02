@@ -10,3 +10,17 @@ services:
       MONGO_INITDB_ROOT_PASSWORD: 89c2ff58768d4d2afaa137f8
     volumes:
       - ./volumes/mongo-data:/data/db
+
+  nats:
+    image: nats:2.11.3
+    container_name: nats
+    ports:
+      - "4222:4222"  
+      - "8222:8222"     
+    command: [
+      "-js",                       
+      "-m", "8222",                 
+      "--store_dir", "/data/jetstream" 
+    ]
+    volumes:
+      - ./volumes/nats-data:/data/jetstream

@@ -30,7 +30,7 @@ async def create_exam(file: UploadFile,
         "student_name": student_name,
         "exam_path": str(file_location),
     }
-    exam = usecase.create_exam(request)
+    exam = await usecase.create_exam(request)
     if os.getenv("ENVIRONMENT", "local") != "local":
         try:
             os.remove(file_location)

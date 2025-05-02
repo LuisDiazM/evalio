@@ -3,14 +3,15 @@ from domain.templates.repositories.db_examp_repo import IExamRepository
 from abc import ABC, abstractmethod
 import os
 from pathlib import Path
-
+import json
 from domain.templates.repositories.db_group_repo import IGroupDbRepo
 from domain.templates.repositories.logger_repo import LoggerInterface
+from domain.templates.repositories.nats_bus import EventPublisher
 
 
 class IExamsUsecase(ABC):
     @abstractmethod
-    def create_exam(self, exam_data: dict):
+    async def create_exam(self, exam_data: dict):
         pass
 
 
@@ -18,12 +19,14 @@ class ExamsUsecase:
 
     def __init__(self, exam_repo: IExamRepository, 
                  group_repo: IGroupDbRepo,
-                 logger_repo: LoggerInterface):
+                 logger_repo: LoggerInterface,
+                 event_publisher:EventPublisher):
         self.exam_repo = exam_repo
         self.group_repo = group_repo
         self.logger_repo = logger_repo
+        self.event_publisher = event_publisher
 
-    def create_exam(self, exam_data: dict) -> Exam | None:
+    async def create_exam(self, exam_data: dict) -> Exam | None:
         """
         Create an exam in the database.
         :param exam_data: Dictionary containing exam data.
@@ -36,6 +39,7 @@ class ExamsUsecase:
             exam_id = self.exam_repo.create_exam(exam=exam)
             if exam_id is None:
                 return
+            await self.event_publisher.publish(json.dumps({"exam_id": exam_id}))
             return exam
         except Exception as e:
             self.logger_repo.error(f"Error creating exam: {str(e)}")
