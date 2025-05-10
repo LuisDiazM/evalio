@@ -1,0 +1,18 @@
+nav {
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  align-items: center;
+  h5:hover {
+    cursor: pointer;
+    color: var(--focus-highlight);
+  }
+  h5:active {
+    color: var(--links);
+  }
+  span {
+    display: flex;
+    gap: 10px;
+  }
+}

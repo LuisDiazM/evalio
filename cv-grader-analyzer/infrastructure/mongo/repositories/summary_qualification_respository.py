@@ -7,7 +7,7 @@ class SummaryQualificationRepository(ISumaryRepository):
 
     def __init__(self, mongo: MongoDB):
         db = mongo.client.get_database("manager")
-        self.collection = db.get_collection("summary_qualification")
+        self.collection = db.get_collection("summary_qualifications")
 
     def update_summary_qualification(self, summary_qualification: SummaryQualifications):
         try:

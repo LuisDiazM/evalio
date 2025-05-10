@@ -10,6 +10,7 @@ class Question(BaseModel):
 
 
 class TemplateResponses(BaseModel):
+    id: str = ""
     professor_id: str
     created_at: datetime = datetime.now(pytz.timezone("America/Bogota"))
     questions: List[Question]

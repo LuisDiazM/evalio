@@ -14,8 +14,8 @@ class Grade(BaseModel):
 class SummaryQualifications(BaseModel):
     group_id: str
     number: int
+    id: str
     period: str
-    template_id: str = ""
     created_at: datetime = datetime.now(timezone("America/Bogota"))
     updated_at: datetime = datetime.now(timezone("America/Bogota"))
     students: List[Grade] = []

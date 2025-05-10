@@ -69,3 +69,10 @@ async def delete_group(professor_id: str, period: str, group_name: str,
     usecase.delete_group(professor_id=professor_id,
                          group_name=group_name, period=period)
     raise HTTPException(status_code=status.HTTP_204_NO_CONTENT)
+
+@group_router.get("/group", description="get group by id")
+async def get_group_by_id(id:str, usecase: Annotated[IGroupUsecase, Depends(get_group_usecase)])->Group:
+    group = usecase.get_group_by_id(group_id=id)
+    if group is None:
+        raise HTTPException(status_code=status.HTTP_204_NO_CONTENT, detail="Group not found")
+    return group

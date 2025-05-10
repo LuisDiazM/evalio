@@ -10,6 +10,7 @@ class Student(BaseModel):
 
 
 class Group(BaseModel):
+    id: str = ""
     name: str
     period: str
     subject_name: str

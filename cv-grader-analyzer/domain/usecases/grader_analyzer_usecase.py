@@ -69,7 +69,7 @@ class GraderAnalyzerUsecase(IGraderAnalyzerUseCase):
         return SummaryQualifications(
             group_id=exam.group_id,
             number=template_response.number,
-            id=exam.id,
+            template_id=exam.template_id,
             period=exam.period,
             students=[Grade(**{
                 "score": score,

@@ -35,7 +35,7 @@ class GroupRepository(IGroupDbRepo):
             cursor = self.coll.find({"professor_id": professor_id})
             results = []
             for data in cursor:
-                results.append(Group(**data))
+                results.append(Group(id=str(data.get("_id")), **data))
             return results
         except Exception as e:
             return []

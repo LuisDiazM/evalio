@@ -1,0 +1,56 @@
+[
+    {
+        "id": "6814000eeb77bfbe595b4d0d",
+        "professor_id": "123412341234",
+        "created_at": "2025-05-01T23:04:18.692000",
+        "questions": [
+            {
+                "question": 1,
+                "answer": "A"
+            },
+            {
+                "question": 2,
+                "answer": "B"
+            },
+            {
+                "question": 3,
+                "answer": "C"
+            },
+            {
+                "question": 4,
+                "answer": "D"
+            },
+            {
+                "question": 5,
+                "answer": "D"
+            },
+            {
+                "question": 6,
+                "answer": "A"
+            },
+            {
+                "question": 7,
+                "answer": "C"
+            },
+            {
+                "question": 8,
+                "answer": "D"
+            },
+            {
+                "question": 9,
+                "answer": "A"
+            },
+            {
+                "question": 10,
+                "answer": "C"
+            },
+            {
+                "question": 11,
+                "answer": "B"
+            }
+        ],
+        "subject_name": "GESTIONES ADMINISTRATIVAS",
+        "period": "2025-1",
+        "number": 1
+    }
+]

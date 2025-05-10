@@ -19,6 +19,10 @@ class IGroupUsecase(ABC):
     def delete_group(self, professor_id: str, group_name: str, period: str):
         pass
 
+    @abstractmethod
+    def get_group_by_id(self, group_id:str):
+        pass
+
 class GroupUsecase(IGroupUsecase):
     def __init__(self, group_db: IGroupDbRepo):
         self.group_db = group_db
@@ -32,3 +36,6 @@ class GroupUsecase(IGroupUsecase):
     def delete_group(self, professor_id: str, group_name: str, period: str):
         self.group_db.delete_group(professor_id=professor_id,
                                    group_name=group_name, period=period)
+
+    def get_group_by_id(self, group_id:str):
+        return self.group_db.get_group_by_id(group_id)

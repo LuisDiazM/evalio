@@ -20,7 +20,7 @@ class TemplateResponsesRepository(ITemplateRepository):
         response = self.coll.find_one(filter)
         if response:
             try:
-                return TemplateResponses(**response)
+                return TemplateResponses(**response, id=str(response.get("_id")))
             except Exception:
                 return
 
@@ -29,7 +29,7 @@ class TemplateResponsesRepository(ITemplateRepository):
         response = self.coll.find(filter)
         if response:
             try:
-                return [TemplateResponses(**template) for template in response]
+                return [TemplateResponses(**template, id=str(template.get("_id"))) for template in response]
             except Exception:
                 return []
         return []

@@ -1,0 +1,30 @@
+.container {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: center;
+  margin-top: 30px;
+  gap: 10px;
+  flex-wrap: wrap;
+  overflow: auto;
+  height: 100%;
+  padding-top: 10px;
+  padding-bottom: 10px;
+}
+.card-group {
+  border: 1px solid var(--shadow-color);
+  width: 290px;
+  text-overflow: ellipsis;
+  border-radius: 10px;
+  text-align: center;
+}
+.card-group:hover {
+  transform: scale(1.03);
+  box-shadow: 0 6px 18px rgba(0, 0, 0, 0.15);
+  z-index: 1;
+  overflow: hidden;
+  transform-origin: center;
+  cursor: pointer;
+  border: 3px solid var(--shadow-color);
+
+}
