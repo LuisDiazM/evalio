@@ -14,12 +14,14 @@ template_router = APIRouter(
 
 
 @template_router.get("/template", description="Useful to generate template for response sheets, produce a pdf with the students")
-async def generate_template(group_name: str, period: str,
-                            professor_id: str, template_id: str,
+async def generate_template(group_id: str,  template_id: str,
                             usecase: Annotated[ITemplatesUsecase, Depends(get_template_usecase)]):
-    input_usecase = InputGenTemplate(group_name=group_name, period=period,
-                                     professor_id=professor_id, template_id=template_id)
+
+    input_usecase = InputGenTemplate(
+        group_id=group_id, template_id=template_id)
     template_temp = usecase.generate_template(input_usecase)
+    if template_temp == "":
+        raise HTTPException(status_code=status.HTTP_204_NO_CONTENT)
     template_path = Path(template_temp)
     if template_path.exists():
         content = template_path.read_bytes()
@@ -28,29 +30,31 @@ async def generate_template(group_name: str, period: str,
             content=content,
             media_type="application/pdf",
             headers={
-                "Content-Disposition": f"attachment; filename={group_name}-template.pdf"}
+                "Content-Disposition": f"attachment; filename={group_id}-template.pdf"}
         )
-    raise HTTPException(status_code=status.HTTP_500_INTERNAL_SERVER_ERROR)
+
 
 @template_router.post("/template", description="Useful to create a template for response sheets")
 async def create_template(template: TemplateResponses,
-                           usecase: Annotated[ITemplatesUsecase, Depends(get_template_usecase)]):
+                          usecase: Annotated[ITemplatesUsecase, Depends(get_template_usecase)]):
     template_response = usecase.create_template_response(template)
     if template_response:
         return template_response
     raise HTTPException(status_code=status.HTTP_500_INTERNAL_SERVER_ERROR)
 
+
 @template_router.get("/template/{template_id}", description="Useful to get a template")
 async def get_template(template_id: str,
-                        usecase: Annotated[ITemplatesUsecase, Depends(get_template_usecase)]):
+                       usecase: Annotated[ITemplatesUsecase, Depends(get_template_usecase)]):
     template_response = usecase.get_template_by_id(template_id)
     if template_response:
         return template_response
     raise HTTPException(status_code=status.HTTP_204_NO_CONTENT)
 
+
 @template_router.get("/templates", description="Useful to get all templates by professor")
-async def get_templates(professor_id:str, usecase: Annotated[ITemplatesUsecase, Depends(get_template_usecase)]):
-    templates = usecase.get_templates_by_professor(professor_id)
-    if len(templates)> 0:
+async def get_templates(group_id: str, usecase: Annotated[ITemplatesUsecase, Depends(get_template_usecase)]):
+    templates = usecase.get_templates_by_group(group_id)
+    if len(templates) > 0:
         return templates
     raise HTTPException(status_code=status.HTTP_204_NO_CONTENT)

@@ -48,6 +48,6 @@ class GroupRepository(IGroupDbRepo):
         try:
             result = self.coll.find_one({"_id": ObjectId(group_id)})
             if result:
-                return Group(**result)
+                return Group(id= str(result.get("_id")),**result)
         except Exception:
             return

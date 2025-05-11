@@ -26,7 +26,7 @@ class ITemplatesUsecase(ABC):
         pass
 
     @abstractmethod
-    def get_templates_by_professor(self, professor_id: str) -> List[TemplateResponses]:
+    def get_templates_by_group(self, group_id: str) -> List[TemplateResponses]:
         pass
 
     @abstractmethod
@@ -44,19 +44,20 @@ class TemplateUsecase(ITemplatesUsecase):
 
     def generate_template(self, input) -> str:
         try:
-            group = self.group_db.get_group(group_name=input.group_name,
-                                            professor_id=input.professor_id,
-                                            period=input.period)
+            group = self.group_db.get_group_by_id(input.group_id)
+            if group is None:
+                self.logger.error(f"group {input.group_id} does not exists" )
+                return ""
             group_students = group.students
             students = []
             if len(group_students) == 0:
-                return ""
+                raise ValueError(f"group {input.group_id} does not have students")
             for student in group_students:
                 data = {
                     "name": student.name,
                     "student_id": student.identification,
                     "template_response_id": input.template_id,
-                    "group_id": group.name,
+                    "group_id": group.id,
                     "subject": group.subject_name,
                     "date": input.date
                 }
@@ -72,7 +73,7 @@ class TemplateUsecase(ITemplatesUsecase):
             c.save()
             return output_path
         except Exception as e:
-            self.logger.error(f"error generating template for group {input.group_name}")
+            self.logger.error(f"error generating template for group {input.group_id}")
             return ""
 
     def get_template_by_id(self, template_id: str) -> TemplateResponses | None:
@@ -86,8 +87,8 @@ class TemplateUsecase(ITemplatesUsecase):
             return template_response
         return
 
-    def get_templates_by_professor(self, professor_id: str) -> List[TemplateResponses]:
-        return self.template_db.get_templates_by_professor(professor_id)
+    def get_templates_by_group(self, group_id: str) -> List[TemplateResponses]:
+        return self.template_db.get_templates_by_group(group_id)
 
     def delete_template(self, template_id: str):
         self.template_db.delete_template_response(template_id)

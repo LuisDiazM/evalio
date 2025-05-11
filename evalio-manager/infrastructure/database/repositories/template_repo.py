@@ -10,7 +10,9 @@ class TemplateResponsesRepository(ITemplateRepository):
 
     def create_template_response(self, template_response: TemplateResponses) -> str:
         try:
-            result = self.coll.insert_one(template_response.model_dump())
+            data = template_response.model_dump()
+            data.pop("id")
+            result = self.coll.insert_one(data)
             return str(result.inserted_id)
         except Exception:
             return ""
@@ -24,8 +26,8 @@ class TemplateResponsesRepository(ITemplateRepository):
             except Exception:
                 return
 
-    def get_templates_by_professor(self, professor_id: str) -> list[TemplateResponses]:
-        filter = {"professor_id": professor_id}
+    def get_templates_by_group(self, group_id: str) -> list[TemplateResponses]:
+        filter = {"group_id": group_id}
         response = self.coll.find(filter)
         if response:
             try:

@@ -8,21 +8,21 @@ class SummaryQualificationsRepository(ISummaryQualificationsRepository):
     def __init__(self, mongo: Mongo):
         self.coll = mongo.db.get_collection("summary_qualifications")
 
-    def get_qualification_by_group_and_number(self, group_id: str, number: int) -> SummaryQualifications | None:
+    def get_qualification_by_group(self, group_id: str) -> SummaryQualifications | None:
         try:
             result = self.coll.find_one(
-                {"group_id": group_id, "number": number}
+                {"group_id": group_id}
             )
             if result is None:
                 return
-            return SummaryQualifications(**result)
+            return SummaryQualifications( id=str(result.get("_id")), **result)
         except Exception as e:
             raise ValueError(f"error getting qualification {str(e)}")
 
-    def delete_qualification_by_group_and_number(self, group_id: str, number: int) -> None:
+    def delete_qualification_by_group(self, group_id: str) -> None:
         try:
             self.coll.delete_one(
-                {"group_id": group_id, "number": number}
+                {"group_id": group_id}
             )
         except Exception as e:
             pass

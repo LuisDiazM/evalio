@@ -13,7 +13,7 @@ class ITemplateRepository(ABC):
         pass
 
     @abstractmethod
-    def get_templates_by_professor(self, professor_id: str) -> list[TemplateResponses]:
+    def get_templates_by_group(self, professor_id: str) -> list[TemplateResponses]:
         pass
 
     @abstractmethod

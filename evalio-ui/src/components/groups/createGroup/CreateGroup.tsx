@@ -1,4 +1,4 @@
-import { useState, type FormEvent } from 'react';
+import React, { useState, type FormEvent } from 'react';
 import './createGroup.css';
 
 interface FormFieldsGroup {
@@ -7,9 +7,12 @@ interface FormFieldsGroup {
   subjectName: string;
   file: File | null;
 }
-const CreateGroup = () => {
-  const [errorForm, setErrorForm] = useState<string>('');
 
+interface CreateGroupProps {
+  setIsOpenCreateGroup: React.Dispatch<React.SetStateAction<boolean>>;
+}
+const CreateGroup: React.FC<CreateGroupProps> = ({ setIsOpenCreateGroup }) => {
+  const [errorForm, setErrorForm] = useState<string>('');
   const handleSubmit = (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault();
     const fields = Object.fromEntries(
@@ -20,6 +23,7 @@ const CreateGroup = () => {
       setErrorForm('El formulario no puede tener ningún campo vacío');
     } else {
       setErrorForm('');
+      setIsOpenCreateGroup(false);
     }
     if (file?.type != 'text/csv') {
       setErrorForm(`el archivo ${file?.name} debe ser csv`);
@@ -76,6 +80,7 @@ const CreateGroup = () => {
         <button type='submit'>Crear grupo</button>
       </form>
       {errorForm != '' && <p>{errorForm}</p>}
+      <button onClick={() => setIsOpenCreateGroup(false)}> Regresar </button>
     </>
   );
 };

@@ -1,5 +1,5 @@
+import { Link } from 'react-router';
 import './navbar.css';
-
 
 const Navbar = () => {
   return (
@@ -7,8 +7,7 @@ const Navbar = () => {
       <nav>
         <h2>Evalio</h2>
         <span>
-          <h5>Configuraciones</h5>
-          <h5>Salir</h5>
+          <Link to='/groups'>Grupos</Link>
         </span>
       </nav>
     </>

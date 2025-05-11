@@ -17,3 +17,4 @@ class TemplateResponses(BaseModel):
     subject_name: str
     period: str
     number: int
+    group_id: str = ""

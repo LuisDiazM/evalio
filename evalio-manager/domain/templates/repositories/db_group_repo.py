@@ -7,7 +7,7 @@ from domain.templates.entities.group import Group
 class IGroupDbRepo(ABC):
 
     @abstractmethod
-    def get_group(self, group_name: str, professor_id: str, period: str) -> Group | None:
+    def get_group(self, group_id: str, professor_id: str, period: str) -> Group | None:
         pass
 
     @abstractmethod
