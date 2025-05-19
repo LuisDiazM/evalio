@@ -1,5 +1,5 @@
 from typing import Annotated, List
-from fastapi import APIRouter, Depends, Form, HTTPException, UploadFile, status
+from fastapi import APIRouter, Depends, Form, HTTPException, Header, UploadFile, status
 from io import BytesIO
 import pandas as pd
 
@@ -29,10 +29,13 @@ async def create_students_group(file: UploadFile,
                                 name: Annotated[str, Form()],
                                 period: Annotated[str, Form()],
                                 subject_name: Annotated[str, Form()],
-                                professor_id: Annotated[str, Form()],
-                                professor_name: Annotated[str, Form()],
-                                usecase: Annotated[IGroupUsecase, Depends(get_group_usecase)]):
-    is_valid_file = validate_file(file.content_type, file.size)
+                                usecase: Annotated[IGroupUsecase, Depends(get_group_usecase)],
+                                professor_id: str = Header(None),
+                                professor_name: str = Header(None)
+                                ):
+    content_type = file.content_type if file.content_type is not None else ""
+    file_size = file.size if file.size is not None else 0
+    is_valid_file = validate_file(content_type, file_size)
     if not is_valid_file:
         raise HTTPException(status_code=status.HTTP_400_BAD_REQUEST,
                             detail=f"only support {ALLOWED_FORMATS} and max {MAX_SIZE} bytes")
@@ -58,8 +61,9 @@ async def create_students_group(file: UploadFile,
 
 
 @group_router.get("/groups", description="get the groups by professor id")
-async def get_groups_by_professor(professor_id: str,
-                                  usecase: Annotated[IGroupUsecase, Depends(get_group_usecase)]) -> List[Group]:
+async def get_groups_by_professor(
+    usecase: Annotated[IGroupUsecase, Depends(get_group_usecase)],
+        professor_id: str = Header(None)) -> List[Group]:
     return usecase.get_groups(professor_id)
 
 
@@ -70,9 +74,11 @@ async def delete_group(professor_id: str, period: str, group_name: str,
                          group_name=group_name, period=period)
     raise HTTPException(status_code=status.HTTP_204_NO_CONTENT)
 
+
 @group_router.get("/group", description="get group by id")
-async def get_group_by_id(id:str, usecase: Annotated[IGroupUsecase, Depends(get_group_usecase)])->Group:
+async def get_group_by_id(id: str, usecase: Annotated[IGroupUsecase, Depends(get_group_usecase)]) -> Group:
     group = usecase.get_group_by_id(group_id=id)
     if group is None:
-        raise HTTPException(status_code=status.HTTP_204_NO_CONTENT, detail="Group not found")
+        raise HTTPException(
+            status_code=status.HTTP_204_NO_CONTENT, detail="Group not found")
     return group

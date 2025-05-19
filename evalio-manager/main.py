@@ -5,15 +5,26 @@ from presentation.controllers.template_controller import template_router
 from presentation.controllers.groups_controller import group_router
 from presentation.controllers.exams_controller import exams_router
 from presentation.controllers.summary_controller import summary_router
+from fastapi.middleware.cors import CORSMiddleware
 
 base = "manager"
 root = APIRouter(prefix=f"/{base}")
+origins = [
+    "*"
+]
+
 
 app = FastAPI(docs_url=f"/{base}/docs",
-    redoc_url=f"/{base}/redoc",
-    openapi_url=f"/{base}/openapi.json")
+              redoc_url=f"/{base}/redoc",
+              openapi_url=f"/{base}/openapi.json")
 
-
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=origins,
+    allow_credentials=True,
+    allow_methods=["*"],
+    allow_headers=["*"],
+)
 root.include_router(template_router)
 root.include_router(group_router)
 root.include_router(exams_router)

@@ -1,45 +1,65 @@
+import { useEffect, useState } from 'react';
 import Navbar from '../../navbar/navbar';
-import templates from '../mockTemplates.json';
 import './template.css';
 
-import { useParams } from 'react-router';
+import { useNavigate, useParams } from 'react-router';
+import { getTemplateById } from '../../../services/manager/managerService';
+import type { Template } from '../../../services/manager/entities/templates';
 
-const Template = () => {
-  const template = templates[0];
-
+const TemplateView = () => {
+  // const template = templates[0];
+  const navigate = useNavigate();
   const { id } = useParams<{ id: string }>();
+  const [template, setTemplate] = useState<Template | null>(null);
+  useEffect(() => {
+    if (id) {
+      getTemplateById(id).then((data) => {
+        setTemplate(data);
+      });
+    }
+    return () => {};
+  }, [id]);
+
+  const handleQualifications = (id: string | undefined) => {
+    if (id) {
+      navigate(`/qualification/template/${id}`);
+    }
+  };
 
   return (
     <>
       <Navbar></Navbar>
       <div className='container-template'>
         <div>
-        <h5>Hojas de respuestas para estudiantes</h5>
-        <button>Generar</button>
-
+          <h5>Hojas de respuestas para estudiantes</h5>
+          <button>Generar</button>
         </div>
 
         <div className='template-card'>
-          <div key={template.id}>
+          <button onClick={() => handleQualifications(id)}>
+            Ver calificaciones
+          </button>
+          <div key={template?.id}>
             <h5>
               {' '}
-              Materia <strong>{template.subject_name} </strong>{' '}
+              Materia <strong>{template?.subject_name} </strong>{' '}
             </h5>
             <h5>
               {' '}
-              Periodo <strong>{template.period}</strong>
+              Periodo <strong>{template?.period}</strong>
             </h5>
             <h5>
               {' '}
-              Corte <strong># {template.number}</strong>
+              Corte <strong># {template?.number}</strong>
             </h5>
             <h5>
               {' '}
-              Cantidad de preguntas <strong>{template.questions.length}</strong>
+              Cantidad de preguntas{' '}
+              <strong>{template?.questions.length}</strong>
             </h5>
           </div>
           <div className='questions-list'>
-            {template.questions.map((question, index) => {
+            {template?.questions.map((question, index) => {
               return (
                 <div key={`${id}-${index}`} className='container-responses'>
                   <div className='question-number'> {question.question} </div>
@@ -93,4 +113,4 @@ const Template = () => {
   );
 };
 
-export default Template;
+export default TemplateView;

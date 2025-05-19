@@ -1,13 +1,33 @@
-import { useNavigate } from 'react-router';
-import templates from './../mockTemplates.json';
+import { useNavigate, useParams } from 'react-router';
+// import templates from './../mockTemplates.json';
 import './listTemplates.css';
 import Navbar from '../../navbar/navbar';
+import { useEffect, useState } from 'react';
+import { getTemplatesByGroup } from '../../../services/manager/managerService';
+import type { Template } from '../../../services/manager/entities/templates';
 const ListTemplates = () => {
+  const { id } = useParams<{ id: string }>();
+
   const navigate = useNavigate();
+
+  const handleCreateTemplate = (groupId: string | undefined) => {
+    if (groupId) {
+      navigate(`/template/group/${groupId}`);
+    }
+  };
 
   const handleCardClick = (id: string) => {
     navigate(`/template/${id}`);
   };
+  const [templates, setTemplates] = useState<Template[]>([]);
+  useEffect(() => {
+    if (id) {
+      getTemplatesByGroup(id).then((data) => {
+        setTemplates(data);
+      });
+    }
+    return () => {};
+  }, [id]);
 
   return (
     <>
@@ -16,7 +36,9 @@ const ListTemplates = () => {
         <div className='templates-header'>
           <h4>Plantillas de parciales</h4>
           <h5>Escoja su plantilla para ver la información detallada</h5>
-          <button>Registrar plantilla</button>
+          <button onClick={() => handleCreateTemplate(id)}>
+            Registrar plantilla
+          </button>
         </div>
         <div className='container-templates'>
           {templates.map((template) => {

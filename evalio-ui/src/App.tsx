@@ -4,7 +4,9 @@ import Group from './components/groups/listGroup/viewGroup/Group';
 
 import { createBrowserRouter, RouterProvider } from 'react-router';
 import ListTemplates from './components/templates/listTemplates/ListTemplates';
-import Template from './components/templates/templateview/Template';
+import TemplateView from './components/templates/templateview/Template';
+import TemplateForm from './components/templates/templateForm/TemplateForm';
+import QualificationView from './components/qualifications/qualification/Qualification';
 const router = createBrowserRouter([
   { path: '/', element: <ListGroup></ListGroup>, index: true },
   {
@@ -13,8 +15,16 @@ const router = createBrowserRouter([
   },
   { path: '/group/:id', element: <Group></Group> },
   { path: '/group/:id/templates', element: <ListTemplates></ListTemplates> },
-  { path: '/templates', element: <ListTemplates></ListTemplates> },
-  { path: '/template/:id', element: <Template></Template> },
+  {
+    path: '/templates/group/:groupId',
+    element: <ListTemplates></ListTemplates>,
+  },
+  { path: '/template/group/:groupId', element: <TemplateForm></TemplateForm> },
+  { path: '/template/:id', element: <TemplateView></TemplateView> },
+  {
+    path: '/qualification/template/:id',
+    element: <QualificationView></QualificationView>,
+  },
 ]);
 function App() {
   return (

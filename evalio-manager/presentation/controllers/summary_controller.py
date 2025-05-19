@@ -11,10 +11,10 @@ summary_router = APIRouter(
 )
 
 
-@summary_router.get("/summary", description="Useful to get a summary qualifications consolidated by group and exams")
-async def get_summary(group_id: str,
+@summary_router.get("/summary", description="Useful to get a summary qualifications consolidated by templat")
+async def get_summary(template_id: str,
                       usecase: Annotated[ISummaryQualificationsUsecase, Depends(get_summary_usecase)]):
-    summary = usecase.get_summary(group_id=group_id)
+    summary = usecase.get_summary(template_id=template_id)
     if summary:
         return summary
     raise HTTPException(status_code=status.HTTP_204_NO_CONTENT)

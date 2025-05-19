@@ -4,7 +4,7 @@ from abc import ABC, abstractmethod
 
 class ISummaryQualificationsUsecase(ABC):
     @abstractmethod
-    def get_summary(self, group_id: str) -> SummaryQualifications | None:
+    def get_summary(self, template_id: str) -> SummaryQualifications | None:
         pass
 
     @abstractmethod
@@ -15,8 +15,8 @@ class SummaryUsecase:
     def __init__(self, db_summary_repo: ISummaryQualificationsRepository):
         self.db_summary_repo = db_summary_repo
 
-    def get_summary(self, group_id: str) -> SummaryQualifications | None:
-        return self.db_summary_repo.get_qualification_by_group(group_id)
+    def get_summary(self, template_id: str) -> SummaryQualifications | None:
+        return self.db_summary_repo.get_qualification_by_template(template_id)
 
     def delete_summary(self, group_id:str):
         return self.db_summary_repo.delete_qualification_by_group(group_id)

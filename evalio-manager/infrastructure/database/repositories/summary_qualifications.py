@@ -8,10 +8,10 @@ class SummaryQualificationsRepository(ISummaryQualificationsRepository):
     def __init__(self, mongo: Mongo):
         self.coll = mongo.db.get_collection("summary_qualifications")
 
-    def get_qualification_by_group(self, group_id: str) -> SummaryQualifications | None:
+    def get_qualification_by_template(self, template_id: str) -> SummaryQualifications | None:
         try:
             result = self.coll.find_one(
-                {"group_id": group_id}
+                {"template_id": template_id}
             )
             if result is None:
                 return

@@ -1,20 +1,15 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import Navbar from '../../navbar/navbar';
 import './listGroup.css';
-import groups from './mockGroups.json';
 import { useNavigate } from 'react-router';
 import CreateGroup from '../createGroup/CreateGroup';
-const parseDate = (date: string) => {
-  try {
-    const locaDate = new Date(date).toLocaleString('es-ES');
-    return locaDate.slice(1);
-  } catch {
-    return '';
-  }
-};
+import { getGroupsByProfessor } from '../../../services/manager/managerService';
+import type { Groups } from '../../../services/manager/entities/groups';
 
 const ListGroup = () => {
   const navigate = useNavigate();
+  const [groups, setGroups] = useState<Groups[]>([]);
+  const [reload, setReload] = useState<string>("")
   const handleOpenGroup = (id: string) => {
     navigate(`/group/${id}`);
   };
@@ -22,6 +17,13 @@ const ListGroup = () => {
   const handleCreateGroup = () => {
     setIsOpenCreateGroup(true);
   };
+
+  useEffect(() => {
+    getGroupsByProfessor().then((data) => {
+      setGroups([...data]);
+    });
+    return () => {};
+  },[reload]);
   return (
     <>
       <Navbar></Navbar>
@@ -46,10 +48,7 @@ const ListGroup = () => {
                     <strong>{group.subject_name} </strong>
                   </h5>
                   <h5>{group.name}</h5>
-                  <h5>
-                    Fecha creación{' '}
-                    <strong>{parseDate(group.created_at)} </strong>
-                  </h5>
+
                   <h5>
                     Periodo académico: <strong>{group.period}</strong>
                   </h5>
@@ -61,6 +60,7 @@ const ListGroup = () => {
         {isOpenCreateGroup && (
           <CreateGroup
             setIsOpenCreateGroup={setIsOpenCreateGroup}
+            setReload={setReload}
           ></CreateGroup>
         )}
       </div>

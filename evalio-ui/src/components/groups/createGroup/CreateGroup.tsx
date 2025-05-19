@@ -1,5 +1,6 @@
 import React, { useState, type FormEvent } from 'react';
 import './createGroup.css';
+import { createGroup } from '../../../services/manager/managerService';
 
 interface FormFieldsGroup {
   groupName: string;
@@ -10,8 +11,12 @@ interface FormFieldsGroup {
 
 interface CreateGroupProps {
   setIsOpenCreateGroup: React.Dispatch<React.SetStateAction<boolean>>;
+  setReload: React.Dispatch<React.SetStateAction<string>>;
 }
-const CreateGroup: React.FC<CreateGroupProps> = ({ setIsOpenCreateGroup }) => {
+const CreateGroup: React.FC<CreateGroupProps> = ({
+  setIsOpenCreateGroup,
+  setReload,
+}) => {
   const [errorForm, setErrorForm] = useState<string>('');
   const handleSubmit = (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault();
@@ -22,8 +27,18 @@ const CreateGroup: React.FC<CreateGroupProps> = ({ setIsOpenCreateGroup }) => {
     if (groupName == '' || period == '' || subjectName == '' || file == null) {
       setErrorForm('El formulario no puede tener ningún campo vacío');
     } else {
-      setErrorForm('');
-      setIsOpenCreateGroup(false);
+      const formData = new FormData();
+      formData.append('file', file);
+      formData.append('name', groupName);
+      formData.append('subject_name', subjectName);
+      formData.append('period', period);
+      createGroup(formData).then((data) => {
+        if (data != null) {
+          setReload(data.subject_name);
+          setErrorForm('');
+          setIsOpenCreateGroup(false);
+        }
+      });
     }
     if (file?.type != 'text/csv') {
       setErrorForm(`el archivo ${file?.name} debe ser csv`);
@@ -54,7 +69,7 @@ const CreateGroup: React.FC<CreateGroupProps> = ({ setIsOpenCreateGroup }) => {
             placeholder='Gestiones administrativas'
           ></input>
         </label>
-        <label>
+        <label id='csv-group'>
           Listado de estudiantes CSV, por ejemplo:
           <span className='tooltip-trigger'></span>
           <table>

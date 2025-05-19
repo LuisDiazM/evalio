@@ -29,3 +29,9 @@ p {
   color: var(--color-red);
   font-size:small;
 }
+
+#csv-group{
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+}

@@ -10,9 +10,9 @@ class GroupRepository(IGroupDbRepo):
     def __init__(self, mongo: Mongo):
         self.coll = mongo.db.get_collection("groups")
 
-    def get_group(self, group_name: str, professor_id: str, period: str) -> Group | None:
+    def get_group(self, group_id: str, professor_id: str, period: str) -> Group | None:
         result = self.coll.find_one(
-            {"name": group_name, "period": period, "professor_id": professor_id})
+            {"name": group_id, "period": period, "professor_id": professor_id})
         if result:
             try:
                 return Group(**result)
@@ -22,10 +22,12 @@ class GroupRepository(IGroupDbRepo):
 
     def create_group(self, group: Group) -> bool:
         try:
+            data = group.model_dump()
+            data.pop("id")
             result = self.coll.find_one_and_update(
-                {"name": group.name, "period": group.period, "professor_id": group.professor_id}, {"$set": group.model_dump()})
+                {"name": group.name, "period": group.period, "professor_id": group.professor_id}, {"$set": data})
             if result is None:
-                self.coll.insert_one(group.model_dump())
+                self.coll.insert_one(data)
             return True
         except Exception as e:
             return False
@@ -48,6 +50,6 @@ class GroupRepository(IGroupDbRepo):
         try:
             result = self.coll.find_one({"_id": ObjectId(group_id)})
             if result:
-                return Group(id= str(result.get("_id")),**result)
+                return Group(id=str(result.get("_id")), **result)
         except Exception:
             return
