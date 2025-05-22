@@ -68,10 +68,10 @@ async def get_groups_by_professor(
 
 
 @group_router.delete("/group", description="delete an specific group")
-async def delete_group(professor_id: str, period: str, group_name: str,
-                       usecase: Annotated[IGroupUsecase, Depends(get_group_usecase)]):
-    usecase.delete_group(professor_id=professor_id,
-                         group_name=group_name, period=period)
+async def delete_group(group_id: str,
+                       usecase: Annotated[IGroupUsecase, Depends(get_group_usecase)],
+                       professor_id: str = Header(None)):
+    usecase.delete_group(group_id)
     raise HTTPException(status_code=status.HTTP_204_NO_CONTENT)
 
 

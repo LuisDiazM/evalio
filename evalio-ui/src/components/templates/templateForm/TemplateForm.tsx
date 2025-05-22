@@ -1,20 +1,23 @@
 import { useNavigate, useParams } from 'react-router';
 import Navbar from '../../navbar/navbar';
 import './templateForm.css';
-import { useRef, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
+import type { CreateTemplate } from '../../../services/manager/entities/templates';
+import {
+  createTemplate,
+  getGroupById,
+} from '../../../services/manager/managerService';
+import type { Groups } from '../../../services/manager/entities/groups';
 
 const TemplateForm = () => {
   const { groupId } = useParams<{ groupId: string }>();
-  console.log(groupId);
   const navigate = useNavigate();
 
   const answerOptions = ['A', 'B', 'C', 'D'];
-  const subjectForm = useRef<HTMLInputElement>(null);
-  const periodForm = useRef<HTMLInputElement>(null);
   const testNumberForm = useRef<HTMLSelectElement>(null);
   const [questionNumber, setQuestionNumber] = useState<number>(0);
   const defaultQuestions = [...Array(questionNumber).keys()];
-
+  const [group, setGroup] = useState<Groups | null>(null);
   const [studentResponses, setStudentResponses] = useState<{
     [questionId: number]: string;
   }>({});
@@ -22,11 +25,26 @@ const TemplateForm = () => {
     event.preventDefault();
 
     const testNumber = testNumberForm.current?.value;
-    const subject = subjectForm.current?.value;
-    const period = subjectForm.current?.value;
 
-    if (testNumber && subject && period && questionNumber > 0) {
-      navigate(`/templates/group/${groupId}`);
+    if (groupId && testNumber && questionNumber > 0) {
+      const questions = Object.entries(studentResponses).map(
+        ([key, value]) => ({
+          question: Number(key),
+          answer: value,
+        })
+      );
+      const templateData: CreateTemplate = {
+        group_id: groupId,
+        number: parseInt(testNumber, 10),
+        period: group?.period ? group.period : '',
+        subject_name: group?.subject_name ? group.subject_name : '',
+        questions,
+      };
+      createTemplate(templateData).then((data) => {
+        if (data != null) {
+          navigate(`/group/${groupId}/templates`);
+        }
+      });
     }
   };
 
@@ -42,19 +60,20 @@ const TemplateForm = () => {
     setQuestionNumber(questions);
   };
 
+  useEffect(() => {
+    if (groupId) {
+      getGroupById(groupId).then((data) => {
+        setGroup(data);
+      });
+    }
+    return () => {};
+  }, [groupId]);
+
   return (
     <>
       <Navbar />
       <div className='container-template'>
         <form onSubmit={handleSubmit} className='template-card'>
-          <label>
-            Materia
-            <input ref={subjectForm} name='subject' key={0} type='text'></input>
-          </label>
-          <label>
-            Periodo
-            <input ref={periodForm} key={1} name='period'></input>
-          </label>
           <label>
             Corte
             <select ref={testNumberForm} name='number'>

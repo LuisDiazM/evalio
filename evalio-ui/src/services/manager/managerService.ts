@@ -1,7 +1,7 @@
 import api from '../api';
 import type { Groups } from './entities/groups';
 import type { Qualification } from './entities/qualifications';
-import type { Template } from './entities/templates';
+import type { CreateTemplate, Template } from './entities/templates';
 
 export async function getGroupsByProfessor(): Promise<Groups[]> {
   const request = await api.get('/groups');
@@ -72,4 +72,51 @@ export async function getSummaryByTemplateId(
   }
   const template = request.data as Qualification;
   return template;
+}
+
+export async function createTemplate(
+  templateData: CreateTemplate
+): Promise<CreateTemplate | null> {
+  const request = await api.post('/template', templateData);
+  if (request.status != 200) {
+    return null;
+  }
+  return templateData;
+}
+
+export async function deleteGroupById(groupId: string) {
+  await api.delete('/group', {
+    params: {
+      group_id: groupId,
+    },
+  });
+}
+
+export async function deleteTemplateById(templateId: string) {
+  await api.delete('/template', {
+    params: {
+      template_id: templateId,
+    },
+  });
+}
+
+export async function getTemplateSheet(
+  groupId: string,
+  templateId: string
+): Promise<null> {
+  const response = await api.get('/template', {
+    params: {
+      group_id: groupId,
+      template_id: templateId,
+    },
+    responseType: 'blob',
+  });
+
+  if (response.status != 200) {
+    return null;
+  }
+  const file = new Blob([response.data], { type: 'application/pdf' });
+  const fileURL = URL.createObjectURL(file);
+  window.open(fileURL);
+  return null;
 }

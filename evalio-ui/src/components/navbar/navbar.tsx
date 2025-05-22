@@ -6,9 +6,14 @@ const Navbar = () => {
     <>
       <nav>
         <h2>Evalio</h2>
-        <span>
-          <Link to='/groups'>Grupos</Link>
-        </span>
+        <div className='menu'>
+          <span>
+            <Link to='/groups'>Grupos</Link>
+          </span>
+          <span>
+            <Link to='/evaluation'>Parciales</Link>
+          </span>
+        </div>
       </nav>
     </>
   );

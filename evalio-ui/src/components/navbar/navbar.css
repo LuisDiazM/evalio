@@ -18,3 +18,9 @@ nav {
     gap: 10px;
   }
 }
+
+.menu {
+  display: flex;
+  gap: 10px;
+  flex-wrap: wrap;
+}

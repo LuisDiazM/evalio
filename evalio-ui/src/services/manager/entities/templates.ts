@@ -13,3 +13,11 @@ export interface Question {
   question: number;
   answer: string;
 }
+
+export interface CreateTemplate {
+  subject_name: string;
+  period: string;
+  number: number;
+  group_id: string;
+  questions: Question[];
+}

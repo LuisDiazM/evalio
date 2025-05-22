@@ -3,13 +3,16 @@ import Navbar from '../../navbar/navbar';
 import './listGroup.css';
 import { useNavigate } from 'react-router';
 import CreateGroup from '../createGroup/CreateGroup';
-import { getGroupsByProfessor } from '../../../services/manager/managerService';
+import {
+  deleteGroupById,
+  getGroupsByProfessor,
+} from '../../../services/manager/managerService';
 import type { Groups } from '../../../services/manager/entities/groups';
-
+import deleteICon from '../../../assets/icons8-delete.svg';
 const ListGroup = () => {
   const navigate = useNavigate();
   const [groups, setGroups] = useState<Groups[]>([]);
-  const [reload, setReload] = useState<string>("")
+  const [reload, setReload] = useState<string>('');
   const handleOpenGroup = (id: string) => {
     navigate(`/group/${id}`);
   };
@@ -23,7 +26,14 @@ const ListGroup = () => {
       setGroups([...data]);
     });
     return () => {};
-  },[reload]);
+  }, [reload]);
+
+  const handleDeleteGroup = (groupId: string) => {
+    deleteGroupById(groupId).then();
+    const newGroups = groups.filter((data) => data.id != groupId);
+    setGroups([...newGroups]);
+  };
+
   return (
     <>
       <Navbar></Navbar>
@@ -39,19 +49,24 @@ const ListGroup = () => {
           <div className='container-groups'>
             {groups.map((group) => {
               return (
-                <div
-                  key={group.id}
-                  className='card-group'
-                  onClick={() => handleOpenGroup(group.id)}
-                >
-                  <h5>
-                    <strong>{group.subject_name} </strong>
-                  </h5>
-                  <h5>{group.name}</h5>
+                <div key={group.id}>
+                  <div
+                    className='card-group'
+                    onClick={() => handleOpenGroup(group.id)}
+                  >
+                    <h5>
+                      <strong>{group.subject_name} </strong>
+                    </h5>
+                    <h5>{group.name}</h5>
 
-                  <h5>
-                    Periodo académico: <strong>{group.period}</strong>
-                  </h5>
+                    <h5>
+                      Periodo académico: <strong>{group.period}</strong>
+                    </h5>
+                  </div>
+                  <img
+                    onClick={() => handleDeleteGroup(group.id)}
+                    src={deleteICon}
+                  ></img>
                 </div>
               );
             })}

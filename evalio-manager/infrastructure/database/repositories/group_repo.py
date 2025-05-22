@@ -42,9 +42,9 @@ class GroupRepository(IGroupDbRepo):
         except Exception as e:
             return []
 
-    def delete_group(self, professor_id: str, group_name: str, period: str):
+    def delete_group(self, group_id: str):
         self.coll.delete_one(
-            {"professor_id": professor_id, "name": group_name, "period": period})
+            {"_id": ObjectId(group_id)})
 
     def get_group_by_id(self, group_id: str) -> Group | None:
         try:

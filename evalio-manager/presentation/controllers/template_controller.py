@@ -1,5 +1,5 @@
 from typing import Annotated
-from fastapi import APIRouter, Depends, Response, HTTPException, status
+from fastapi import APIRouter, Depends, Header, Response, HTTPException, status
 from pathlib import Path
 import os
 from app.dependency_injection import get_template_usecase
@@ -36,8 +36,11 @@ async def generate_template(group_id: str,  template_id: str,
 
 @template_router.post("/template", description="Useful to create a template for response sheets")
 async def create_template(template: TemplateResponses,
-                          usecase: Annotated[ITemplatesUsecase, Depends(get_template_usecase)]):
-    template_response = usecase.create_template_response(template)
+                          usecase: Annotated[ITemplatesUsecase, Depends(get_template_usecase)],
+                          professor_id: str = Header(None),):
+    temp = template.model_copy()
+    temp.professor_id = professor_id
+    template_response = usecase.create_template_response(temp)
     if template_response:
         return template_response
     raise HTTPException(status_code=status.HTTP_500_INTERNAL_SERVER_ERROR)
@@ -58,3 +61,9 @@ async def get_templates(group_id: str, usecase: Annotated[ITemplatesUsecase, Dep
     if len(templates) > 0:
         return templates
     raise HTTPException(status_code=status.HTTP_204_NO_CONTENT)
+
+
+@template_router.delete("/template", description="Useful to delete a template by Id", status_code=status.HTTP_204_NO_CONTENT)
+async def delete_template(template_id: str,  usecase: Annotated[ITemplatesUsecase, Depends(get_template_usecase)],
+                          professor_id: str = Header(None)):
+    usecase.delete_template(template_id)

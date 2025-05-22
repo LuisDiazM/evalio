@@ -19,7 +19,7 @@ class IGroupDbRepo(ABC):
         pass
 
     @abstractmethod
-    def delete_group(self, professor_id: str, group_name: str, period: str):
+    def delete_group(self, group_id:str):
         pass
 
     @abstractmethod

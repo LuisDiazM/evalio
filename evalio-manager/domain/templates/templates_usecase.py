@@ -46,7 +46,7 @@ class TemplateUsecase(ITemplatesUsecase):
         try:
             group = self.group_db.get_group_by_id(input.group_id)
             if group is None:
-                self.logger.error(f"group {input.group_id} does not exists" )
+                # self.logger.error(f"group {input.group_id} does not exists" )
                 return ""
             group_students = group.students
             students = []
@@ -68,12 +68,12 @@ class TemplateUsecase(ITemplatesUsecase):
             students_group = [tuple(students[i:i+3])
                               for i in range(0, len(students), 3)]
             for student_group in students_group:
-                render_page(c, student_group)
+                render_page(c, list(student_group))
                 c.showPage()
             c.save()
             return output_path
         except Exception as e:
-            self.logger.error(f"error generating template for group {input.group_id}")
+            # self.logger.error(f"error generating template for group {input.group_id}")
             return ""
 
     def get_template_by_id(self, template_id: str) -> TemplateResponses | None:

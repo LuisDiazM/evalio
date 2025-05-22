@@ -3,7 +3,10 @@ import Navbar from '../../navbar/navbar';
 import './template.css';
 
 import { useNavigate, useParams } from 'react-router';
-import { getTemplateById } from '../../../services/manager/managerService';
+import {
+  getTemplateById,
+  getTemplateSheet,
+} from '../../../services/manager/managerService';
 import type { Template } from '../../../services/manager/entities/templates';
 
 const TemplateView = () => {
@@ -26,13 +29,28 @@ const TemplateView = () => {
     }
   };
 
+  const handleGenerateTemplateSheets = (
+    groupId: string | undefined,
+    templateId: string | undefined
+  ) => {
+    if (groupId && templateId) {
+      getTemplateSheet(groupId, templateId).then();
+    }
+  };
+
   return (
     <>
       <Navbar></Navbar>
       <div className='container-template'>
         <div>
           <h5>Hojas de respuestas para estudiantes</h5>
-          <button>Generar</button>
+          <button
+            onClick={() =>
+              handleGenerateTemplateSheets(template?.group_id, template?.id)
+            }
+          >
+            Generar
+          </button>
         </div>
 
         <div className='template-card'>
