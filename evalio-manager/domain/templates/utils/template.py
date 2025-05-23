@@ -23,7 +23,7 @@ def render_page(c: canvas.Canvas, students: List[Dict]) -> canvas.Canvas:
         if len(student_name) > LIMIT_CARACTERS:
             student_name = student_name[:LIMIT_CARACTERS]
         student_id = student.get("student_id")
-        subject_name = student.get("subject")
+        subject_name = student.get("subject", "")
 
         fecha_examen = student.get("date")
         if len(subject_name) > LIMIT_CARACTERS:
@@ -41,7 +41,7 @@ def render_page(c: canvas.Canvas, students: List[Dict]) -> canvas.Canvas:
         qr_data = str(student_info)
         qr = qrcode.make(qr_data)
         qr_buffer = io.BytesIO()
-        qr.save(qr_buffer, format="PNG")
+        qr.save(qr_buffer)
         qr_buffer.seek(0)
         qr_image = Image.open(qr_buffer)
         qr_path = f"temp/{student_name}_{student_id}.png"
@@ -77,7 +77,7 @@ if __name__ == "__main__":
     # Canvas reference to make pdf
     output_path = "temp/responses_sheet.pdf"
     c = canvas.Canvas(output_path, pagesize=letter)
-    students_group = [tuple(students[i:i+3])
+    students_group = [students[i:i+3]
                       for i in range(0, len(students), 3)]
     for student_group in students_group:
         render_page(c, student_group)

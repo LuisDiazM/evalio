@@ -1,3 +1,4 @@
+from typing import List
 from domain.templates.entities.exams import Exam
 from domain.templates.repositories.db_examp_repo import IExamRepository
 from abc import ABC, abstractmethod
@@ -14,6 +15,9 @@ class IExamsUsecase(ABC):
     async def create_exam(self, exam_data: dict):
         pass
 
+    @abstractmethod
+    def get_exams_by_template(self, template_id:str) -> List[Exam]:
+        pass
 
 class ExamsUsecase:
 
@@ -39,7 +43,7 @@ class ExamsUsecase:
             exam_id = self.exam_repo.create_exam(exam=exam)
             if exam_id is None:
                 return
-            await self.event_publisher.publish(json.dumps({"exam_id": exam_id}))
+            await self.event_publisher.publish(data=json.dumps({"exam_id": exam_id})) # type: ignore
             return exam
         except Exception as e:
             self.logger_repo.error(f"Error creating exam: {str(e)}")
@@ -51,14 +55,23 @@ class ExamsUsecase:
             group_id = exam_data.get("group_id")
             student_name = exam_data.get("student_name")
             file_location = exam_data.get("exam_path")
-            if not all([student_id, template_id, group_id, student_name, file_location]):
+            if group_id is None or student_id is None or template_id is None or student_name is None:
                 return
+            if not isinstance(template_id, str):
+                template_id = str(template_id)
             if os.getenv("ENVIRONMENT", "local") == "local":
-                localtion = Path(file_location)
-                abs_path = os.path.abspath(localtion)
+                if file_location is None:
+                    return
+                location = Path(str(file_location))
+                abs_path = os.path.abspath(location)
+                if abs_path is None:
+                    return
+                abs_path = str(abs_path)
             else:
                 # logica para un storage en la nube por ahora solo guarda local
-                abs_path = file_location
+                if file_location is None:
+                    return
+                abs_path = str(file_location)
             group = self.group_repo.get_group_by_id(group_id)
             if group is None:
                 return
@@ -73,3 +86,6 @@ class ExamsUsecase:
                         )
         except Exception as e:
             raise ValueError(f"Error creating exam: {str(e)}")
+
+    def get_exams_by_template(self, template_id:str) -> List[Exam]:
+        return self.exam_repo.get_exams_by_template(template_id)

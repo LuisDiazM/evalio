@@ -29,6 +29,12 @@ const TemplateView = () => {
     }
   };
 
+  const handleEvaluations = (id: string | undefined) => {
+    if (id && template) {
+      navigate(`/evaluations/group/${template?.group_id}/template/${id}`);
+    }
+  };
+
   const handleGenerateTemplateSheets = (
     groupId: string | undefined,
     templateId: string | undefined
@@ -44,19 +50,24 @@ const TemplateView = () => {
       <div className='container-template'>
         <div>
           <h5>Hojas de respuestas para estudiantes</h5>
-          <button
-            onClick={() =>
-              handleGenerateTemplateSheets(template?.group_id, template?.id)
-            }
-          >
-            Generar
-          </button>
         </div>
 
         <div className='template-card'>
-          <button onClick={() => handleQualifications(id)}>
-            Ver calificaciones
-          </button>
+          <div className='template-settings'>
+            <button
+              onClick={() =>
+                handleGenerateTemplateSheets(template?.group_id, template?.id)
+              }
+            >
+              Imprimir
+            </button>
+            <button onClick={() => handleQualifications(id)}>
+              Ver calificaciones
+            </button>
+            <button onClick={() => handleEvaluations(id)}>
+              Ver estado de calificaciones
+            </button>
+          </div>
           <div key={template?.id}>
             <h5>
               {' '}

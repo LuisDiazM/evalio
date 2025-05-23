@@ -5,6 +5,7 @@ from reportlab.pdfgen import canvas
 
 from domain.templates.entities.input_group import InputGenTemplate
 from domain.templates.entities.template_responses import Question, TemplateResponses
+from domain.templates.repositories.db_examp_repo import IExamRepository
 from domain.templates.repositories.db_group_repo import IGroupDbRepo
 from domain.templates.repositories.db_template_repo import ITemplateRepository
 from domain.templates.repositories.logger_repo import LoggerInterface
@@ -37,9 +38,11 @@ class ITemplatesUsecase(ABC):
 class TemplateUsecase(ITemplatesUsecase):
     def __init__(self, group_repo: IGroupDbRepo,
                  template_repo: ITemplateRepository,
+                 exam_repo: IExamRepository,
                  logger=LoggerInterface):
         self.group_db = group_repo
         self.template_db = template_repo
+        self.exam_repo = exam_repo
         self.logger = logger
 
     def generate_template(self, input) -> str:
@@ -51,7 +54,8 @@ class TemplateUsecase(ITemplatesUsecase):
             group_students = group.students
             students = []
             if len(group_students) == 0:
-                raise ValueError(f"group {input.group_id} does not have students")
+                raise ValueError(
+                    f"group {input.group_id} does not have students")
             for student in group_students:
                 data = {
                     "name": student.name,
@@ -92,3 +96,4 @@ class TemplateUsecase(ITemplatesUsecase):
 
     def delete_template(self, template_id: str):
         self.template_db.delete_template_response(template_id)
+        self.exam_repo.delete_exams_by_template(template_id)

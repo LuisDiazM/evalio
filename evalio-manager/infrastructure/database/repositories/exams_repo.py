@@ -1,3 +1,4 @@
+from typing import List
 from domain.templates.entities.exams import Exam
 from domain.templates.repositories.db_examp_repo import IExamRepository
 from infrastructure.database.mongo_imp import Mongo
@@ -25,3 +26,21 @@ class ExamsRepository(IExamRepository):
                 return str(result["_id"])
         except Exception as e:
             raise ValueError(f"error creating exam {str(e)}")
+
+    def get_exams_by_template(self, template_id: str) -> List[Exam]:
+        filter = {"template_id": template_id}
+        response = self.coll.find(filter)
+        if response:
+            try:
+                return [Exam(**exam) for exam in response]
+            except Exception:
+                return []
+        return []
+
+    def delete_exams_by_template(self, template_id: str):
+        filter = {"template_id": template_id}
+        self.coll.delete_many(filter)
+
+    def delete_exams_by_group(self, group_id: str):
+        filter = {"group_id": group_id}
+        self.coll.delete_many(filter)

@@ -1,5 +1,5 @@
 from typing import Annotated
-from fastapi import APIRouter, Depends, Form, HTTPException, Path, UploadFile, status
+from fastapi import APIRouter, Depends, Form, HTTPException, Header, Path, UploadFile, status
 import shutil
 import os
 from app.dependency_injection import get_exam_usecase
@@ -18,7 +18,8 @@ async def create_exam(file: UploadFile,
                       template_response_id: Annotated[str, Form()],
                       group_id: Annotated[str, Form()],
                       student_name: Annotated[str, Form()],
-                      usecase: Annotated[IExamsUsecase, Depends(get_exam_usecase)]) -> Exam:
+                      usecase: Annotated[IExamsUsecase, Depends(get_exam_usecase)],
+                      professor_id: str = Header(None)) -> Exam:
 
     file_location = f"temp/{file.filename}"
     with open(file_location, "wb") as buffer:
@@ -39,3 +40,12 @@ async def create_exam(file: UploadFile,
     if exam is None:
         raise HTTPException(status_code=status.HTTP_204_NO_CONTENT)
     return exam
+
+
+@exams_router.get("/exams", description="Useful to get all exams by template")
+async def delete_template(template_id: str,  usecase: Annotated[IExamsUsecase, Depends(get_exam_usecase)],
+                          professor_id: str = Header(None)):
+    exams = usecase.get_exams_by_template(template_id)
+    if len(exams) == 0:
+        raise HTTPException(status_code=status.HTTP_204_NO_CONTENT)
+    return exams

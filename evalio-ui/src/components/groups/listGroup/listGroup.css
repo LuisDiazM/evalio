@@ -12,14 +12,15 @@
   /* padding-top: 10px; */
   /* padding-bottom: 10px; */
 }
+
 .card-group {
   border: 1px solid var(--shadow-color);
+  border-radius: 10px;
   width: 290px;
   text-overflow: ellipsis;
-  border-radius: 10px;
   text-align: center;
   box-sizing: border-box;
-  height: 160px;
+  height: 140px;
 }
 .card-group:hover {
   box-shadow: 0 6px 18px rgba(0, 0, 0, 0.15);

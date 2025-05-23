@@ -1,4 +1,5 @@
 import api from '../api';
+import type { ExamResponse } from './entities/exams';
 import type { Groups } from './entities/groups';
 import type { Qualification } from './entities/qualifications';
 import type { CreateTemplate, Template } from './entities/templates';
@@ -119,4 +120,49 @@ export async function getTemplateSheet(
   const fileURL = URL.createObjectURL(file);
   window.open(fileURL);
   return null;
+}
+
+export async function uploadExam(form: FormData): Promise<ExamResponse | null> {
+  const response = await api.post('/exam', form);
+  if (response.status != 201) {
+    return null;
+  } else {
+    const group = response.data as ExamResponse;
+    return group;
+  }
+}
+
+export async function getExamsByTemplate(
+  templateId: string
+): Promise<ExamResponse[]> {
+  const response = await api.get('/exams', {
+    params: {
+      template_id: templateId,
+    },
+  });
+  if (response.status != 200) {
+    return [];
+  }
+  const exams = response.data as ExamResponse[];
+  return exams;
+}
+
+export async function generateCsvSummaryQualifications(templateId: string) {
+  const response = await api.get('/summary/export', {
+    params: {
+      template_id: templateId,
+    },
+  });
+  if (response.status !== 200) {
+    return;
+  }
+  const blob = new Blob([response.data], { type: 'text/csv' });
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement('a');
+  a.href = url;
+  a.download = 'summary.csv';
+  document.body.appendChild(a);
+  a.click();
+  document.body.removeChild(a);
+  URL.revokeObjectURL(url);
 }

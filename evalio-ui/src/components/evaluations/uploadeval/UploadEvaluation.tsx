@@ -4,12 +4,19 @@ import { Scanner } from '@yudiel/react-qr-scanner';
 import Webcam from 'react-webcam';
 import './uploadEvaluation.css';
 import { base64ToFile } from './base64Transformation';
+import { uploadExam } from '../../../services/manager/managerService';
 const UploadEvaluation = () => {
   const [step, setStep] = useState(1);
-  const [qrResult, setQrResult] = useState<string | null>(null);
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  const [qrResult, setQrResult] = useState<any | null>(null);
   const [image, setImage] = useState<string | null>(null);
   const webcamRef = useRef<Webcam>(null);
-
+  const videConstrains = {
+    facingMode: 'environment',
+    width: { ideal: 1920 },
+    height: { ideal: 1920 },
+  };
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const handleQrScan = (result: string | any[]) => {
     if (!result || !Array.isArray(result) || !result[0]?.rawValue) return;
 
@@ -24,9 +31,9 @@ const UploadEvaluation = () => {
       }
       setQrResult(parsed);
       setStep(2);
-    } catch (error) {
-      alert('El código QR no contiene datos válidos.');
+    } catch {
       setQrResult(null);
+      setStep(1);
     }
   };
 
@@ -34,8 +41,37 @@ const UploadEvaluation = () => {
     if (webcamRef.current) {
       const imageSrc = webcamRef.current.getScreenshot();
       setImage(imageSrc);
-      const file = base64ToFile(imageSrc, 'output.png');
-      console.log(file);
+    }
+  };
+
+  const resetStatus = () => {
+    setQrResult(null);
+    setImage(null);
+    setStep(1);
+  };
+
+  const handleUploadExam = () => {
+    const formData = new FormData();
+    if (qrResult) {
+      const file = base64ToFile(
+        image,
+        `exam-${qrResult?.template_response_id}-${qrResult?.student_id}.jpeg`
+      );
+      if (file) {
+        formData.append('file', file);
+        formData.append('group_id', qrResult?.group_id);
+        formData.append('student_id', qrResult?.student_id);
+        formData.append('template_response_id', qrResult?.template_response_id);
+        formData.append('student_name', qrResult?.student_name);
+
+        uploadExam(formData)
+          .then(() => {
+            resetStatus();
+          })
+          .catch(() => {
+            resetStatus();
+          });
+      }
     }
   };
 
@@ -48,49 +84,28 @@ const UploadEvaluation = () => {
             <h2>Escanear Código QR</h2>
             <p>Centra el código QR en la pantalla</p>
             <Scanner
-              styles={{ container: { height: '60%', width: '60%' } }}
+              key={step}
+              styles={{ container: { height: '80%', width: '80%' } }}
               onScan={handleQrScan}
-              videoConstraints={{ facingMode: 'environment' }}
-              onError={(error) => alert(`Error: ${error.message}`)}
+              constraints={videConstrains}
+              onError={(error) => alert(`Error: ${error}`)}
             />
-            {qrResult && <p>Código QR detectado: {qrResult}</p>}
           </div>
         )}
         {step === 2 && image == null && (
           <div className='camera-window'>
-            <h2>Capturar Hoja de Respuestas</h2>
-            <p>Alinea la hoja de respuestas dentro del marco rojo</p>
-            <div
+            <Webcam
+              key={step}
+              audio={false}
+              screenshotFormat='image/jpeg'
+              videoConstraints={videConstrains}
+              ref={webcamRef}
               style={{
-                position: 'relative',
-                width: '400px',
-                height: '720px',
+                width: '100%',
+                height: '80vh',
+                objectFit: 'cover',
               }}
-            >
-              <Webcam
-                audio={false}
-                height={720}
-                width={400}
-                screenshotFormat='image/jpeg'
-                videoConstraints={{
-                  width: 400,
-                  height: 720,
-                  facingMode: 'environment',
-                }}
-                ref={webcamRef}
-              />
-              <div
-                style={{
-                  position: 'absolute',
-                  top: '10%',
-                  left: '10%',
-                  width: '80%',
-                  height: '80%',
-                  border: '2px solid red',
-                  boxSizing: 'border-box',
-                }}
-              />
-            </div>
+            />
             <button className='camera-button' onClick={handleCapture}></button>
           </div>
         )}
@@ -101,9 +116,9 @@ const UploadEvaluation = () => {
             <img
               src={image}
               alt='Hoja capturada'
-              style={{ maxWidth: '100%' }}
+              style={{ maxWidth: '100%', maxHeight: '100%' }}
             />
-            <button>Enviar</button>
+            <button onClick={() => handleUploadExam()}>Enviar</button>
           </div>
         )}
       </div>

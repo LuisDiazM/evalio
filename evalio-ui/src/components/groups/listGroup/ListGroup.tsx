@@ -40,7 +40,12 @@ const ListGroup = () => {
       <div className='container-list-group'>
         <div className='groups-header'>
           <h3>Grupos</h3>
-          <h5>Escoja el grupo para ver su información detallada</h5>
+          {groups.length > 0 && (
+            <h5>
+              Escoja el grupo de estudiantes para ver su información detallada
+            </h5>
+          )}
+
           {!isOpenCreateGroup && (
             <button onClick={() => handleCreateGroup()}>Registrar grupo</button>
           )}

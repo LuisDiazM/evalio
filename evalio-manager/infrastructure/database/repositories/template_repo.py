@@ -39,3 +39,7 @@ class TemplateResponsesRepository(ITemplateRepository):
     def delete_template_response(self, template_id: str):
         filter = {"_id": ObjectId(template_id)}
         self.coll.delete_one(filter)
+
+    def delete_templates_by_group(self, group_id:str):
+        filter = {"group_id": group_id}
+        self.coll.delete_many(filter)

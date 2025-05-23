@@ -19,3 +19,7 @@ class ITemplateRepository(ABC):
     @abstractmethod
     def delete_template_response(self, template_id: str):
         pass
+
+    @abstractmethod
+    def delete_templates_by_group(self, group_id:str):
+        pass

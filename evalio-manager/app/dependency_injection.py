@@ -16,7 +16,6 @@ from infrastructure.messaging.nats_publisher import NatsPublisher
 import os
 
 
-
 async def get_nats():
     nc = NATS()
     host = os.getenv("NATS_URL")
@@ -48,17 +47,23 @@ async def get_template_repo(mongo=Depends(get_mongo)):
 async def get_exam_repo(mongo=Depends(get_mongo)):
     return ExamsRepository(mongo=mongo)
 
+
 async def get_summary_repo(mongo=Depends(get_mongo)):
     return SummaryQualificationsRepository(mongo)
 
+
 async def get_template_usecase(group_repo=Depends(get_group_repo),
                                template_repo=Depends(get_template_repo),
+                               exams_repo=Depends(get_exam_repo),
                                logger=Depends(get_logger)):
-    return TemplateUsecase(group_repo=group_repo, template_repo=template_repo, logger=logger)
+    return TemplateUsecase(group_repo=group_repo, template_repo=template_repo, logger=logger, exam_repo=exams_repo)
 
 
-async def get_group_usecase(group_repo=Depends(get_group_repo)):
-    return GroupUsecase(group_db=group_repo)
+async def get_group_usecase(group_repo=Depends(get_group_repo),
+                            template_repo=Depends(get_template_repo),
+                            exam_repo=Depends(get_exam_repo),
+                            summary_repo=Depends(get_summary_repo)):
+    return GroupUsecase(group_db=group_repo, template_db=template_repo, exam_db=exam_repo, summary_db=summary_repo)
 
 
 async def get_exam_usecase(exam_repo=Depends(get_exam_repo),
@@ -66,6 +71,7 @@ async def get_exam_usecase(exam_repo=Depends(get_exam_repo),
                            logger=Depends(get_logger),
                            nats=Depends(get_nats)):
     return ExamsUsecase(exam_repo=exam_repo, group_repo=group_repo, logger_repo=logger, event_publisher=nats)
+
 
 async def get_summary_usecase(summary_repo=Depends(get_summary_repo)):
     return SummaryUsecase(db_summary_repo=summary_repo)

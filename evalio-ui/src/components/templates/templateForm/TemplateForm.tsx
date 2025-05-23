@@ -42,7 +42,7 @@ const TemplateForm = () => {
       };
       createTemplate(templateData).then((data) => {
         if (data != null) {
-          navigate(`/group/${groupId}/templates`);
+          navigate(`/group/${groupId}`);
         }
       });
     }
@@ -73,6 +73,7 @@ const TemplateForm = () => {
     <>
       <Navbar />
       <div className='container-template'>
+        <h3>Acá registra las respuestas A, B, C, o D que tiene cada pregunta</h3>
         <form onSubmit={handleSubmit} className='template-card'>
           <label>
             Corte

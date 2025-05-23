@@ -1,0 +1,35 @@
+[
+    {
+        "group_id": "682a715a23ee2961d486278f",
+        "created_at": "2025-05-23T18:50:51.885000",
+        "student_identification": 1193092984,
+        "student_name": "Karen Yul",
+        "exam_path": "/home/luis-diaz/Documentos/Roadmap Arquitecto/proyectos/grader-computer-vision/evalio-manager/temp/test_04.png",
+        "template_id": "681fda249537e160cbdfc1e2",
+        "period": "2025-1",
+        "status": "completed",
+        "group_name": "E041"
+    },
+    {
+        "group_id": "682a715a23ee2961d486278f",
+        "created_at": "2025-05-23T18:50:51.885000",
+        "student_identification": 1001185994,
+        "student_name": "HEIDY LORENA ARDILA BAREÑO",
+        "exam_path": "/home/luis-diaz/Documentos/Roadmap Arquitecto/proyectos/grader-computer-vision/evalio-manager/temp/test_04.png",
+        "template_id": "681fda249537e160cbdfc1e2",
+        "period": "2025-1",
+        "status": "pending",
+        "group_name": "E041"
+    },
+     {
+        "group_id": "682a715a23ee2961d486278f",
+        "created_at": "2025-05-23T18:50:51.885000",
+        "student_identification": 1005452036,
+        "student_name": "SINDY VANESSA MORENO QUIROGA",
+        "exam_path": "/home/luis-diaz/Documentos/Roadmap Arquitecto/proyectos/grader-computer-vision/evalio-manager/temp/test_04.png",
+        "template_id": "681fda249537e160cbdfc1e2",
+        "period": "2025-1",
+        "status": "error",
+        "group_name": "E041"
+    }
+]

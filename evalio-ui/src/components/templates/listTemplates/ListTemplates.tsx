@@ -1,6 +1,5 @@
-import { useNavigate, useParams } from 'react-router';
+import { useNavigate } from 'react-router';
 import './listTemplates.css';
-import Navbar from '../../navbar/navbar';
 import { useEffect, useState } from 'react';
 import {
   deleteTemplateById,
@@ -9,15 +8,13 @@ import {
 import type { Template } from '../../../services/manager/entities/templates';
 import deleteICon from '../../../assets/icons8-delete.svg';
 
-const ListTemplates = () => {
-  const { id } = useParams<{ id: string }>();
-  const navigate = useNavigate();
+interface ListTemplatesProps {
+  id: string | undefined;
+}
 
-  const handleCreateTemplate = (groupId: string | undefined) => {
-    if (groupId) {
-      navigate(`/template/group/${groupId}`);
-    }
-  };
+const ListTemplates = ({ id }: ListTemplatesProps) => {
+  // const { id } = useParams<{ id: string }>();
+  const navigate = useNavigate();
 
   const handleCardClick = (id: string) => {
     navigate(`/template/${id}`);
@@ -40,14 +37,12 @@ const ListTemplates = () => {
 
   return (
     <>
-      <Navbar></Navbar>
       <div>
         <div className='templates-header'>
-          <h4>Plantillas de parciales</h4>
-          <h5>Escoja su plantilla para ver la información detallada</h5>
-          <button onClick={() => handleCreateTemplate(id)}>
-            Registrar plantilla
-          </button>
+          <h5>
+            {' '}
+            <strong>Mis parciales </strong>
+          </h5>
         </div>
         <div className='container-templates'>
           {templates.map((template) => {
@@ -57,10 +52,6 @@ const ListTemplates = () => {
                   className='card-group'
                   onClick={() => handleCardClick(template.id)}
                 >
-                  <h5>
-                    {' '}
-                    Materia <strong>{template.subject_name} </strong>{' '}
-                  </h5>
                   <h5>
                     {' '}
                     Periodo <strong>{template.period}</strong>
