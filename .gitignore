@@ -1,3 +1,4 @@
 .qodo
 venv
 volumes
+node_modules

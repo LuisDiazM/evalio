@@ -7,6 +7,6 @@ export default defineConfig({
   server: {
     host: true,
     port: 5173,
-    allowedHosts: ['c3ad-177-93-43-227.ngrok-free.app'],
+    allowedHosts: ['evalio.click'],
   },
 });

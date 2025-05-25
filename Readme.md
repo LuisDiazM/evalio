@@ -101,3 +101,13 @@ Dependencias externas (bibliotecas y servicios externos)
 ## 10. Roadmap de Evolución
 
 ### 10.1. Características
+
+Tareas:
+✅ compartir el volumen entre ambos ms (revisar tema de lógica porque no funciona)
+✅ agregar traefik
+* agregar traefik con ssl autofirmado red local
+* agregar docker del front
+* capturar fotos desde la app
+* empezar a ajustar el grader analyzer con las fotos reales
+* realizar pruebas unitarias
+* implementar storage S3 o GCP o ambos

@@ -21,7 +21,7 @@ async def create_exam(file: UploadFile,
                       usecase: Annotated[IExamsUsecase, Depends(get_exam_usecase)],
                       professor_id: str = Header(None)) -> Exam:
 
-    file_location = f"temp/{file.filename}"
+    file_location = f"shared/{file.filename}"
     with open(file_location, "wb") as buffer:
         shutil.copyfileobj(file.file, buffer)
     request = {
@@ -32,7 +32,7 @@ async def create_exam(file: UploadFile,
         "exam_path": str(file_location),
     }
     exam = await usecase.create_exam(request)
-    if os.getenv("ENVIRONMENT", "local") != "local":
+    if os.getenv("ENVIRONMENT") == "cloud":
         try:
             os.remove(file_location)
         except Exception as e:

@@ -12,19 +12,7 @@ from infrastructure.mongo.repositories.summary_qualification_respository import 
 from infrastructure.mongo.repositories.template_repository import TemplateRepository
 
 
-# # Ejecutar el programa
-# if __name__ == "__main__":
-#     mongo_client = MongoDB()
-#     logger = StandardLogger()
-#     exam_repo = ExamRepository(mongo=mongo_client)
-#     template_repo = TemplateRepository(mongo=mongo_client)
-#     summary_repo = SummaryQualificationRepository(mongo=mongo_client)
-#     usecase = GraderAnalyzerUsecase(exam_repo=exam_repo,
-#                                     temp_repo=template_repo,
-#                                     summary_repo=summary_repo,
-#                                     logger=logger)
 
-#     usecase.analyze("681402fedfa5d350c38ac963")
 STREAM_NAME = "cv-grader-analyzer"
 EVENT_PROCESS_EXAM = "process.exam"
 logger = StandardLogger()

@@ -72,6 +72,7 @@ class ExamsUsecase:
                 if file_location is None:
                     return
                 abs_path = str(file_location)
+                self.logger_repo.info(abs_path)
             group = self.group_repo.get_group_by_id(group_id)
             if group is None:
                 return

@@ -30,10 +30,11 @@ class GraderAnalyzerUsecase(IGraderAnalyzerUseCase):
         self.logger = logger
 
     def analyze(self, message:str):
+        exam_id = ""
         try:
             self.logger.info(f"message: {message}")
             data = json.loads(message)
-            exam_id = data.get("exam_id")
+            exam_id = data.get("exam_id","")
             exam = self.exam_repo.get_exam_by_id(exam_id)
             if not exam:
                 return
@@ -44,13 +45,13 @@ class GraderAnalyzerUsecase(IGraderAnalyzerUseCase):
                 return
             result = grade_exam(
                 exam_path, f"{exam.student_identification}_{exam.id}")
-            if len(result.get("responses"))==0:
+            if len(result.get("responses",[]))==0:
                 self.exam_repo.update_exam(exam.id, {"status": "error"})
                 return
             template = self.temp_repo.get_template(exam.template_id)
             if not template:
                 return
-            score = score_calculator(template.questions, result.get("responses"))
+            score = score_calculator(template.questions, result.get("responses",[]))
             summary = self.__create_summary(exam, score, template, result.get("output",""))
             self.summary_repo.update_summary_qualification(summary)
             self.exam_repo.update_exam(exam.id, {"status": "completed"})

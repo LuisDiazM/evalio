@@ -125,4 +125,4 @@ def grade_exam(image_path, output_prefix) -> dict:
 if __name__ == "__main__":
     path = os.path.join("./", "images", "test_04.png")
 
-    grade_exam(path)
+    grade_exam(path,"output")
