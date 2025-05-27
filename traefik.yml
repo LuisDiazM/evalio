@@ -1,0 +1,14 @@
+entryPoints:
+  web:
+    address: ":80"
+  websecure:
+    address: ":443"
+providers:
+  docker:
+    exposedByDefault: false
+api:
+  insecure: true
+tls:
+  certificates:
+    - certFile: /etc/traefik/certs/traefik.crt
+      keyFile: /etc/traefik/certs/traefik.key

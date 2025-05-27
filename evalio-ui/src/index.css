@@ -2,13 +2,21 @@
   --highlight-border-radius: 7px;
   --border-radius: 11px;
   --yellow-highlight: #fffab7;
-  --links: #0f6dff;
+  --links: rgb(53, 20, 26);
   --background-body: #fff;
-  --green: #a2e278;
+  --green: rgb(85, 164, 128);
   --background-main: #f1f1f1;
   --background-inputs: #fcfcfc;
   --text: #1c1d1e;
   --border: #ddd;
+  --primary: #2563eb;
+  --secondary: #facc15;
+  --danger: #ef4444;
+  --text: #1f2937;
+  --bg: #f9fafb;
+  --white: #ffffff;
+  --shadow: rgba(0, 0, 0, 0.1);
+
   --focus-highlight: #b8b8b8;
   --shadow-color: #545454;
   --table-highlight: #f1f1f1;

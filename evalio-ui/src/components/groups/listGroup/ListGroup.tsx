@@ -8,7 +8,6 @@ import {
   getGroupsByProfessor,
 } from '../../../services/manager/managerService';
 import type { Groups } from '../../../services/manager/entities/groups';
-import deleteICon from '../../../assets/icons8-delete.svg';
 const ListGroup = () => {
   const navigate = useNavigate();
   const [groups, setGroups] = useState<Groups[]>([]);
@@ -68,10 +67,14 @@ const ListGroup = () => {
                       Periodo académico: <strong>{group.period}</strong>
                     </h5>
                   </div>
-                  <img
+
+                  <button
                     onClick={() => handleDeleteGroup(group.id)}
-                    src={deleteICon}
-                  ></img>
+                    className='btn-delete'
+                    title='Eliminar grupo'
+                  >
+                    🗑️
+                  </button>
                 </div>
               );
             })}

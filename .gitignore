@@ -1,4 +1,6 @@
 .qodo
 venv
-volumes
+volumes/mongo-data
+volumes/nats-data
+volumes/shared-data
 node_modules

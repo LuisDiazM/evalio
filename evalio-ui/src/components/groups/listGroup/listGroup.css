@@ -47,3 +47,17 @@
 img:hover {
   cursor: pointer;
 }
+
+    .btn-delete {
+      margin-top: 1rem;
+      background: none;
+      border: none;
+      color: var(--danger);
+      font-size: 1.5rem;
+      cursor: pointer;
+      transition: color 0.3s;
+    }
+
+.btn-delete:hover {
+  color: #dc2626;
+}

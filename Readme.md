@@ -102,11 +102,45 @@ Dependencias externas (bibliotecas y servicios externos)
 
 ### 10.1. Características
 
+## 11. Correr localmente
+
+Como requisito debería tener docker instalado, también una herramienta
+para autofirmar certificados SSL (para correr el sistema en una red interna)
+
+Generar el certificado para su dirección IP o si puede exponer un servidor dns dentro de la red interna donde va "\<IP>" reemplaza el valor
+
+```bash
+openssl req -x509 -newkey rsa:4096 -keyout traefik.key -out traefik.crt -days 365 -nodes -subj "/CN=<IP>"
+```
+
+Clone the project
+
+```bash
+  git clone https://link-to-project
+```
+
+Go to the project directory
+
+```bash
+  cd my-project
+```
+
+Install dependencies
+
+```bash
+  npm install
+```
+
+Start the server
+
+```bash
+  npm run start
+```
 Tareas:
 ✅ compartir el volumen entre ambos ms (revisar tema de lógica porque no funciona)
 ✅ agregar traefik
-* agregar traefik con ssl autofirmado red local
-* agregar docker del front
+✅ agregar traefik con ssl autofirmado red local
+✅ agregar docker del front
 * capturar fotos desde la app
 * empezar a ajustar el grader analyzer con las fotos reales
 * realizar pruebas unitarias
