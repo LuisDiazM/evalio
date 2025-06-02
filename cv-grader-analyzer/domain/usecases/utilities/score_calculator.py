@@ -1,5 +1,4 @@
 from typing import List
-
 from domain.entities.templates import Question
 
 
@@ -14,4 +13,4 @@ def score_calculator(template: List[Question], user_responses: List[dict]) -> fl
             if temp_res.question == list(user.keys())[0]:
                 if temp_res.answer == list(user.values())[0]:
                     counter += 1
-    return counter / len(template) * 5
+    return round(counter / len(template) * 5, 1)

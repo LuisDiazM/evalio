@@ -56,7 +56,8 @@ class GraderAnalyzerUsecase(IGraderAnalyzerUseCase):
             self.summary_repo.update_summary_qualification(summary)
             self.exam_repo.update_exam(exam.id, {"status": "completed"})
             self.logger.info(f"exam {exam_id} student: {exam.student_name} score: {score}")
-            os.remove(exam_path)
+            if os.getenv("ENVIRONMENT") == "cloud":
+                os.remove(exam_path)
         except Exception as e:
             self.logger.error(f"error processing {exam_id} --> {str(e)}")
 

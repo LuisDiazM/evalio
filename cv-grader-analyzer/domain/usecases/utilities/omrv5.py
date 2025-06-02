@@ -74,8 +74,8 @@ def grade_exam(image_path, output_prefix):
         image, gray, thresh = preprocess_image(image_path)
         circles = find_circles(gray)
         if circles is not None:
-            for (x, y, r) in circles:
-                cv2.circle(image, (x, y), r, (0, 0, 255), 2)
+            # for (x, y, r) in circles:
+            #     cv2.circle(image, (x, y), r, (0, 0, 255), 2)
             filled_circles = find_filled_circles(circles, thresh)
             rows = group_questions(circles)
             responses = []
@@ -87,6 +87,9 @@ def grade_exam(image_path, output_prefix):
                 cv2.circle(image, (x, y), r, (0, 255, 0), 2)  # Círculos rellenos en verde
         
             output = os.path.join(os.path.dirname(image_path), f"{output_prefix}_resultado.png")
+            cv2.imshow("circiles",image)
+            cv2.imshow("thresh", thresh)
+            cv2.waitKey(0)
             cv2.imwrite(output, image)
             return {"responses": responses, "output": output}
         return {}
@@ -95,6 +98,6 @@ def grade_exam(image_path, output_prefix):
         return {}
 
 if __name__ == "__main__":
-    path = os.path.join("./", "images", "exam-6830f8135ae1a02cfe398728-1001185994.jpeg")
+    path = os.path.join("./", "images", "exam-6830f8135ae1a02cfe398728-1101753119.jpeg")
     result = grade_exam(path, "output")
     print("Respuestas detectadas:", result.get("responses", []))

@@ -9,7 +9,7 @@
             "name": "Python Debugger: Current File",
             "type": "debugpy",
             "request": "launch",
-            "program": "${workspaceFolder}/main.py",
+            "program": "${file}",
             "console": "integratedTerminal",
             "envFile": "${workspaceFolder}/.env"
         }

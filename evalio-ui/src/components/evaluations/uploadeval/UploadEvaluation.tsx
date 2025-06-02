@@ -102,7 +102,7 @@ const UploadEvaluation = () => {
               ref={webcamRef}
               style={{
                 width: '100%',
-                height: '80vh',
+                height: '70vh',
                 objectFit: 'cover',
               }}
             />
