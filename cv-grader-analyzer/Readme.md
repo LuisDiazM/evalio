@@ -11,25 +11,25 @@ Dado que se iniciará un proceso de OMR (Optical Mark Recognition) la identifica
 
 ## 3. Aplicación de umbral
 La aplicación del umbral permite eliminar el ruido y unificar la imagen únicamente a dos colores blanco o negro, sin tonalidades de gris, esto se hace con el fin de tener una imagen más limpia como podemos ver:
-![black](/docs/umbral.png)
+![black](/cv-grader-analyzer/docs/umbral.png)
 
 Imagen original
 
-![original](/docs/original.jpeg)
+![original](/cv-grader-analyzer/docs/original.jpeg)
 
 ## 4. Detección de posibles circulos
 La idea es poder detectar las coordenadas de posibles circulos para saber donde están las opciones de respuesta, ya que sabemos que tienen 4 posibles opciones y cada fila de 4 circulos representaría 1 pregunta, la aproximación se realizó usando la transformación [Hough](https://docs.opencv.org/4.x/da/d53/tutorial_py_houghcircles.html)
 
 en nuestra imagen podemos ver lo siguiente con los circulos detectados:
 
-![circulos](/docs/circulos.png)
+![circulos](/cv-grader-analyzer/docs/circulos.png)
 
 Como se observa no todos los circulos están centrados o tienen el mismo tamaño, pero tienen algo en comun y es que comparten cercanía con las opciones de respuesta.
 
 ## 5. Evaluación de circulos rellenos
 Como se tienen los circulos detectados se evalúa circulo por circulo si su área tiene pixeles y acá es importante la imagen con el umbral ya que como tenemos posibles valores blanco o negro una respuesta rellena va a tener una densidad de pixeles más grande que una sin contestar donde se aplicará un umbral debido a que dentro de las opciones están las letras A,B,C,D y el sistema podría interpretar esa densidad de pixeles como opción válida por ello el umbral reduce esa probabilidad y podemos obtener la siguiente imagen:
 
-![relleno](/docs/respuesta.png)
+![relleno](/cv-grader-analyzer/docs/respuesta.png)
 
 ## 6. Generar respuestas
 Con los circulos detectados como rellenos se evalúa la pregunta para saber si es 1, 2, 3, ... con base en las filas y sus posiciones para finalmente traducir la respuesta a una lista de diccionarios donde se identifica el número de pregunta y su respuesta, por ejemplo:
