@@ -3,16 +3,23 @@
 ## 1. Introducción
 
 ### 1.1. Propósito de este documento
+Documentar todo el proceso que se realizó para conseguir el producto llamado evalio, desde la necesidad que quería responder la pregunta ¿Puedo tener un sistema que califique automáticamente evaluaciones de estudiantes? hasta como esa necesidad se transformó en una solución a nivel de arquitectura de software donde se aplican patrones, microservicios, comunicación entre microservicios, seguridad e infraestructura cloud, y monitoreo.
+El producto al pasar por una etapa del ciclo de vida del software su diseño e implementación estará basada en los atributos de calidad del software definidos en la ISO25000.  
 
 ### 1.2. Alcance del producto
+Evalio permitirá calificar parciales o evaluaciones de opciones múltiples con única respuesta usando técnicas de OMR (Optical Mark Recognition), también permitirá administrar los diferentes grupos de estudiantes, plantillas de evaluaciones para administrar los diferentes semestres.
+
+Su modelo de acceso se basa en suscripciones mensuales que se administrarán para su control de acceso.
 
 ### 1.3. Resumen ejecutivo
+Evalio es una plataforma que usando técnicas de visión por computador ayudará a calificar evaluaciones ahorrando tiempo al docente ya que el sistema de manera automática analiza las fotos y saca los resúmenes y listados de calificación.
 
 ## 2. Visión General del Producto
 
 ### 2.1. Descripción general del sistema
 
 ### 2.3. Principales casos de uso
+
 
 ## 3. Arquitectura del Sistema
 
@@ -104,6 +111,8 @@ Dependencias externas (bibliotecas y servicios externos)
 
 ## 11. Correr localmente
 
+Debido a que el objetivo principal es poder usar la cámara del navegador 
+
 Como requisito debería tener docker instalado, también una herramienta
 para autofirmar certificados SSL (para correr el sistema en una red interna)
 
@@ -136,12 +145,71 @@ Start the server
 ```bash
   npm run start
 ```
-Tareas:
-✅ compartir el volumen entre ambos ms (revisar tema de lógica porque no funciona)
-✅ agregar traefik
-✅ agregar traefik con ssl autofirmado red local
-✅ agregar docker del front
-* capturar fotos desde la app
-* empezar a ajustar el grader analyzer con las fotos reales
-* realizar pruebas unitarias
+
+## Anexos
+### Definición de tareas
+
+✅ Definir requisitos del sistema que se convertirán en casos de uso
+
+✅ Definir los procesos que tiene el sistema
+
+✅ Diseñar la solución como vista lógica de componentes
+
+✅ Diseñar los modelos de datos de la solución
+
+✅ Crear el boilerplate de los componentes de la vista lógica
+
+1. ✅ Trabajar el servicio princial de manera jerarquica a nivel de dominios y exponer APIS
+
+    ✅ grupos
+
+    ✅ plantillas de hojas de respuestas
+
+    ✅ examenes de los estudiantes
+
+    ✅ generador de resumenes de calificaciones
+
+2. ✅ Trabajar en el servicio que se encarga de analizar imágenes por OMR
+    estudiar la teoría, pipeline para procesar imagenes y definición y ajuste del proceso
+
+3. ✅ Comunicar el servicio general con el que analiza imágenes
+
+4. ✅ Diseñar como sería la experiencia de usuario con base a los procesos definidos
+5. ✅ Trabajar en el front Diseñando su interfaz con mocks de datos
+6. ✅ Conectar el front con el backend
+
+✅ Crear los contenedores de los servicios
+
+✅ Administrar los contenedores mediante un docker compose de manera local
+
+✅ compartir el volumen entre los ms para gestionar examenes subidos
+
+✅ agregar traefik como reverse proxy
+
+✅ agregar traefik con ssl autofirmado red local 
+
+✅ agregar docker del front (por temas de pruebas)
+
+✅ capturar fotos desde la app corriendo por contenedores
+
+✅ empezar a ajustar el grader analyzer con las fotos reales
+* Crear el servicio de administración de usuarios golang fiber, CRUD completo incluido login, registro (rutas públicas) duración finita de suscripción
+* Crear el servicio de forwardAuth para validar los token de acceso
+* Integrar servicio usuarios y forwardAuth con traefik
+* realizar pruebas unitarias a los servicios
 * implementar storage S3 o GCP o ambos
+* Diseñar la infraestructura en el cloud seleccionado AWS
+* Definir la infraestructura como código usando terraform
+* Crear pipelines de despliegue
+* Ajustar infraestructura y probar APP
+* Definir como monitorear el sistema que herramientas se usarán
+* Unificar logs
+
+Mejoras para el sistema:
+* Hay estudiantes que se retiran, al generar parciales esas hojas se pierden
+* En la lista de parciales mostrar información del grupo
+* En las hojas que se imprimen de respuestas colocar el nombre del grupo
+* Agregar navegación hacia atrás y mejorar estilos
+* Diseñar logo
+
+### Videos del sistema

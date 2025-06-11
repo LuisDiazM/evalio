@@ -12,75 +12,76 @@ services:
     volumes:
       - ./volumes/mongo-data:/data/db
 
-  nats:
-    image: nats:2.11.3
-    container_name: nats
-    ports:
-      - "4222:4222"  
-      - "8222:8222"     
-    command: [
-      "-js",                       
-      "-m", "8222",                 
-      "--store_dir", "/data/jetstream" 
-    ]
-    volumes:
-      - ./volumes/nats-data:/data/jetstream
+  # nats:
+  #   image: nats:2.11.3
+  #   container_name: nats
+  #   ports:
+  #     - "4222:4222"  
+  #     - "8222:8222"     
+  #   command: [
+  #     "-js",                       
+  #     "-m", "8222",                 
+  #     "--store_dir", "/data/jetstream" 
+  #   ]
+  #   volumes:
+  #     - ./volumes/nats-data:/data/jetstream
 
-  reverse-proxy:
-        # The official v3 Traefik docker image
-        image: traefik:v3.4
-        ports:
-          # The HTTP port
-          - "0.0.0.0:80:80"
-          # The Web UI (enabled by --api.insecure=true)
-          - "8080:8080"
-          - "0.0.0.0:443:443"  # Puerto para HTTPS
-        volumes:
-          # So that Traefik can listen to the Docker events
-          - /var/run/docker.sock:/var/run/docker.sock
-          - ./volumes/certs:/etc/traefik/certs:ro  # Monta los certificados
-          - ./traefik.yml:/etc/traefik/traefik.yml:ro
-  evalio-manager:
-    build: evalio-manager/.
-    image: evalio-manager:v1
-    labels:
-      - "traefik.enable=true"
-      - "traefik.http.routers.evalio-manager.rule=Host(`evalio.click`)|| Host(`192.168.1.45`) && PathPrefix(`/manager`)"
-      - "traefik.http.routers.evalio-manager.entrypoints=websecure"
-      - "traefik.http.routers.evalio-manager.service=evalio-manager"
-      - "traefik.http.routers.evalio-manager.tls=true"  # Habilita TLS
-      - "traefik.http.services.evalio-manager.loadbalancer.server.port=5455"
-      - "traefik.http.routers.evalio-manager-http.middlewares=redirect-to-https"
-      - "traefik.http.middlewares.redirect-to-https.redirectscheme.scheme=https"
-      - "traefik.http.middlewares.test-ratelimit.ratelimit.average=50"
-      - "traefik.http.middlewares.test-ratelimit.ratelimit.burst=200"
-    restart: always
-    env_file:
-      - evalio-manager/.env.dev
-    volumes:
-      - ./volumes/shared-data:/evalio-manager/shared
+  # reverse-proxy:
+  #       # The official v3 Traefik docker image
+  #       image: traefik:v3.4
+  #       ports:
+  #         # The HTTP port
+  #         - "0.0.0.0:80:80"
+  #         # The Web UI (enabled by --api.insecure=true)
+  #         - "8080:8080"
+  #         - "0.0.0.0:443:443"  # Puerto para HTTPS
+  #       volumes:
+  #         # So that Traefik can listen to the Docker events
+  #         - /var/run/docker.sock:/var/run/docker.sock
+  #         - ./volumes/certs:/etc/traefik/certs:ro  # Monta los certificados
+  #         - ./traefik.yml:/etc/traefik/traefik.yml:ro
+  # evalio-manager:
+  #   build: evalio-manager/.
+  #   image: evalio-manager:v1
+  #   labels:
+  #     - "traefik.enable=true"
+  #     - "traefik.http.routers.evalio-manager.rule=Host(`evalio.click`)|| Host(`192.168.1.34`) && PathPrefix(`/manager`)"
+  #     - "traefik.http.routers.evalio-manager.entrypoints=websecure"
+  #     - "traefik.http.routers.evalio-manager.service=evalio-manager"
+  #     - "traefik.http.routers.evalio-manager.tls=true"  # Habilita TLS
+  #     - "traefik.http.services.evalio-manager.loadbalancer.server.port=5455"
+  #     - "traefik.http.routers.evalio-manager-http.middlewares=redirect-to-https"
+  #     - "traefik.http.middlewares.redirect-to-https.redirectscheme.scheme=https"
+  #     - "traefik.http.middlewares.test-ratelimit.ratelimit.average=50"
+  #     - "traefik.http.middlewares.test-ratelimit.ratelimit.burst=200"
+  #   restart: always
+  #   env_file:
+  #     - evalio-manager/.env.dev
+  #   volumes:
+  #     - ./volumes/shared-data:/evalio-manager/shared
 
-  evalio-analyzer:
-    build: cv-grader-analyzer/.
-    image: cv-grader-analyzer:v1
-    restart: always
-    env_file:
-      - cv-grader-analyzer/.env.dev
-    volumes:
-      - ./volumes/shared-data:/grader-analyzer/shared
+  # evalio-analyzer:
+  #   build: cv-grader-analyzer/.
+  #   image: cv-grader-analyzer:v1
+  #   restart: always
+  #   env_file:
+  #     - cv-grader-analyzer/.env.dev
+  #   volumes:
+  #     - ./volumes/shared-data:/grader-analyzer/shared
 
-  evalio-front:
-    build: evalio-ui/.
-    image: evalio-ui:v1
-    restart: always
-    # volumes:
-    #   - ./evalio-ui/dist:/usr/share/nginx/html:ro
-    #   - ./evalio-ui/nginx.conf:/etc/nginx/nginx.conf:ro
-    labels:
-      - "traefik.enable=true"
-      - "traefik.http.routers.evalio-front.rule=Host(`evalio.click`)|| Host(`192.168.1.45`)"
-      - "traefik.http.routers.evalio-front.entrypoints=websecure"
-      - "traefik.http.routers.evalio-front.tls=true"  # Habilita TLS
-      - "traefik.http.services.evalio-front.loadbalancer.server.port=5173"
-      - "traefik.http.routers.evalio-front-http.middlewares=redirect-to-https"
-      - "traefik.http.middlewares.redirect-to-https.redirectscheme.scheme=https"
+  # evalio-front:
+  #   build: evalio-ui/.
+  #   image: evalio-ui:v1
+  #   restart: always
+  #   volumes:
+  #       - ./evalio-ui:/app
+  #   #   - ./evalio-ui/dist:/usr/share/nginx/html:ro
+  #   #   - ./evalio-ui/nginx.conf:/etc/nginx/nginx.conf:ro
+  #   labels:
+  #     - "traefik.enable=true"
+  #     - "traefik.http.routers.evalio-front.rule=Host(`evalio.click`)|| Host(`192.168.1.34`)"
+  #     - "traefik.http.routers.evalio-front.entrypoints=websecure"
+  #     - "traefik.http.routers.evalio-front.tls=true"  # Habilita TLS
+  #     - "traefik.http.services.evalio-front.loadbalancer.server.port=5173"
+  #     - "traefik.http.routers.evalio-front-http.middlewares=redirect-to-https"
+  #     - "traefik.http.middlewares.redirect-to-https.redirectscheme.scheme=https"

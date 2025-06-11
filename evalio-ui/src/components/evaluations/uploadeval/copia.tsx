@@ -5,21 +5,19 @@ import Webcam from 'react-webcam';
 import './uploadEvaluation.css';
 import { base64ToFile } from './base64Transformation';
 import { uploadExam } from '../../../services/manager/managerService';
-
 const UploadEvaluation = () => {
-  const [step, setStep] = useState(1);
-  const [qrResult, setQrResult] = useState(null);
-  const [image, setImage] = useState(null);
-  const [aspectRatio, setAspectRatio] = useState(1); // Estado para la relación de aspecto
-  const webcamRef = useRef(null);
-
+  const [step, setStep] = useState(2);
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  const [qrResult, setQrResult] = useState<any | null>(null);
+  const [image, setImage] = useState<string | null>(null);
+  const webcamRef = useRef<Webcam>(null);
   const videConstrains = {
     facingMode: 'environment',
-    width: { ideal: 1920 }, // Restauramos resolución alta
+    width: { ideal: 1920 },
     height: { ideal: 1920 },
   };
-
-  const handleQrScan = (result) => {
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  const handleQrScan = (result: string | any[]) => {
     if (!result || !Array.isArray(result) || !result[0]?.rawValue) return;
 
     try {
@@ -41,11 +39,7 @@ const UploadEvaluation = () => {
 
   const handleCapture = () => {
     if (webcamRef.current) {
-      const imageSrc = webcamRef.current.getScreenshot({
-        width: 1920, // Forzamos el ancho de la captura
-        height: 1920 * aspectRatio, // Ajustamos la altura según la relación de aspecto
-        screenshotQuality: 1, // Máxima calidad (0 a 1)
-      });
+      const imageSrc = webcamRef.current.getScreenshot();
       setImage(imageSrc);
     }
   };
@@ -81,22 +75,12 @@ const UploadEvaluation = () => {
     }
   };
 
-  // Función para obtener las dimensiones del video y ajustar la relación de aspecto
-  const handleUserMedia = (stream) => {
-    const track = stream.getVideoTracks()[0];
-    const settings = track.getSettings();
-    if (settings.width && settings.height) {
-      const ratio = settings.height / settings.width;
-      setAspectRatio(ratio);
-    }
-  };
-
   return (
     <>
-      <Navbar />
+      <Navbar></Navbar>
       <div style={{ textAlign: 'center', padding: '20px' }}>
         {step === 1 && (
-          <div className="camera-window">
+          <div className='camera-window'>
             <h2>Escanear Código QR</h2>
             <p>Centra el código QR en la pantalla</p>
             <Scanner
@@ -109,43 +93,29 @@ const UploadEvaluation = () => {
           </div>
         )}
         {step === 2 && image == null && (
-          <div className="camera-window">
-            {/* Contenedor con relación de aspecto dinámica */}
-            <div
+          <div className='camera-window'>
+            <Webcam
+              key={step}
+              audio={false}
+              screenshotFormat='image/jpeg'
+              videoConstraints={{...videConstrains}}
+              ref={webcamRef}
               style={{
-                position: 'relative',
                 width: '100%',
-                paddingTop: `${aspectRatio * 100}%`, // Ajusta la altura según la relación de aspecto
-                maxHeight: '70vh', // Limita la altura máxima
-                overflow: 'hidden', // Evita desbordamientos
+                height: '70vh',
+                objectFit: 'cover',
               }}
-            >
-              <Webcam
-                key={step}
-                audio={false}
-                screenshotFormat="image/jpeg"
-                videoConstraints={{ ...videConstrains }}
-                ref={webcamRef}
-                onUserMedia={handleUserMedia} // Detecta las dimensiones del video
-                style={{
-                  position: 'absolute',
-                  top: 0,
-                  left: 0,
-                  width: '100%',
-                  height: '100%',
-                  objectFit: 'cover',
-                }}
-              />
-            </div>
-            <button className="camera-button" onClick={handleCapture}></button>
+            />
+            <button className='camera-button' onClick={handleCapture}></button>
           </div>
         )}
+
         {image && (
-          <div className="photo-scan">
+          <div className='photo-scan'>
             <h3>Imagen Capturada</h3>
             <img
               src={image}
-              alt="Hoja capturada"
+              alt='Hoja capturada'
               style={{ maxWidth: '100%', maxHeight: '100%' }}
             />
             <button onClick={() => handleUploadExam()}>Enviar</button>

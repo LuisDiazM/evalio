@@ -8,7 +8,7 @@ def preprocess_image(image_path):
     image = cv2.imread(image_path)
     if image is None:
         raise Exception("No se pudo cargar la imagen.")
-    img_resize = cv2.resize(image, (530, 720))  # Mantener tamaño ajustado
+    img_resize = cv2.resize(image, (720, 720))  # Mantener tamaño ajustado
     gray = cv2.cvtColor(img_resize, cv2.COLOR_BGR2GRAY)
     thresh = cv2.adaptiveThreshold(gray, 255, cv2.ADAPTIVE_THRESH_MEAN_C,
                                    cv2.THRESH_BINARY_INV, 121, 10)
@@ -98,6 +98,6 @@ def grade_exam(image_path, output_prefix):
         return {}
 
 if __name__ == "__main__":
-    path = os.path.join("./", "images", "exam-6830f8135ae1a02cfe398728-1101753119.jpeg")
+    path = os.path.join("./", "images", "exam-6840373eb4a896fcb04dcabe-1102518280.jpeg")
     result = grade_exam(path, "output")
     print("Respuestas detectadas:", result.get("responses", []))
