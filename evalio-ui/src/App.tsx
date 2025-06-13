@@ -8,22 +8,24 @@ import TemplateForm from './components/templates/templateForm/TemplateForm';
 import QualificationView from './components/qualifications/qualification/Qualification';
 import UploadEvaluation from './components/evaluations/uploadeval/UploadEvaluation';
 import ListEvaluations from './components/evaluations/listEvaluations/ListEvaluations';
+import Login from './components/Login';
+import Signup from './components/Signup';
+import PrivateRoute from './components/PrivateRoute';
+
 const router = createBrowserRouter([
-  { path: '/', element: <ListGroup></ListGroup>, index: true },
-  {
-    path: '/groups',
-    element: <ListGroup></ListGroup>,
-  },
-  { path: '/group/:id', element: <Group></Group> },
-  { path: '/template/group/:groupId', element: <TemplateForm></TemplateForm> },
-  { path: '/template/:id', element: <TemplateView></TemplateView> },
-  {
-    path: '/qualification/template/:id',
-    element: <QualificationView></QualificationView>,
-  },
-  { path: '/evaluation', element: <UploadEvaluation></UploadEvaluation> },
-  { path: '/evaluations/group/:groupId/template/:templateId', element: <ListEvaluations></ListEvaluations> },
+  { path: '/', element: <Login />, index: true },
+  { path: '/login', element: <Login /> },
+  { path: '/signup', element: <Signup /> },
+  
+  { path: '/groups', element: <PrivateRoute><ListGroup /></PrivateRoute> },
+  { path: '/group/:id', element: <PrivateRoute><Group /></PrivateRoute> },
+  { path: '/template/group/:groupId', element: <PrivateRoute><TemplateForm /></PrivateRoute> },
+  { path: '/template/:id', element: <PrivateRoute><TemplateView /></PrivateRoute> },
+  { path: '/qualification/template/:id', element: <PrivateRoute><QualificationView /></PrivateRoute> },
+  { path: '/evaluation', element: <PrivateRoute><UploadEvaluation /></PrivateRoute> },
+  { path: '/evaluations/group/:groupId/template/:templateId', element: <PrivateRoute><ListEvaluations /></PrivateRoute> },
 ]);
+
 function App() {
   return (
     <>

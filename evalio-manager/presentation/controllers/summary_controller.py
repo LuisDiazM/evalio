@@ -1,6 +1,5 @@
-
 from typing import Annotated
-from fastapi import APIRouter, Depends, status, HTTPException
+from fastapi import APIRouter, Depends, status, HTTPException, Header
 
 from app.dependency_injection import get_summary_usecase
 from domain.templates.summary_usecase import ISummaryQualificationsUsecase
@@ -16,7 +15,8 @@ summary_router = APIRouter(
 
 @summary_router.get("/summary", description="Useful to get a summary qualifications consolidated by templat")
 async def get_summary(template_id: str,
-                      usecase: Annotated[ISummaryQualificationsUsecase, Depends(get_summary_usecase)]):
+                      usecase: Annotated[ISummaryQualificationsUsecase, Depends(get_summary_usecase)],
+                      ):
     summary = usecase.get_summary(template_id=template_id)
     if summary:
         return summary
@@ -25,7 +25,8 @@ async def get_summary(template_id: str,
 
 @summary_router.get("/summary/export", description="Export students summary as CSV")
 async def export_summary_csv(template_id: str,
-                             usecase: Annotated[ISummaryQualificationsUsecase, Depends(get_summary_usecase)]):
+                             usecase: Annotated[ISummaryQualificationsUsecase, Depends(get_summary_usecase)],
+                            ):
     summary = usecase.get_summary(template_id=template_id)
     if not summary or not hasattr(summary, "students"):
         raise HTTPException(status_code=status.HTTP_204_NO_CONTENT)

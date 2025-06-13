@@ -54,3 +54,12 @@
     nav a:hover {
       text-decoration: underline;
     }
+
+    #logout{
+      font-size: 15;
+    }
+
+    #logout:hover{
+      cursor: pointer;
+      color: var(--primary);
+    }

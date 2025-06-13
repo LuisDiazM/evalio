@@ -6,17 +6,17 @@ from presentation.controllers.groups_controller import group_router
 from presentation.controllers.exams_controller import exams_router
 from presentation.controllers.summary_controller import summary_router
 from fastapi.middleware.cors import CORSMiddleware
+from app.middleware import JWTExtractorMiddleware
 
-base = "manager"
-root = APIRouter(prefix=f"/{base}")
 origins = [
     "*"
 ]
 
+root_router = APIRouter(prefix="/manager")
 
-app = FastAPI(docs_url=f"/{base}/docs",
-              redoc_url=f"/{base}/redoc",
-              openapi_url=f"/{base}/openapi.json")
+app = FastAPI(docs_url="/docs",
+              redoc_url="/redoc",
+              openapi_url="/openapi.json")
 
 app.add_middleware(
     CORSMiddleware,
@@ -25,13 +25,15 @@ app.add_middleware(
     allow_methods=["*"],
     allow_headers=["*"],
 )
-root.include_router(template_router)
-root.include_router(group_router)
-root.include_router(exams_router)
-root.include_router(summary_router)
-app.include_router(root)
 
+# Add JWT Extractor Middleware
+app.add_middleware(JWTExtractorMiddleware)
 
+root_router.include_router(template_router)
+root_router.include_router(group_router)
+root_router.include_router(exams_router)
+root_router.include_router(summary_router)
+app.include_router(root_router)
 def run_fastapi():
     port = int(os.getenv("PORT", 8081))
     config = uvicorn.Config(
@@ -44,7 +46,6 @@ def run_fastapi():
     )
     server = uvicorn.Server(config)
     server.run()
-
 
 if __name__ == "__main__":
     run_fastapi()

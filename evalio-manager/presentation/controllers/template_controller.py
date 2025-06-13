@@ -1,5 +1,5 @@
 from typing import Annotated
-from fastapi import APIRouter, Depends, Header, Response, HTTPException, status
+from fastapi import APIRouter, Depends, Header, Request, Response, HTTPException, status
 from pathlib import Path
 import os
 from app.dependency_injection import get_template_usecase
@@ -14,8 +14,10 @@ template_router = APIRouter(
 
 
 @template_router.get("/template", description="Useful to generate template for response sheets, produce a pdf with the students")
-async def generate_template(group_id: str,  template_id: str,
-                            usecase: Annotated[ITemplatesUsecase, Depends(get_template_usecase)]):
+async def generate_template(group_id: str,  
+                           template_id: str,
+                           usecase: Annotated[ITemplatesUsecase, Depends(get_template_usecase)],
+                          ):
 
     input_usecase = InputGenTemplate(
         group_id=group_id, template_id=template_id)
@@ -36,8 +38,9 @@ async def generate_template(group_id: str,  template_id: str,
 
 @template_router.post("/template", description="Useful to create a template for response sheets")
 async def create_template(template: TemplateResponses,
-                          usecase: Annotated[ITemplatesUsecase, Depends(get_template_usecase)],
-                          professor_id: str = Header(None),):
+                         usecase: Annotated[ITemplatesUsecase, Depends(get_template_usecase)],
+                        request: Request):
+    professor_id = request.headers.get("x-professor-id")
     temp = template.model_copy()
     temp.professor_id = professor_id
     template_response = usecase.create_template_response(temp)
@@ -48,7 +51,8 @@ async def create_template(template: TemplateResponses,
 
 @template_router.get("/template/{template_id}", description="Useful to get a template")
 async def get_template(template_id: str,
-                       usecase: Annotated[ITemplatesUsecase, Depends(get_template_usecase)]):
+                      usecase: Annotated[ITemplatesUsecase, Depends(get_template_usecase)],
+                      ):
     template_response = usecase.get_template_by_id(template_id)
     if template_response:
         return template_response
@@ -56,7 +60,9 @@ async def get_template(template_id: str,
 
 
 @template_router.get("/templates", description="Useful to get all templates by professor")
-async def get_templates(group_id: str, usecase: Annotated[ITemplatesUsecase, Depends(get_template_usecase)]):
+async def get_templates(group_id: str, 
+                       usecase: Annotated[ITemplatesUsecase, Depends(get_template_usecase)],
+):
     templates = usecase.get_templates_by_group(group_id)
     if len(templates) > 0:
         return templates
@@ -64,6 +70,7 @@ async def get_templates(group_id: str, usecase: Annotated[ITemplatesUsecase, Dep
 
 
 @template_router.delete("/template", description="Useful to delete a template by Id", status_code=status.HTTP_204_NO_CONTENT)
-async def delete_template(template_id: str,  usecase: Annotated[ITemplatesUsecase, Depends(get_template_usecase)],
-                          professor_id: str = Header(None)):
+async def delete_template(template_id: str,  
+                         usecase: Annotated[ITemplatesUsecase, Depends(get_template_usecase)],
+                         ):
     usecase.delete_template(template_id)

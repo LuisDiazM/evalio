@@ -193,9 +193,10 @@ Start the server
 ✅ capturar fotos desde la app corriendo por contenedores
 
 ✅ empezar a ajustar el grader analyzer con las fotos reales
-* Crear el servicio de administración de usuarios golang fiber, CRUD completo incluido login, registro (rutas públicas) duración finita de suscripción
-* Crear el servicio de forwardAuth para validar los token de acceso
-* Integrar servicio usuarios y forwardAuth con traefik
+✅ Crear el servicio de administración de usuarios golang fiber, CRUD completo incluido login, registro (rutas públicas) duración finita de suscripción
+✅ Crear el servicio de forwardAuth para validar los token de acceso
+✅ Integrar servicio usuarios y forwardAuth con traefik
+* Agregar login y registro de usuario
 * realizar pruebas unitarias a los servicios
 * implementar storage S3 o GCP o ambos
 * Diseñar la infraestructura en el cloud seleccionado AWS

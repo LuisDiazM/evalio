@@ -8,8 +8,6 @@ const api = axios.create({
 api.interceptors.request.use(
   (config) => {
     const token = localStorage.getItem('access_token');
-    config.headers['Professor-Id'] = '123412341234';
-    config.headers['Professor-Name'] = 'Ingri Rojas';
     if (token) {
       config.headers.Authorization = `Bearer ${token}`;
     }

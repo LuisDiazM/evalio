@@ -12,8 +12,9 @@ import (
 )
 
 type ProfessorClaims struct {
-	Email string `json:"email"`
-	Name  string `json:"name"`
+	Email       string `json:"email"`
+	Name        string `json:"name"`
+	ProfessorId string `json:"professor_id"`
 	jwt.RegisteredClaims
 }
 
@@ -54,8 +55,9 @@ func (s *ProfessorService) Authenticate(email string, password string, ctx conte
 	expiresAt := time.Now().Add(8 * time.Hour)
 	// Crear claims del token
 	claims := ProfessorClaims{
-		Email: professor.Email,
-		Name:  professor.Name,
+		Email:       professor.Email,
+		Name:        professor.Name,
+		ProfessorId: professor.ID.Hex(),
 		RegisteredClaims: jwt.RegisteredClaims{
 			ExpiresAt: jwt.NewNumericDate(expiresAt),
 			IssuedAt:  jwt.NewNumericDate(time.Now()),

@@ -19,7 +19,7 @@ async def create_exam(file: UploadFile,
                       group_id: Annotated[str, Form()],
                       student_name: Annotated[str, Form()],
                       usecase: Annotated[IExamsUsecase, Depends(get_exam_usecase)],
-                      professor_id: str = Header(None)) -> Exam:
+                      ) -> Exam:
 
     file_location = f"shared/{file.filename}"
     with open(file_location, "wb") as buffer:
@@ -44,7 +44,7 @@ async def create_exam(file: UploadFile,
 
 @exams_router.get("/exams", description="Useful to get all exams by template")
 async def delete_template(template_id: str,  usecase: Annotated[IExamsUsecase, Depends(get_exam_usecase)],
-                          professor_id: str = Header(None)):
+                          ):
     exams = usecase.get_exams_by_template(template_id)
     if len(exams) == 0:
         raise HTTPException(status_code=status.HTTP_204_NO_CONTENT)
