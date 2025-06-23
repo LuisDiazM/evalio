@@ -38,3 +38,16 @@ Con los circulos detectados como rellenos se evalúa la pregunta para saber si e
 ``` 
 
 El objetivo de la identificación es saber lo que respondió el estudiante, luego el caso de uso evalúa si la respuesta es correcta basado en una plantilla.
+
+
+## Actualización
+Con la primera versión con el OMR se hizo una prueba de 60 parciales donde los resultados no fueron muy precisos, es decir, en varias hojas de respuestas no detectaba lo que los estudiantes rellenaban y debido a que el servicio estará expuesto a internet la toma de fotos va a variar mucho en condiciones de iluminación, enfoque, etc,
+entonces se decide entrenar una red neuronal para ello se toman las imagenes, se recortan los circulos, se clasifican llenos y vacios:
+- El dataset tiene tres carpetas:
+    * images: son las fotos de los parciales tomadas directamente por la interfaz web de evalio
+    con el script 
+    * filled: circulos rellenos recortados
+    * empty: circulos vacios
+
+
+Nota el menos pesado ese el v6 es el que obtuvo mejores resultados

@@ -8,7 +8,7 @@ def preprocess_image(image_path):
     image = cv2.imread(image_path)
     if image is None:
         raise Exception("No se pudo cargar la imagen.")
-    img_resize = cv2.resize(image, (720, 720))  # Mantener tamaño ajustado
+    img_resize = cv2.resize(image, (530, 720))  # Mantener tamaño ajustado
     gray = cv2.cvtColor(img_resize, cv2.COLOR_BGR2GRAY)
     thresh = cv2.adaptiveThreshold(gray, 255, cv2.ADAPTIVE_THRESH_MEAN_C,
                                    cv2.THRESH_BINARY_INV, 121, 10)
@@ -74,8 +74,8 @@ def grade_exam(image_path, output_prefix):
         image, gray, thresh = preprocess_image(image_path)
         circles = find_circles(gray)
         if circles is not None:
-            # for (x, y, r) in circles:
-            #     cv2.circle(image, (x, y), r, (0, 0, 255), 2)
+            for (x, y, r) in circles:
+                cv2.circle(image, (x, y), r, (0, 0, 255), 2)
             filled_circles = find_filled_circles(circles, thresh)
             rows = group_questions(circles)
             responses = []
@@ -86,18 +86,29 @@ def grade_exam(image_path, output_prefix):
             for (x, y, r) in filled_circles:
                 cv2.circle(image, (x, y), r, (0, 255, 0), 2)  # Círculos rellenos en verde
         
-            output = os.path.join(os.path.dirname(image_path), f"{output_prefix}_resultado.png")
-            cv2.imshow("circiles",image)
-            cv2.imshow("thresh", thresh)
-            cv2.waitKey(0)
-            cv2.imwrite(output, image)
-            return {"responses": responses, "output": output}
+            # output = os.path.join(os.path.dirname(image_path), f"{output_prefix}_resultado.png")
+            # cv2.imshow("circiles",image)
+            # cv2.imshow("thresh", thresh)
+            # cv2.waitKey(0)
+            cv2.imwrite(output_prefix, image)
+            return {"responses": responses, "output": output_prefix}
         return {}
     except Exception as e:
         print(f"Error: {e}")
         return {}
 
 if __name__ == "__main__":
-    path = os.path.join("./", "images", "exam-6840373eb4a896fcb04dcabe-1102518280.jpeg")
-    result = grade_exam(path, "output")
-    print("Respuestas detectadas:", result.get("responses", []))
+    # path = os.path.join("./", "images", "exam-6840373eb4a896fcb04dcabe-1102518280.jpeg")
+    # result = grade_exam(path, "output")
+    # print("Respuestas detectadas:", result.get("responses", []))
+
+    images_dir = os.path.join("dataset", "images")
+    outputs_dir = "outputs"
+    os.makedirs(outputs_dir, exist_ok=True)
+    image_files = [f for f in os.listdir(images_dir) if f.lower().endswith((".jpg", ".jpeg", ".png"))]
+    for img_name in image_files:
+        path = os.path.join(images_dir, img_name)
+        vis_output_path = os.path.join(outputs_dir, f"vis_{os.path.splitext(img_name)[0]}.png")
+        debug_circles_path = os.path.join(outputs_dir, f"debug_circles_{os.path.splitext(img_name)[0]}.png")
+        answers = grade_exam(path, output_prefix=vis_output_path)
+        print(f"{img_name}: {answers}")

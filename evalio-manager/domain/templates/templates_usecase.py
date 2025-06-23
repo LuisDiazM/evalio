@@ -9,7 +9,9 @@ from domain.templates.repositories.db_examp_repo import IExamRepository
 from domain.templates.repositories.db_group_repo import IGroupDbRepo
 from domain.templates.repositories.db_template_repo import ITemplateRepository
 from domain.templates.repositories.logger_repo import LoggerInterface
+from domain.templates.repositories.storage_repo import IStorageRepository
 from domain.templates.utils.template import render_page
+import os
 
 
 class ITemplatesUsecase(ABC):
@@ -39,11 +41,13 @@ class TemplateUsecase(ITemplatesUsecase):
     def __init__(self, group_repo: IGroupDbRepo,
                  template_repo: ITemplateRepository,
                  exam_repo: IExamRepository,
-                 logger=LoggerInterface):
+                 logger: LoggerInterface,
+                 storage_repo: IStorageRepository):
         self.group_db = group_repo
         self.template_db = template_repo
         self.exam_repo = exam_repo
         self.logger = logger
+        self.storage_repo = storage_repo
 
     def generate_template(self, input) -> str:
         try:
@@ -95,5 +99,26 @@ class TemplateUsecase(ITemplatesUsecase):
         return self.template_db.get_templates_by_group(group_id)
 
     def delete_template(self, template_id: str):
-        self.template_db.delete_template_response(template_id)
-        self.exam_repo.delete_exams_by_template(template_id)
+        try:
+            # Obtener el template para obtener el group_id
+            template = self.template_db.get_template_by_id(template_id)
+            if template:
+                group_id = template.group_id
+                # Eliminar carpeta del cloud storage si no estamos en modo local
+                if os.getenv("ENVIRONMENT", "local") != "local":
+                    folder_path = f"exams/{group_id}/{template_id}/"
+                    if self.storage_repo.delete_folder(folder_path):
+                        self.logger.info(f"Cloud storage folder deleted: {folder_path}")
+                    else:
+                        self.logger.warning(f"Failed to delete cloud storage folder: {folder_path}")
+                else:
+                    self.logger.info("Local environment - skipping cloud storage deletion")
+            else:
+                self.logger.warning(f"Template not found: {template_id}")
+            
+            # Eliminar de la base de datos
+            self.template_db.delete_template_response(template_id)
+            self.exam_repo.delete_exams_by_template(template_id)
+        except Exception as e:
+            self.logger.error(f"Error deleting template {template_id}: {str(e)}")
+            raise

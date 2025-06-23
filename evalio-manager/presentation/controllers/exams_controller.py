@@ -21,22 +21,38 @@ async def create_exam(file: UploadFile,
                       usecase: Annotated[IExamsUsecase, Depends(get_exam_usecase)],
                       ) -> Exam:
 
-    file_location = f"shared/{file.filename}"
-    with open(file_location, "wb") as buffer:
-        shutil.copyfileobj(file.file, buffer)
-    request = {
-        "student_identification": student_id,
-        "template_id": template_response_id,
-        "group_id": group_id,
-        "student_name": student_name,
-        "exam_path": str(file_location),
-    }
+    # Leer el contenido del archivo como bytes
+    file_content = await file.read()
+    
+    # Determinar si estamos en modo local o producción
+    environment = os.getenv("ENVIRONMENT", "local")
+    
+    if environment == "local":
+        # Modo local: guardar archivo temporalmente
+        file_location = f"shared/{file.filename}"
+        with open(file_location, "wb") as buffer:
+            buffer.write(file_content)
+        
+        request = {
+            "student_identification": student_id,
+            "template_id": template_response_id,
+            "group_id": group_id,
+            "student_name": student_name,
+            "exam_path": str(file_location),
+        }
+    else:
+        # Modo producción: enviar datos binarios directamente
+        request = {
+            "student_identification": student_id,
+            "template_id": template_response_id,
+            "group_id": group_id,
+            "student_name": student_name,
+            "exam_binary": file_content,
+        }
+    
     exam = await usecase.create_exam(request)
-    if os.getenv("ENVIRONMENT") == "cloud":
-        try:
-            os.remove(file_location)
-        except Exception as e:
-            print(f"Error deleting file: {str(e)}")
+    
+    
     if exam is None:
         raise HTTPException(status_code=status.HTTP_204_NO_CONTENT)
     return exam

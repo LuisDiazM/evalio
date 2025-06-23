@@ -20,12 +20,20 @@ Evalio es una plataforma que usando técnicas de visión por computador ayudará
 
 ### 2.3. Principales casos de uso
 
-
 ## 3. Arquitectura del Sistema
 
 ### 3.1. Vista lógica
+El sistema se compone de 
+![logica](/docs/logica.png)
 
 ### 3.2. Vista física
+Evalio se compone de los siguientes recursos de infraestructura:
+- 7 Máquinas virtuales
+- Storage GCP
+- Cloud front
+- Route53
+- Elastic container registry
+- Reglas de firewall
 
 ### 3.3. Vista de procesos
 
@@ -193,13 +201,18 @@ Start the server
 ✅ capturar fotos desde la app corriendo por contenedores
 
 ✅ empezar a ajustar el grader analyzer con las fotos reales
+
 ✅ Crear el servicio de administración de usuarios golang fiber, CRUD completo incluido login, registro (rutas públicas) duración finita de suscripción
+
 ✅ Crear el servicio de forwardAuth para validar los token de acceso
+
 ✅ Integrar servicio usuarios y forwardAuth con traefik
-* Agregar login y registro de usuario
-* realizar pruebas unitarias a los servicios
-* implementar storage S3 o GCP o ambos
-* Diseñar la infraestructura en el cloud seleccionado AWS
+
+✅ Agregar login y registro de usuario interactuando el back y el front
+✅ implementar storage GCP dentro del código y firmar urls
+✅ Diseñar la infraestructura en el cloud seleccionado GCP
+
+* En el front mostrar la evaluación detectada por el sistema
 * Definir la infraestructura como código usando terraform
 * Crear pipelines de despliegue
 * Ajustar infraestructura y probar APP
@@ -211,6 +224,5 @@ Mejoras para el sistema:
 * En la lista de parciales mostrar información del grupo
 * En las hojas que se imprimen de respuestas colocar el nombre del grupo
 * Agregar navegación hacia atrás y mejorar estilos
-* Diseñar logo
 
 ### Videos del sistema

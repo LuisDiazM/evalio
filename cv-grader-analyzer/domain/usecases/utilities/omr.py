@@ -8,16 +8,17 @@ def preprocess_image(image_path):
     image = cv2.imread(image_path)
     if image is None:
         raise Exception("No se pudo cargar la imagen.")
-    img_resize = cv2.resize(image, (530, 720))  # Mantener tamaño ajustado
+    img_resize = cv2.resize(image, (1920, 1920))  # Mantener tamaño ajustado
     gray = cv2.cvtColor(img_resize, cv2.COLOR_BGR2GRAY)
     thresh = cv2.adaptiveThreshold(gray, 255, cv2.ADAPTIVE_THRESH_MEAN_C,
                                    cv2.THRESH_BINARY_INV, 121, 10)
     return img_resize, gray, thresh
 
 def find_circles(gray):
-    circles = cv2.HoughCircles(gray, cv2.HOUGH_GRADIENT, dp=0.5, minDist=32,  # minDist para evitar circulos muy cercanos
-                               param1=30, param2=15,  # Reducidos para mayor sensibilidad
-                               minRadius=8, maxRadius=13)  # Para que no ponga circulos muy grandes
+    circles = cv2.HoughCircles(
+        gray, cv2.HOUGH_GRADIENT, dp=1.1, minDist=65,
+        param1=50, param2=25, minRadius=30, maxRadius=55
+    )
     if circles is not None:
         circles = np.round(circles[0, :]).astype("int")
         return circles 
@@ -66,33 +67,32 @@ def calculate_question_response(filled_circle, rows):
             x_column, y_column = column
             distance = np.sqrt((x - x_column)**2 + (y - y_column)**2)
             if distance <= 20:  # Tolerancia aumentada
+                len_cols = len(columns)
+                if column_index >= len(columns):
+                    return None
                 return {"question": row_index, "response": columns[column_index]}
     return None
 
 def grade_exam(image_path, output_prefix):
-    try:
-        image, gray, thresh = preprocess_image(image_path)
-        circles = find_circles(gray)
-        if circles is not None:
-            for (x, y, r) in circles:
-                cv2.circle(image, (x, y), r, (0, 0, 255), 2)
-            filled_circles = find_filled_circles(circles, thresh)
-            rows = group_questions(circles)
-            responses = []
-            for c in filled_circles:
-                response = calculate_question_response(c, rows)
-                if response:
-                    responses.append(response)
-            for (x, y, r) in filled_circles:
-                cv2.circle(image, (x, y), r, (0, 255, 0), 2)  # Círculos rellenos en verde
-        
-            output = os.path.join(os.path.dirname(image_path), f"{output_prefix}_resultado.png")
-            cv2.imwrite(output, image)
-            return {"responses": responses, "output": output}
-        return {}
-    except Exception as e:
-        print(f"Error: {e}")
-        return {}
+    image, gray, thresh = preprocess_image(image_path)
+    circles = find_circles(gray)
+    if circles is not None:
+        for (x, y, r) in circles:
+            cv2.circle(image, (x, y), r, (0, 0, 255), 2)
+        filled_circles = find_filled_circles(circles, thresh)
+        rows = group_questions(circles)
+        responses = []
+        for c in filled_circles:
+            response = calculate_question_response(c, rows)
+            if response:
+                responses.append(response)
+        for (x, y, r) in filled_circles:
+            cv2.circle(image, (x, y), r, (0, 255, 0), 2)  # Círculos rellenos en verde
+    
+        cv2.imwrite(output_prefix, image)
+        return {"responses": responses, "output": output_prefix}
+    return {}
+
 
 if __name__ == "__main__":
     path = os.path.join("./", "images", "exam-6830f8135ae1a02cfe398728-1001185994.jpeg")

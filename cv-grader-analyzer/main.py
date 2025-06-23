@@ -10,6 +10,7 @@ from infrastructure.mongo.mongo import MongoDB
 from infrastructure.mongo.repositories.exam_repository import ExamRepository
 from infrastructure.mongo.repositories.summary_qualification_respository import SummaryQualificationRepository
 from infrastructure.mongo.repositories.template_repository import TemplateRepository
+from infrastructure.storage.gcp_storage_repository import GCPStorageRepository
 
 
 
@@ -56,13 +57,14 @@ async def main():
     await js.add_stream(name=STREAM_NAME, subjects=[EVENT_PROCESS_EXAM])
 
     mongo_client = MongoDB()
+    storage_repo = GCPStorageRepository()
     exam_repo = ExamRepository(mongo=mongo_client)
     template_repo = TemplateRepository(mongo=mongo_client)
     summary_repo = SummaryQualificationRepository(mongo=mongo_client)
     usecase = GraderAnalyzerUsecase(exam_repo=exam_repo,
                                     temp_repo=template_repo,
                                     summary_repo=summary_repo,
-                                    logger=logger)
+                                    logger=logger, storage_repo=storage_repo)
     subscriber = NatsSubscriber(nc)
 
     await subscriber.subscribe(EVENT_PROCESS_EXAM, usecase.analyze)
