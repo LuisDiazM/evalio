@@ -20,6 +20,21 @@ Evalio es una plataforma que usando técnicas de visión por computador ayudará
 
 ### 2.3. Principales casos de uso
 
+#### 2.3.1 Configurar los grupos, examenes
+En este caso de uso el profesor crea las definiciones de los grupos, las plantillas de respuestas para repartir con los estudiantes, donde cada estudiante tendrá un código QR por evaluación que identifica el examen que está presentando.
+
+#### 2.3.2 Subir los examenes al sistema
+En este caso de uso el profesor por medio de fotos sube los examenes, no necesita llenar formularios ni nada, únicamente escanear QRs por la plataforma y subir los examenes para que evalio se encargue de calificarlos usando técnicas de OMR (Optical Mark Recognition)
+
+#### 2.3.3 Generar reportes
+El profesor podrá monitorear los estudiantes a los cuales evalio ha calificado, también podrá generar los reportes de las calificaciones indiviales y comparar lo calificado por el sistema con lo real.
+
+#### 2.3.4 Registrarse de manera gratuita
+El usuario que quiera probar evalio puede registrarse de manera gratuita, sin embargo, está pendiente manejar tema de licencias finitas
+
+#### 2.3.5 Login con el sistema
+El usuario para poder usar evalio requiere estar logueado con el sistema, de lo contrario no podrá hacer uso del mismo.
+
 ## 3. Arquitectura del Sistema
 
 ### 3.1. Vista lógica
@@ -27,13 +42,18 @@ El sistema se compone de
 ![logica](/docs/logica.png)
 
 ### 3.2. Vista física
-Evalio se compone de los siguientes recursos de infraestructura:
-- 7 Máquinas virtuales
-- Storage GCP
-- Cloud front
-- Route53
-- Elastic container registry
+![fisica](/docs/infrastructure.png)
+Evalio se compone de los siguientes recursos de infraestructura en Google Cloud Platform:
+- 4 Máquinas virtuales para manejar el reverse-proxy, la base de datos NoSQL, el broker de mensajería NATS, el suscriptor al broker para procesar las imágenes el grader analyzer
+- 2 buckets en cloud storage GCP
+- 3 Cloud run para correr los microservicios de manera serverless
+- Route53 donde se había comprado inicialmente el dominio evalio.click
+- Artifac registry para subir las imagenes de docker de los microservicios
 - Reglas de firewall
+- VPC red privada virtual
+- 1 Load balancer para conectar la carga del front
+- 1 CDN para manejo de caché para distribuir contenido
+- 1 DNS cloud para agregar las rutas hacia el load balancer y el backend para el reverse proxy
 
 ### 3.3. Vista de procesos
 
@@ -83,15 +103,33 @@ Base de datos, documentos y esquema de almacenamiento.
 ### 4.1. Catalogo Stack tecnológico, Frameworks utilizados,
 Dependencias externas (bibliotecas y servicios externos)
 
+El stack tecnológico de evalio es:
+* Python maneja el core de la aplicación incluyendo el procesamiento de imágenes
+* Golang maneja la administración de usuarios y forward-auth para validación de identidad
+* Front en react como un SPA para la interfaz con el usuario
+* Base de datos NoSQL como MongoDB
+* Broker de mensajería NATS
+* Almacenamiento de multimedia en un storage tipo cloud storage
+
 ## 5. Seguridad
 
 ### 5.1. Modelo de seguridad de componentes involucrados.
 
+Toda la infraestructura de evalio está dentro de una VPC de google cloud donde tiene reglas de firewall que bloquean el acceso a internet.
+
+Las bases de datos, brokers de momento estarán dentro de la red interna sin acceso a internet.
+
+El acceso a los microservicios únicamente está por el reverse proxy donde por medio del patrón forward-auth se valida la identidad y validación criptográfica de tokens JWT.
+
+Los tokens JWT que firma el sistema tienen una firma asimétrica usando RSA.
+
+El reverse proxy tiene definidos middleware para temas de rate limit.
+
+Las contraseñas almacenadas no se guardan en texto plano sino por medio de hash criptográfico.
+
 ## 6. Integraciones y Comunicaciones Externas
 
-### 6.1. APIs expuestas e integraciones
-
-### 6.2. Catálogo de interoperabilidades e integraciones.
+Evalio de momento no expone APIS para su uso público y no se conecta con sistemas de infraestructura externos que se encuentren fuera de GCP
 
 
 ## 7. Escalabilidad y Rendimiento
@@ -209,12 +247,16 @@ Start the server
 ✅ Integrar servicio usuarios y forwardAuth con traefik
 
 ✅ Agregar login y registro de usuario interactuando el back y el front
+
 ✅ implementar storage GCP dentro del código y firmar urls
+
 ✅ Diseñar la infraestructura en el cloud seleccionado GCP
 
-* En el front mostrar la evaluación detectada por el sistema
-* Definir la infraestructura como código usando terraform
-* Crear pipelines de despliegue
+✅  En el front mostrar la evaluación detectada por el sistema
+
+* Crear el pipeline en github actions
+* Definir el artifact registry para las imagenes en terraform
+* Definir la infraestructura como código usando terraform parte por parte
 * Ajustar infraestructura y probar APP
 * Definir como monitorear el sistema que herramientas se usarán
 * Unificar logs
