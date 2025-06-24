@@ -37,7 +37,7 @@ const Login: React.FC = () => {
 
   return (
     <div style={{ minHeight: '100vh', display: 'flex', flexDirection: 'column' }}>
-      <nav style={{ height: 60, display: 'flex', alignItems: 'center', borderBottom: '1px solid #eee', padding: '0 24px' }}>
+      <nav style={{ height: 60, display: 'flex', alignItems: 'center', padding: '0 24px' }}>
         <span style={{ fontWeight: 700, fontSize: 22, display: 'flex', alignItems: 'center' }}>
           <span style={{ marginRight: 8, fontSize: 24 }}>▮</span> Evalio
         </span>

@@ -13,6 +13,8 @@ const QualificationView = () => {
   const [qualification, setQualification] = useState<Qualification | null>(
     null
   );
+  const [selectedImage, setSelectedImage] = useState<string | null>(null);
+  const [isModalOpen, setIsModalOpen] = useState(false);
   useEffect(() => {
     if (id) {
       getSummaryByTemplateId(id).then((data) => {
@@ -20,13 +22,24 @@ const QualificationView = () => {
       });
     }
 
-    return () => {};
+    return () => { };
   }, [id]);
+
 
   const handleExportQualifications = (templateId: string | undefined) => {
     if (templateId) {
       generateCsvSummaryQualifications(templateId).then();
     }
+  };
+
+  const handleViewExam = (examPath: string) => {
+    setSelectedImage(examPath);
+    setIsModalOpen(true);
+  };
+
+  const closeModal = () => {
+    setIsModalOpen(false);
+    setSelectedImage(null);
   };
 
   return (
@@ -55,7 +68,13 @@ const QualificationView = () => {
                   <td> {student.student_identification}</td>
                   <td>{student.student_name}</td>
                   <td>{student.score}</td>
-                  <td>Ver</td>
+                  <button
+                    className="view-exam-btn"
+                    onClick={() => handleViewExam(student.exam_path)}
+                    title="Ver examen"
+                  >
+                    👁️
+                  </button>
                 </tr>
               );
             })}
@@ -69,6 +88,20 @@ const QualificationView = () => {
           <Link to={'/evaluation'}>
             <img src={uploadIcon} alt='subir'></img>
           </Link>
+        </div>
+      )}
+      {isModalOpen && selectedImage && (
+        <div className="modal-overlay" onClick={closeModal}>
+          <div className="modal-content" onClick={(e) => e.stopPropagation()}>
+            <button className="modal-close" onClick={closeModal}>
+              ✕
+            </button>
+            <img
+              src={selectedImage}
+              alt="Examen del estudiante"
+              className="exam-image"
+            />
+          </div>
         </div>
       )}
     </>
