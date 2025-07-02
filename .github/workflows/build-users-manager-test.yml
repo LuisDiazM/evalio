@@ -1,0 +1,39 @@
+name: Test Users Manager Docker Build
+
+on:
+  push:
+    branches:
+      - develop
+    paths:
+      - 'users-manager/**'
+  pull_request:
+    branches:
+      - develop
+      - master
+    paths:
+      - 'users-manager/**'
+
+jobs:
+  test-build:
+    runs-on: ubuntu-latest
+    
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v3
+
+      - name: Build Docker image (test only)
+        uses: docker/build-push-action@v5
+        with:
+          context: ./users-manager
+          push: false
+          tags: users-manager:test
+          cache-from: type=gha
+          cache-to: type=gha,mode=max
+
+      - name: Verify image was built
+        run: |
+          echo "✅ Docker image built successfully!"
+          echo "Image: users-manager:test" 
