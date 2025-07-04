@@ -5,14 +5,14 @@ on:
     branches:
       - develop
       - master
-    paths:
-      - 'evalio-manager/**'
+    # paths:
+    #   - 'cv-grader-analyzer/**'
   pull_request:
     branches:
       - develop
       - master
     paths:
-      - 'evalio-manager/**'
+      - 'cv-grader-analyzer/**'
 
 jobs:
   build-and-push:
@@ -41,8 +41,8 @@ jobs:
       - name: Build and push Docker image
         uses: docker/build-push-action@v5
         with:
-          context: ./evalio-manager
+          context: ./cv-grader-analyzer
           push: ${{ github.event_name != 'pull_request' }} # Solo hace push en eventos de push, no en PRs
-          tags: ${{ secrets.GCP_ARTIFACT_REGISTRY_LOCATION }}-docker.pkg.dev/${{ secrets.GCP_PROJECT_ID }}/evalio-containers/manager:${{ github.sha }}
+          tags: ${{ secrets.GCP_ARTIFACT_REGISTRY_LOCATION }}-docker.pkg.dev/${{ secrets.GCP_PROJECT_ID }}/evalio-containers/grader_analyzer:${{ github.sha }}
           cache-from: type=gha
           cache-to: type=gha,mode=max
