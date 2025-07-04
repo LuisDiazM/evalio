@@ -55,6 +55,10 @@ Evalio se compone de los siguientes recursos de infraestructura en Google Cloud 
 - 1 CDN para manejo de caché para distribuir contenido
 - 1 DNS cloud para agregar las rutas hacia el load balancer y el backend para el reverse proxy
 
+La infraestructura completa del proyecto se encuentra definia como IaC  usando terraform y se puede observar en el siguiente repositorio https://github.com/LuisDiazM/evalio-infrastructure
+
+**NOTA** por temas de costos en esta configuración, se decidió compartir la máquina de NATS y mongoDB en una sóla.
+
 ### 3.3. Vista de procesos
 
 #### 3.3.0 Configuraciones para el calificador
@@ -91,7 +95,101 @@ junto con lo que detectó el sistema señalado en la imagen que subió en el pro
 
 ### 3.4. Vista de desarrollo
 
-### 3.5. Vista de implementación
+### 3.5. Vista de implementación o despliegue
+El proceso usa CI mediante pipelines de github actions que se encargan de generar las imágenes docker y subir hacia un artifact registry de GCP que fue creado mediante IaC.
+
+Para entender el proceso de despligue se tiene el siguiente diagrama donde se separa el CI que aplica directamente hacia este repositorio llamado evalio y su función es generar las imágenes de los contenedores. Para la etapa de CD se tiene un repositorio aparte de toda la infraestructura en terraform donde se actualizan los tags de las imágenes generadas por el artifact registry para que con terraform se apliquen los cambios y por ende el despliegue.
+
+![diagram](/docs/despliegue.png)
+
+En GCP se creó una cuenta de servicio para que sea manejada únicamente para administrar el artifact registry (almacenamiento de contenedores) y la conexión con github actions se utilizó Workload Identity Federation (WIF), esta es una característica que ofrece ventajas respecto a métodos tradicionales como generar las claves de la cuenta de servicio y almacenarlas en secretos dentro del proyecto ya que estas claves de la manera tradicional son de larga duración, con WIF se emiten claves de corta duración (1 hora defecto) con la cuenta de servicio. El siguiente articulo explica la conexión de WIF con github https://cloud.google.com/blog/products/identity-security/enabling-keyless-authentication-from-github-actions
+
+A continuación se muestran los pasos seguidos para lograr la conexión WIF y github actions:
+
+* Paso 1: Crear la Cuenta de Servicio: :a cuenta de servicio con el rol Artifact Registry Administrator. Anota su dirección de correo
+  electrónico, la necesitarás más adelante. Por ejemplo: evalio-runner@tu-proyecto-gcp.iam.gserviceaccount.com.
+
+* Paso 2: Crear un Workload Identity Pool
+
+  Un "Pool" es un contenedor para gestionar identidades externas (como GitHub Actions).
+
+      - Ve a la consola de Google Cloud -> IAM & Admin -> Workload Identity Federation.
+      - Haz clic en Crear Pool.
+      - Nombre: github-pool (o el que prefieras).
+      - ID del Pool: Anota este ID.
+      - Haz clic en Continuar.
+
+* Paso 3: Añadir un Proveedor al Pool
+
+  El "Proveedor" define qué identidad externa puede asumir roles en GCP.
+
+
+      - En la página de tu Pool, haz clic en Añadir Proveedor.
+      - Selecciona OpenID Connect (OIDC).
+      - Nombre del Proveedor: github-provider.
+      - ID del Proveedor: Anota este ID.
+      - Emisor (URL): https://token.actions.githubusercontent.com
+      - Audiencia: Deja la audiencia por defecto (https://iam.googleapis.com/...).
+      - Mapeo de Atributos:
+        * google.subject: assertion.sub
+        * attribute.actor: assertion.actor
+        * attribute.repository: assertion.repository
+      - Condición de Atributo (Opcional pero recomendado): Para limitar qué repositorios pueden usar esta identidad.
+        * attribute.repository == 'tu-usuario-github/tu-repositorio'
+        * Ejemplo: attribute.repository == 'LuisDiazM/evalio' # este es el repositorio
+      - Haz clic en Guardar.
+
+* Paso 4: Conceder Permisos a la Identidad Federada
+
+
+  Ahora, permite que las identidades de GitHub Actions (filtradas por tu repositorio) actúen como tu cuenta de
+  servicio.
+
+
+   1. Ve a la página de tu Cuenta de Servicio en IAM.
+   2. Selecciona la pestaña Permisos.
+   3. Haz clic en Conceder Acceso.
+   4. En el campo Nuevos principales, pega lo siguiente, reemplazando los valores:
+    
+     principalSet://iam.googleapis.com/projects/NUMERO_DE_PROYECTO/locations/global/workloadIdentityPools/ID
+     _DEL_POOL/attribute.repository/tu-usuario-github/tu-repositorio
+
+
+       * NUMERO\_DE\_PROYECTO: Lo encuentras en la página principal de tu proyecto de GCP.
+       * ID\_DEL\_POOL: El que anotaste en el Paso 2.
+       * tu-usuario-github/tu-repositorio: El nombre de tu repositorio.
+
+   5. Asigna el rol Workload Identity User. Esto permite a la identidad federada obtener tokens para la cuenta de
+      servicio.
+   6. Haz clic en Guardar.
+* Paso 5: Configurar los Secretos en GitHub
+
+
+  Ve a tu repositorio de GitHub -> Settings -> Secrets and variables -> Actions.
+
+  Crea los siguientes secretos:
+
+
+   * GCP_WORKLOAD_IDENTITY_PROVIDER:
+       * Valor:
+         projects/NUMERO_DE_PROYECTO/locations/global/workloadIdentityPools/ID_DEL_POOL/providers/ID_DEL_PROVEEDOR
+       * Reemplaza los valores con los que anotaste.
+
+
+   * GCP_SERVICE_ACCOUNT_EMAIL:
+       * Valor: El email de tu cuenta de servicio.
+       * Ejemplo: evalio-runner@tu-proyecto-gcp.iam.gserviceaccount.com
+
+   * GCP_PROJECT_ID:
+       * Valor: El ID de tu proyecto de Google Cloud.
+
+
+   * GCP_ARTIFACT_REGISTRY_LOCATION:
+       * Valor: La región de tu Artifact Registry.
+       * Ejemplo: us-central1
+
+
+
 ### 3.6. Vista de datos
 #### 3.6.1 Diagrama
 #### 3.6.2 Modelo de datos principal.
@@ -254,9 +352,13 @@ Start the server
 
 ✅  En el front mostrar la evaluación detectada por el sistema
 
-* Crear el pipeline en github actions
-* Definir el artifact registry para las imagenes en terraform
+✅ Crear el pipeline en github actions
+
+✅ Definir el artifact registry para las imagenes en terraform
+
+
 * Definir la infraestructura como código usando terraform parte por parte
+
 * Ajustar infraestructura y probar APP
 * Definir como monitorear el sistema que herramientas se usarán
 * Unificar logs
