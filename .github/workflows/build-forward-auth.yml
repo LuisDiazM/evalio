@@ -1,0 +1,48 @@
+name: Build and Push forward-auth to GCP Artifact Registry
+
+on:
+  push:
+    branches:
+      - develop
+      - master
+    # paths:
+    #   - 'forward-auth/**'
+  pull_request:
+    branches:
+      - develop
+      - master
+    paths:
+      - 'forward-auth/**'
+
+jobs:
+  build-and-push:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      id-token: write # Necesario para la autenticación con Workload Identity Federation
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Authenticate to Google Cloud
+        id: auth
+        uses: 'google-github-actions/auth@v2'
+        with:
+          workload_identity_provider: '${{ secrets.GCP_WORKLOAD_IDENTITY_PROVIDER }}' # Formato: projects/NUMERO/locations/global/workloadIdentityPools/POOL_ID/providers/PROVIDER_ID
+          service_account: '${{ secrets.GCP_SERVICE_ACCOUNT_EMAIL }}' # Email de la cuenta de servicio
+
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v3
+
+      - name: Configure Docker for GCP Artifact Registry
+        run: gcloud auth configure-docker ${{ secrets.GCP_ARTIFACT_REGISTRY_LOCATION }}-docker.pkg.dev
+
+      - name: Build and push Docker image
+        uses: docker/build-push-action@v5
+        with:
+          context: ./forward-auth
+          push: ${{ github.event_name != 'pull_request' }} # Solo hace push en eventos de push, no en PRs
+          tags: ${{ secrets.GCP_ARTIFACT_REGISTRY_LOCATION }}-docker.pkg.dev/${{ secrets.GCP_PROJECT_ID }}/evalio-containers/forward_auth:${{ github.sha }}
+          cache-from: type=gha
+          cache-to: type=gha,mode=max
