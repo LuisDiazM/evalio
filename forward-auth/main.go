@@ -136,6 +136,9 @@ func main() {
 		}
 		return c.SendStatus(fiber.StatusOK)
 	})
-
-	log.Fatal(app.Listen(":1337"))
+	port := os.Getenv("PORT")
+	if port == "" {
+		port = "1337" // Default port if not set
+	}
+	log.Fatal(app.Listen(":" + port))
 }
