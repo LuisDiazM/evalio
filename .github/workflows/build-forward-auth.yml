@@ -5,8 +5,8 @@ on:
     branches:
       - develop
       - master
-    paths:
-      - 'forward-auth/**'
+    # paths:
+    #   - 'forward-auth/**'
   pull_request:
     branches:
       - develop

@@ -5,8 +5,8 @@ on:
     branches:
       - develop
       - master
-    paths:
-      - 'evalio-manager/**'
+    # paths:
+    #   - 'evalio-manager/**'
   pull_request:
     branches:
       - develop
