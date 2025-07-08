@@ -188,7 +188,8 @@ A continuación se muestran los pasos seguidos para lograr la conexión WIF y gi
        * Valor: La región de tu Artifact Registry.
        * Ejemplo: us-central1
 
-
+Adicionalmente el pipeline de despliegue cambiará los certificados ya que estos se proveen en el 
+repositorio para temas de correr en local, pero para correr en cloud es importante tener otros certificados
 
 ### 3.6. Vista de datos
 #### 3.6.1 Diagrama
