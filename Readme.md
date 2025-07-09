@@ -234,6 +234,7 @@ Evalio de momento no expone APIS para su uso público y no se conecta con sistem
 ## 7. Escalabilidad y Rendimiento
 
 ### 7.1. Descripción de procesos de escalamiento.
+Actualmente evalio cuenta con 3 microservicios serverless con cloud run cuyo escalamiento es automático por GCP basado en req/s y uso de CPU, 1 máquina virtual que ejecuta el microservicio que analyza las imágenes, sin embargo, este microservicio hace pull 1 examen a la vez, lo que en teoría sacrifica tiempo para no estar sesgado en recursos, si se quisiera reducir el tiempo se podría escalar horizontalmente este servicio (de momento no lo hace), para la base de datos y el broker que conviven en la misma máquina (por temas de costos) el escalamiento sería manual y de forma vertical.
 
 ## 8. Operación y Mantenimiento
 
