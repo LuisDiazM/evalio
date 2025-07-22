@@ -9,7 +9,6 @@ El producto al pasar por una etapa del ciclo de vida del software su diseño e i
 ### 1.2. Alcance del producto
 Evalio permitirá calificar parciales o evaluaciones de opciones múltiples con única respuesta usando técnicas de OMR (Optical Mark Recognition), también permitirá administrar los diferentes grupos de estudiantes, plantillas de evaluaciones para administrar los diferentes semestres.
 
-Su modelo de acceso se basa en suscripciones mensuales que se administrarán para su control de acceso.
 
 ### 1.3. Resumen ejecutivo
 Evalio es una plataforma que usando técnicas de visión por computador ayudará a calificar evaluaciones ahorrando tiempo al docente ya que el sistema de manera automática analiza las fotos y saca los resúmenes y listados de calificación.
@@ -17,6 +16,7 @@ Evalio es una plataforma que usando técnicas de visión por computador ayudará
 ## 2. Visión General del Producto
 
 ### 2.1. Descripción general del sistema
+El sistema evalio es un producto que integra técnicas de visión por computador para evaluar o calificar exámenes de selección múltiple con única respuesta, donde podrá administrar las pruebas y generar reportes sobre las calificaciones de los estudiantes, su sistema se basa en microservicios, donde usa patrones de comunicación sincronos, asincronos como publicador - suscriptor, forward auth donde delega a un microservicio externo el tema de seguridad mediante un proxy inverso, toda la infraestructura está en GCP, sin embargo, los microservicios están contenedores que los hace fácilmente transportables.
 
 ### 2.3. Principales casos de uso
 

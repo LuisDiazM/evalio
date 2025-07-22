@@ -74,7 +74,7 @@ class GraderAnalyzerUsecase(IGraderAnalyzerUseCase):
                 return path
         # Si no es local, descargar desde GCP
         # path esperado: bucket/object_path
-        bucket = "evalio-multimedia-pdn"
+        bucket = os.getenv("GCP_BUCKET_NAME","evalio-multimedia-pdn")
         # path puede ser solo el nombre del blob
         filename = os.path.basename(path)
         temp_dir = "outputs/tmp_downloads"
@@ -85,7 +85,7 @@ class GraderAnalyzerUsecase(IGraderAnalyzerUseCase):
 
     def __create_summary(self, exam: Exam, score: float, template_response: TemplateResponses, output:str) -> SummaryQualifications:
         # Subir la imagen procesada al bucket y guardar el blob name
-        bucket = "evalio-multimedia-pdn"
+        bucket = os.getenv("GCP_BUCKET_NAME","evalio-multimedia-pdn")
         exam_path = exam.exam_path.split("/")
         exam_path = "/".join(exam_path[:-1])
         blob_name = f"{exam_path}/vis_{exam.student_identification}.png"
