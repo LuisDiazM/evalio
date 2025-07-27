@@ -228,7 +228,7 @@ Las contraseñas almacenadas no se guardan en texto plano sino por medio de hash
 
 ## 6. Integraciones y Comunicaciones Externas
 
-Evalio de momento no expone APIS para su uso público y no se conecta con sistemas de infraestructura externos que se encuentren fuera de GCP
+Evalio de momento no expone APIS para su uso público y no se conecta con sistemas de infraestructura externos que se encuentren fuera de GCP, las APIS de acceso del sistema están publicadas con el mecanismo de seguridad que usa evalio por JWT firmados con RSA, sin embargo, no están pensadas para exponer a otros sistemas externos de momento.
 
 
 ## 7. Escalabilidad y Rendimiento
@@ -242,14 +242,23 @@ Actualmente evalio cuenta con 3 microservicios serverless con cloud run cuyo esc
 
 ### 8.2. Gestión de logs y alertas
 
-
 ## 9. Decisiones Arquitectónicas Clave
 
 
 ### 9.1. Registro de decisiones arquitectónicas (ADR)
+* El proyecto escogió la arquitectura entre servicios serverless y máquinas virtuales gestionadas con herramientas opensource que
+se pudiesen instalar como docker, traefik, nats, mongodb, esto se hace con el fin de tener los menores costos posibles.
+
+* La distribución del front, hay otras alternativas para exponerlo especialmente para una aplicación de bajo tráfico como evalio, sin embargo, se escogío esta arquitectura con el balanceador de carga, CDN, bucket porque es la arquitectura más robusta para exponer un front y a nivel personal me permitía practicar.
+
+* El análisis por OMR tuvo varias fases iniciando con detección de bordes, detección de formas, incluso con el entrenamiento de un red neuronal convolucional, sin embargo, la que mejor tuvo éxito fue la mezcla entre detección de bordes y formas.
+
+* ¿Por qué hay un dominio en amazon y la infraestructura en GCP? el dominio lo había comprado antes de que surgiera la idea, la compra fue con fines de práctica y cuando surgió la idea se decidió llamar el proyecto basado en el dominio previamente adquirido, por eso está en ruta53 y no en GCP.
 
 ### 9.2. Impactos de las decisiones tomadas
+* El proyecto es más una práctica basado en una pasión personal y se llevó al punto de hacerlo lo más parecido a un producto completo que cubriera el ciclo de vida de desarrollo del software.
 
+* También se quiere explorar el uso de LLMs para tareas de clasificación y probar su eficacia costo/beneficio, esto podrá expandir los tipos de respuestas ya que actualmente sólo está limitado a 4 opciones de respuesta A,B,C o D.
 
 ## 10. Roadmap de Evolución
 
