@@ -209,6 +209,7 @@ El stack tecnológico de evalio es:
 * Base de datos NoSQL como MongoDB
 * Broker de mensajería NATS
 * Almacenamiento de multimedia en un storage tipo cloud storage
+* Nube usada GCP, los microservicios todos corren en contenedores para transportabilidad y evolución de infraestructura.
 
 ## 5. Seguridad
 
@@ -239,8 +240,9 @@ Actualmente evalio cuenta con 3 microservicios serverless con cloud run cuyo esc
 ## 8. Operación y Mantenimiento
 
 ### 8.1. Estrategias de monitoreo
-
+Dado que la aplicación de evalio no va a estar corriendo por mucho tiempo o que sea un producto, no se tiene implementada una estrategia, sin embargo, como temas practicos se estudiará la viabilidad de prometheus + grafana.
 ### 8.2. Gestión de logs y alertas
+Los logs no se tiene estrategia de estandard implementada, pero como temas practicos se estudiará fluentd como mecanismo de centralización.
 
 ## 9. Decisiones Arquitectónicas Clave
 
