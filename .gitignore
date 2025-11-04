@@ -1,2 +1,7 @@
 .qodo
 venv
+volumes/mongo-data
+volumes/nats-data
+volumes/shared-data
+volumes/service-accounts
+node_modules

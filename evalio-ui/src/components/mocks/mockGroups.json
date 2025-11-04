@@ -1,0 +1,137 @@
+[
+    {
+        "name": "E041",
+        "period": "2025-1",
+        "subject_name": "GESTIONES ADMINISTRATIVAS",
+        "created_at": "2025-04-24T01:01:17.647000",
+        "professor_id": "123412341234",
+        "professor_name": "Ingri Yulieth Rojas",
+        "id": "454646464644",
+        "students": [
+            {
+                "name": "MARLON LEANDRO ACERO FONTECHA",
+                "identification": 1193092984
+            },
+            {
+                "name": "QUITIAN ROMERO ANGIE TATIANA",
+                "identification": 1101753119
+            },
+            {
+                "name": "HEIDY LORENA ARDILA BAREÑO",
+                "identification": 1001185994
+            },
+            {
+                "name": "KAROL YOJANA AVENDAÑO ESPITIA",
+                "identification": 1097162112
+            },
+            {
+                "name": "LEZLY VALENTINA BAREÑO DIAZ",
+                "identification": 1007554887
+            },
+            {
+                "name": "MARIA CAROLINA CANTILLO RIVERA",
+                "identification": 1005484949
+            },
+            {
+                "name": "NICOLAS CORTES MOGOLLON",
+                "identification": 1005485329
+            },
+            {
+                "name": "INGRID CRUZ HERREÑO",
+                "identification": 1005294900
+            },
+            {
+                "name": "SANDY YULIANA FRANCO ARIZA",
+                "identification": 1101174617
+            },
+            {
+                "name": "SANTIAGO HERNANDEZ BARBOSA",
+                "identification": 1000163355
+            },
+            {
+                "name": "JUAN DAVID HERRAN MEDINA",
+                "identification": 1101760438
+            },
+            {
+                "name": "WILSON FERNEY HERREÑO ARIZA",
+                "identification": 1001277503
+            },
+            {
+                "name": "ARIZA SANCHEZ JENNY VANESSA",
+                "identification": 1099203868
+            },
+            {
+                "name": "LEIDY NATHALIA LEON BARBOSA",
+                "identification": 1101753167
+            },
+            {
+                "name": "DIEGO ANDRES MENESES CASTILLO",
+                "identification": 1101760861
+            },
+            {
+                "name": "MONICA MARIANA MORALES GALEANO",
+                "identification": 1097638213
+            },
+            {
+                "name": "SINDY VANESSA MORENO QUIROGA",
+                "identification": 1005452036
+            },
+            {
+                "name": "DANIEL ALEJANDRO OLARTE SANTAMARIA",
+                "identification": 1005362904
+            },
+            {
+                "name": "EDWIN OSMA ARIZA",
+                "identification": 1005273502
+            },
+            {
+                "name": "KAROL VANESA PARDO RODRIGUEZ",
+                "identification": 1097638300
+            },
+            {
+                "name": "NIDIA KATERINE QUIROGA CASTILLO",
+                "identification": 1101758282
+            },
+            {
+                "name": "JUAN ESTEBAN QUIROGA MENDOZA",
+                "identification": 1096906038
+            },
+            {
+                "name": "JUAN DIEGO RIVERA ROMERO",
+                "identification": 1005341500
+            },
+            {
+                "name": "HAYDER SANTIAGO ROMERO SIERRA",
+                "identification": 1101018498
+            },
+            {
+                "name": "FRANCISCO JAVIER SARMIENTO PACHON",
+                "identification": 1096484768
+            },
+            {
+                "name": "JUAN ESTEBAN TAMAYO CRISTANCHO",
+                "identification": 1002724216
+            },
+            {
+                "name": "YEIMY YOMARA TEUTA GONZALEZ",
+                "identification": 1005196175
+            },
+            {
+                "name": "JOHON FREDY TORRES TELLEZ",
+                "identification": 1095486124
+            },
+            {
+                "name": "ANDRI VIKNEY TRIANA ACUÑA",
+                "identification": 1097638252
+            },
+            {
+                "name": "LAURA VALENTINA UNIGARRO O",
+                "identification": 1101760533
+            },
+            {
+                "name": "JONATHAN ANDRES VELASCO PARRA",
+                "identification": 1192916844
+            }
+        ]
+    }
+]

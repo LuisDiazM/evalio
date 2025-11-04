@@ -1,0 +1,63 @@
+.container-groups {
+  display: flex;
+  flex-direction: flex-end;
+  align-items: center;
+  justify-content: center;
+  margin-top: 30px;
+  gap: 10px;
+  flex-wrap: wrap;
+  overflow: auto;
+  height: 100%;
+
+  /* padding-top: 10px; */
+  /* padding-bottom: 10px; */
+}
+
+.card-group {
+  border: 1px solid var(--shadow-color);
+  border-radius: 10px;
+  width: 290px;
+  text-overflow: ellipsis;
+  text-align: center;
+  box-sizing: border-box;
+  height: 140px;
+}
+.card-group:hover {
+  box-shadow: 0 6px 18px rgba(0, 0, 0, 0.15);
+  z-index: 1;
+  overflow: hidden;
+  transform-origin: center;
+  cursor: pointer;
+  border: 3px solid var(--shadow-color);
+}
+
+.groups-header {
+  display: flex;
+  align-items: center;
+  flex-direction: column;
+  padding-left: 10px;
+}
+
+.container-list-group {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+img:hover {
+  cursor: pointer;
+}
+
+    .btn-delete {
+      margin-top: 1rem;
+      background: none;
+      border: none;
+      color: var(--danger);
+      font-size: 1.5rem;
+      cursor: pointer;
+      transition: color 0.3s;
+    }
+
+.btn-delete:hover {
+  color: #dc2626;
+}
