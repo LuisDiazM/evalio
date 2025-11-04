@@ -10,7 +10,15 @@
       "@nx/react/typings/cssmodule.d.ts",
       "@nx/react/typings/image.d.ts"
     ],
-    "rootDir": "src"
+    "rootDir": "src",
+    "baseUrl": ".",
+    "paths": {
+      "@/*": ["src/app/*"],
+      "@/config/*": ["src/app/config/*"],
+      "@/features/*": ["src/app/features/*"],
+      "@/shared/*": ["src/app/shared/*"],
+      "@/styles/*": ["src/styles/*"],
+    }
   },
   "exclude": [
     "out-tsc",
