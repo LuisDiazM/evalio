@@ -193,6 +193,8 @@ repositorio para temas de correr en local, pero para correr en cloud es importan
 
 ### 3.6. Vista de datos
 #### 3.6.1 Diagrama
+![manager](/docs/evalio-manager.jpg)
+![users](/docs/evalio-users.jpg)
 #### 3.6.2 Modelo de datos principal.
 #### 3.6.3 Catalogo
 Base de datos, documentos y esquema de almacenamiento.

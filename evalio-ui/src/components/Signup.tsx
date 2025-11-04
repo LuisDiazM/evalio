@@ -33,7 +33,7 @@ const Signup: React.FC = () => {
       } else {
         setError(data.message || 'Error al registrar');
       }
-    } catch (err) {
+    } catch {
       setError('Error de red');
     } finally {
       setLoading(false);

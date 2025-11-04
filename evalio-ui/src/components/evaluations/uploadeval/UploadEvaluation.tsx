@@ -8,10 +8,10 @@ import { uploadExam } from '../../../services/manager/managerService';
 
 const UploadEvaluation = () => {
   const [step, setStep] = useState(1);
-  const [qrResult, setQrResult] = useState(null);
+  const [qrResult, setQrResult] = useState<any>(null);
   const [image, setImage] = useState(null);
   const [aspectRatio, setAspectRatio] = useState(1); // Estado para la relación de aspecto
-  const webcamRef = useRef(null);
+  const webcamRef:any = useRef(null);
 
   const videConstrains = {
     facingMode: 'environment',
@@ -19,7 +19,7 @@ const UploadEvaluation = () => {
     height: { ideal: 1920 },
   };
 
-  const handleQrScan = (result) => {
+  const handleQrScan = (result:any) => {
     if (!result || !Array.isArray(result) || !result[0]?.rawValue) return;
 
     try {
@@ -41,7 +41,7 @@ const UploadEvaluation = () => {
 
   const handleCapture = () => {
     if (webcamRef.current) {
-      const imageSrc = webcamRef.current.getScreenshot({
+      const imageSrc = webcamRef.current?.getScreenshot({
         width: 1920, // Forzamos el ancho de la captura
         height: 1920 * aspectRatio, // Ajustamos la altura según la relación de aspecto
         screenshotQuality: 1, // Máxima calidad (0 a 1)
@@ -82,7 +82,7 @@ const UploadEvaluation = () => {
   };
 
   // Función para obtener las dimensiones del video y ajustar la relación de aspecto
-  const handleUserMedia = (stream) => {
+  const handleUserMedia = (stream:any) => {
     const track = stream.getVideoTracks()[0];
     const settings = track.getSettings();
     if (settings.width && settings.height) {

@@ -28,7 +28,7 @@ const Login: React.FC = () => {
       } else {
         setError('Invalid credentials');
       }
-    } catch (err) {
+    } catch  {
       setError('Network error');
     } finally {
       setLoading(false);
