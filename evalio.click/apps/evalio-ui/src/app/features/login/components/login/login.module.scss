@@ -9,23 +9,26 @@
   max-width: 480px;
   margin: 4rem auto 0;
   width: 100%;
-  padding: var(--space-md);
+  /* increase overall padding so title, fields and button have more room */
+  padding: var(--space-lg, 2rem);
 }
 
 .title {
   text-align: center;
   font-weight: 700;
   font-size: 2rem;
-  margin-bottom: var(--space-lg);
+  /* add extra space under the title */
+  margin-bottom: calc(var(--space-lg, 2rem) + 0.5rem);
   color: var(--text);
 }
 
 .field {
-  margin-bottom: var(--space-md);
+  /* give inputs more vertical spacing */
+  margin-bottom: calc(var(--space-md, 1rem) + 0.5rem);
 }
 
 .fieldSmall {
-  margin-bottom: var(--space-sm);
+  margin-bottom: calc(var(--space-sm, 0.5rem) + 0.25rem);
 }
 
 .label {
@@ -61,7 +64,7 @@
 
 .submit {
   width: 50%;
-  padding: 0.75rem 0;
+  padding: 1rem 0;
   border-radius: var(--radius-md);
   background: var(--accent);
   color: #fff;
@@ -83,11 +86,18 @@
 
 .right {
   text-align: right;
-  margin-top: calc(var(--space-sm));
+  /* push the submit/button row further from inputs */
+  margin-top: var(--space-md, 1rem);
 }
 
 .signup {
   color: var(--muted);
   font-size: 0.95rem;
   text-decoration: underline;
+}
+
+.error {
+  color: var(--danger);
+  font-size: 0.875rem;
+  margin-top: calc(var(--space-sm) / 2);
 }

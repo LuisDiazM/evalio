@@ -1,0 +1,122 @@
+@use "sass:color";
+
+// Signup form styles that rely on runtime CSS custom properties declared in theme.module.scss
+
+.signup-wrapper {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: var(--space-lg, 24px);
+  box-sizing: border-box;
+}
+
+.signup-form {
+  width: 100%;
+  max-width: 480px;
+  background: var(--surface);
+  padding: var(--space-lg, 24px);
+  border-radius: var(--radius-lg, 14px);
+  border: 1px solid var(--border);
+  box-shadow: var(--shadow-md);
+  box-sizing: border-box;
+}
+
+.title {
+  text-align: center;
+  font-weight: 700;
+  font-size: var(--heading-1, 32px);
+  margin-bottom: var(--space-lg, 24px);
+  color: var(--text);
+}
+
+.field {
+  margin-bottom: var(--space-md, 16px);
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  gap: 12px;
+}
+
+.label {
+  width: 140px;
+  text-align: left;
+  color: var(--text);
+  font-weight: 600;
+}
+
+.input {
+  width: 100%;
+  padding: 12px 14px;
+  border-radius: var(--radius-md, 10px);
+  border: 1px solid var(--border);
+  font-size: var(--text-base, 16px);
+  background: var(--surface);
+  color: var(--text);
+  box-sizing: border-box;
+}
+
+.actions {
+  display: flex;
+  gap: var(--space-md, 16px);
+  align-items: center;
+  justify-content: space-between;
+  margin-top: var(--space-md, 16px);
+}
+
+.submit {
+  width: 50%;
+  padding: 14px 0;
+  border-radius: 12px;
+  background: var(--accent);
+  color: var(--text);
+  font-weight: 600;
+  font-size: 18px;
+  border: none;
+  cursor: pointer;
+}
+
+.link {
+  color: var(--muted);
+  font-size: 15px;
+  text-decoration: underline;
+}
+
+.error {
+  color: var(--danger);
+  font-size: 0.875rem;
+  margin-top: calc(var(--space-sm) / 2);
+}
+
+/* Responsive adjustments */
+@media (max-width: 520px) {
+  .signup-form {
+    padding: var(--space-md, 16px);
+  }
+
+  .title {
+    font-size: 24px;
+  }
+
+  .actions {
+    flex-direction: column;
+    gap: 12px;
+    align-items: stretch;
+  }
+
+  .submit {
+    width: 100%;
+  }
+}
+
+@media (max-width: 520px) {
+  .field {
+    flex-direction: column;
+    align-items: stretch;
+  }
+
+  .label {
+    width: 100%;
+  }
+}

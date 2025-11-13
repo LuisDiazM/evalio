@@ -5,6 +5,7 @@
     "tsBuildInfoFile": "dist/tsconfig.app.tsbuildinfo",
     "jsx": "react-jsx",
     "lib": ["dom"],
+    "resolveJsonModule": true,
     "types": [
       "node",
       "@nx/react/typings/cssmodule.d.ts",
@@ -18,6 +19,7 @@
       "@/features/*": ["src/app/features/*"],
       "@/shared/*": ["src/app/shared/*"],
       "@/styles/*": ["src/styles/*"],
+      "@/i18n/*": ["src/app/i18n/*"]
     }
   },
   "exclude": [
@@ -36,5 +38,12 @@
     "eslint.config.cjs",
     "eslint.config.mjs"
   ],
-  "include": ["src/**/*.js", "src/**/*.jsx", "src/**/*.ts", "src/**/*.tsx"]
+  "include": [
+    "src/**/*.js",
+    "src/**/*.jsx",
+    "src/**/*.ts",
+    "src/**/*.tsx",
+    "src/**/*.json",
+    "src/**/*.d.ts"
+  ]
 }

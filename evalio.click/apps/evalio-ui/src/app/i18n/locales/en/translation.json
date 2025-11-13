@@ -1,0 +1,30 @@
+{
+  "login": {
+    "title": "Sign in to your account",
+    "email": "Email",
+    "password": "Password",
+    "submit": "Sign in",
+    "noAccount": "Don't have an account? Sign up",
+    "passwordRequired": "Password is required",
+    "invalidPassword": "Password must be at least 6 characters",
+    "invalidEmail": "Email must be in the format @example.com",
+    "emailRequired": "Email is required"
+  },
+  "signup":{
+    "title": "Create your account",
+    "email": "Email",
+    "password": "Password",
+    "submit": "Sign up",
+    "haveAccount": "Already have an account? Sign in",
+    "passwordRequired": "Password is required",
+    "invalidPassword": "Password must be at least 6 characters",
+    "invalidEmail": "Email must be in the format name@example.com",
+    "emailRequired": "Email is required",
+    "fullNameRequired": "Full name is required",
+    "passwordsMustMatch": "Passwords must match",
+    "confirmPasswordRequired": "Confirm password is required"
+  },
+  "nav": {
+    "brand": "Evalio"
+  }
+}

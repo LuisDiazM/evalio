@@ -9,27 +9,23 @@ type Config = {
 }
 
 const getEnv = (key: string, fallback = ''): string => {
-  // 1) process.env (Bun / Node)
-  const maybeProcess = globalThis as unknown as { process?: { env?: Record<string, string | undefined> } }
-  if (maybeProcess.process?.env && typeof maybeProcess.process.env[key] !== 'undefined') {
-    return String(maybeProcess.process.env[key])
-  }
-
-  // 2) runtime-injected global (e.g., window.__ENV__ or globalThis.__ENV__)
-  const maybeGlobalEnv = globalThis as unknown as { __ENV__?: Record<string, string | undefined> }
-  if (maybeGlobalEnv.__ENV__ && typeof maybeGlobalEnv.__ENV__[key] !== 'undefined') {
-    return String(maybeGlobalEnv.__ENV__[key])
-  }
-
-  // 3) import.meta.env (bundle-time replacements like rspack support)
+  // 1) Build-time injected process.env (rspack define plugin replaces these at compile time)
   try {
-    const meta = (import.meta as unknown as { env?: Record<string, unknown> }).env
-    if (meta && typeof meta[key] !== 'undefined') return String(meta[key])
+    if (typeof process !== 'undefined' && process.env) {
+      const value = process.env[key];
+      if (value !== undefined) {
+        return String(value);
+      }
+    }
   } catch {
-    // ignore if import.meta is not available in this runtime
+    // process not available
+  }
+  // 2) Runtime fallback for development - use location origin for PUBLIC_URL
+  if (key === 'PUBLIC_URL' && typeof window !== 'undefined' && window.location) {
+    return window.location.origin;
   }
 
-  return fallback
+  return fallback;
 }
 
 export const config: Config = {
