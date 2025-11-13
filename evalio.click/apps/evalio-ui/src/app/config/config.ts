@@ -1,37 +1,36 @@
-// Config object built from environment variables.
-// Prioritize runtime sources appropriate for an NX monorepo using Bun and rspack:
-// 1) process.env (Bun/Node), 2) globalThis.__ENV__ (server-injected at runtime),
-// 3) import.meta.env (rspack compile-time) as a last resort.
+// Environment configuration
+// Variables are injected at compile-time via rspack's define plugin
+// from environment-specific .env files (.env.development, .env.qa, .env.production)
 
 type Config = {
-  PUBLIC_URL: string
-  AUTH_URL: string
+  PUBLIC_URL: string;
+  AUTH_URL: string;
+  NODE_ENV: string;
 }
 
-const getEnv = (key: string, fallback = ''): string => {
-  // 1) Build-time injected process.env (rspack define plugin replaces these at compile time)
-  try {
-    if (typeof process !== 'undefined' && process.env) {
-      const value = process.env[key];
-      if (value !== undefined) {
-        return String(value);
-      }
-    }
-  } catch {
-    // process not available
-  }
-  // 2) Runtime fallback for development - use location origin for PUBLIC_URL
-  if (key === 'PUBLIC_URL' && typeof window !== 'undefined' && window.location) {
-    return window.location.origin;
-  }
+// Direct access to process.env so rspack's define plugin can replace them
+// These will be replaced at compile-time with actual string values
+const PUBLIC_URL = process.env.PUBLIC_URL || '';
+const AUTH_URL = process.env.AUTH_URL || '';
+const NODE_ENV = process.env.NODE_ENV || 'development';
 
-  return fallback;
-}
+// Debug logging
+console.log('[config] Raw process.env values:');
+console.log('  process.env.PUBLIC_URL =', process.env.PUBLIC_URL, `(type: ${typeof process.env.PUBLIC_URL})`);
+console.log('  process.env.AUTH_URL =', process.env.AUTH_URL, `(type: ${typeof process.env.AUTH_URL})`);
+console.log('  process.env.NODE_ENV =', process.env.NODE_ENV, `(type: ${typeof process.env.NODE_ENV})`);
 
 export const config: Config = {
-  // Prefer PUBLIC_URL, fallback to VITE_REACT_PUBLIC_URL for compatibility
-  PUBLIC_URL: getEnv('PUBLIC_URL', getEnv('VITE_REACT_PUBLIC_URL', '')),
-  AUTH_URL: getEnv('AUTH_URL', ''),
-}
+  PUBLIC_URL: PUBLIC_URL || (typeof window !== 'undefined' ? window.location.origin : ''),
+  AUTH_URL: AUTH_URL,
+  NODE_ENV: NODE_ENV,
+};
+
+// Log final configuration (only in development)
+console.log('[config] Final environment configuration:', {
+  PUBLIC_URL: config.PUBLIC_URL,
+  AUTH_URL: config.AUTH_URL,
+  NODE_ENV: config.NODE_ENV,
+});
 
 export default config;

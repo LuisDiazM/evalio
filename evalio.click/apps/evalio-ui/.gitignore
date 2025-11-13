@@ -1,0 +1,6 @@
+# Local environment files (not committed)
+.env.local
+.env.*.local
+.env.development.local
+.env.qa.local
+.env.production.local
