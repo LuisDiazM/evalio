@@ -16,9 +16,12 @@ const Login = () => {
     const isValid = LoginSchema.isValidSync(values);
     if (isValid) {
       const response = await login(values.email, values.password);
-      console.log(response);
+      if (response?.token) {
+        localStorage.setItem('access_token', response.token);
+      }
     }
   };
+
   const formik = useFormik({
     initialValues: initialValues,
     onSubmit: submitLoginForm,

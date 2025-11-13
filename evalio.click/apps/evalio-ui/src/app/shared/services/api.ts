@@ -1,7 +1,7 @@
 import axios from 'axios';
 import { config } from '@/config/config';
 
-const base = config?.PUBLIC_URL;
+const base = config?.AUTH_URL;
 const api = axios.create({ baseURL: base });
 
 api.interceptors.request.use(
