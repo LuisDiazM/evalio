@@ -1,0 +1,446 @@
+[
+  {
+    "id": "6840357bb4a896fcb04dcaa2",
+    "name": "Diurno FCS001",
+    "period": "2025-1",
+    "subject_name": "Administración general",
+    "created_at": "2025-06-04T11:52:59.119000",
+    "professor_id": "6849edec495fde1d4f74751e",
+    "professor_name": "Ingri Rojas",
+    "students": [
+      {
+        "name": "LUIS FERNANDO ARIZA ARIZA",
+        "identification": 1097099035
+      },
+      {
+        "name": "MARIA FERNANDA BARBOSA CRUZ",
+        "identification": 1096906414
+      },
+      {
+        "name": "LYCED SIOMARA BARBOSA VELASCO",
+        "identification": 1101754598
+      },
+      {
+        "name": "YILIVER BARBOSA VELASCO",
+        "identification": 13957890
+      },
+      {
+        "name": "KAROL XIMENA CASTAÑEDA ROMERO",
+        "identification": 1102518280
+      },
+      {
+        "name": "YINETH DANIELA CHACON BERNAL",
+        "identification": 1101753993
+      },
+      {
+        "name": "NIXON ALEXANDER DIAZ FONTECHA",
+        "identification": 1101759203
+      },
+      {
+        "name": "LAURA CATHERINE FRANCO RUIZ",
+        "identification": 1099342636
+      },
+      {
+        "name": "CARLOS ANDRES MEDINA MORALES",
+        "identification": 1096906595
+      },
+      {
+        "name": "ANGELINE JOLIE MEJIA QUINTERO",
+        "identification": 1057488653
+      },
+      {
+        "name": "DANIELA VALENTINA MORALES BAREÑO",
+        "identification": 1101754104
+      },
+      {
+        "name": "DANIELA ALEJANDRA RODRIGUEZ BAUTISTA",
+        "identification": 1057514644
+      },
+      {
+        "name": "JENNY PAOLA SANTAMARIA HERNANDEZ",
+        "identification": 1103470499
+      },
+      {
+        "name": "HELLEN TATIANA SEDANO QUINTERO",
+        "identification": 1096483163
+      },
+      {
+        "name": "GEINNY VALENTINA VARGAS CIFUENTES",
+        "identification": 1099219830
+      },
+      {
+        "name": "LAURA VANESA VARGAS GALEANO",
+        "identification": 1096483479
+      }
+    ]
+  },
+  {
+    "id": "68403605b4a896fcb04dcaa9",
+    "name": "Nocturno FCS001",
+    "period": "2025-1",
+    "subject_name": "Administración general",
+    "created_at": "2025-06-04T11:52:59.119000",
+    "professor_id": "6849edec495fde1d4f74751e",
+    "professor_name": "Ingri Rojas",
+    "students": [
+      {
+        "name": "ANDRES FELIPE ACEVEDO PARDO",
+        "identification": 1096906467
+      },
+      {
+        "name": "RUBIELA ACUÑA GONZALEZ",
+        "identification": 1005205679
+      },
+      {
+        "name": "YULI TATIANA AMADOR VARGAS",
+        "identification": 1095484542
+      },
+      {
+        "name": "DAVID MANUEL ARIAS OSMA",
+        "identification": 1101755347
+      },
+      {
+        "name": "FABIAN RICARDO ARIZA GONZALEZ",
+        "identification": 1101754961
+      },
+      {
+        "name": "JULIANA CAÑAS FLOREZ",
+        "identification": 1096618739
+      },
+      {
+        "name": "BIANNY LIZETH CASTAÑEDA DUARTE",
+        "identification": 1005341960
+      },
+      {
+        "name": "DANNA VALENTINA COY GARZON",
+        "identification": 1097638758
+      },
+      {
+        "name": "SANDRA MILENA FONTECHA LAYTON",
+        "identification": 1101756474
+      },
+      {
+        "name": "ESTEBAN GOMEZ TORRES",
+        "identification": 1001217705
+      },
+      {
+        "name": "ERIKA YOJANA GONZALEZ SANTAMARIA",
+        "identification": 1101758315
+      },
+      {
+        "name": "DIEGO ALEJANDRO GUIZA PINZON",
+        "identification": 1043965965
+      },
+      {
+        "name": "KAREN JULIANA HERNANDEZ FLOREZ",
+        "identification": 1096483179
+      },
+      {
+        "name": "JEFRI LEANDRO HERNANDEZ HERNANDEZ",
+        "identification": 1096906280
+      },
+      {
+        "name": "YURANY MILENA HERNANDEZ TARQUINO",
+        "identification": 1073518875
+      },
+      {
+        "name": "JARID JINETH JIMENEZ GARCIA",
+        "identification": 1099546308
+      },
+      {
+        "name": "DAYANA NEIRA SANATAMARIA",
+        "identification": 1101754292
+      },
+      {
+        "name": "LESLYE MARILY NIÑO PERALTA",
+        "identification": 1099213240
+      },
+      {
+        "name": "KAROL ORTIZ ORTIZ",
+        "identification": 63437817
+      },
+      {
+        "name": "ZHARITH ANDREA OSORIO CONDE",
+        "identification": 1101687014
+      },
+      {
+        "name": "LEYDY PATRICIA PEÑA RINCON",
+        "identification": 1101018823
+      },
+      {
+        "name": "LUIS EDISON RAMIREZ COTACACHI",
+        "identification": 625125
+      },
+      {
+        "name": "COSTANZA RODRIGUEZ RAMOS",
+        "identification": 37671441
+      },
+      {
+        "name": "JARVID SEBASTIAN RODRIGUEZ ROMERO",
+        "identification": 1097332548
+      },
+      {
+        "name": "WILFRAN STIVEN SANABRIA MEDINA",
+        "identification": 1005196090
+      },
+      {
+        "name": "ANDREA CAROLINA TELLEZ FRANCO",
+        "identification": 1101018581
+      },
+      {
+        "name": "CARLOS ORLANDO ULLOA MATEUS",
+        "identification": 1099216339
+      }
+    ]
+  },
+  {
+    "id": "6840367cb4a896fcb04dcaaf",
+    "name": "TGE008 Diurno",
+    "period": "2025-1",
+    "subject_name": "Evaluación de mercados",
+    "created_at": "2025-06-04T11:52:59.119000",
+    "professor_id": "6849edec495fde1d4f74751e",
+    "professor_name": "Ingri Rojas",
+    "students": [
+      {
+        "name": "MARLON LEANDRO ACERO FONTECHA",
+        "identification": 1193092984
+      },
+      {
+        "name": "QUITIAN ROMERO ANGIE TATIANA",
+        "identification": 1101753119
+      },
+      {
+        "name": "HEIDY LORENA ARDILA BAREÑO",
+        "identification": 1001185994
+      },
+      {
+        "name": "KAROL YOJANA AVENDAÑO ESPITIA",
+        "identification": 1097162112
+      },
+      {
+        "name": "LEZLY VALENTINA BAREÑO DIAZ",
+        "identification": 1007554887
+      },
+      {
+        "name": "MARIA CAROLINA CANTILLO RIVERA",
+        "identification": 1005484949
+      },
+      {
+        "name": "NICOLAS CORTES MOGOLLON",
+        "identification": 1005485329
+      },
+      {
+        "name": "INGRID CRUZ HERREÑO",
+        "identification": 1005294900
+      },
+      {
+        "name": "SANDY YULIANA FRANCO ARIZA",
+        "identification": 1101174617
+      },
+      {
+        "name": "ANGIE VIVIANA GAMBOA FONTECHA",
+        "identification": 1101759858
+      },
+      {
+        "name": "SANTIAGO GONZALEZ QUINTERO",
+        "identification": 1102518065
+      },
+      {
+        "name": "SANTIAGO HERNANDEZ BARBOSA",
+        "identification": 1000163355
+      },
+      {
+        "name": "WILSON FERNEY HERREÑO ARIZA",
+        "identification": 1001277503
+      },
+      {
+        "name": "ARIZA SANCHEZ JENNY VANESSA",
+        "identification": 1099203868
+      },
+      {
+        "name": "LEIDY NATHALIA LEON BARBOSA",
+        "identification": 1101753167
+      },
+      {
+        "name": "DIEGO ANDRES MENESES CASTILLO",
+        "identification": 1101760861
+      },
+      {
+        "name": "MONICA MARIANA MORALES GALEANO",
+        "identification": 1097638213
+      },
+      {
+        "name": "SINDY VANESSA MORENO QUIROGA",
+        "identification": 1005452036
+      },
+      {
+        "name": "KAREN XIMENA OLARTE DIAZ",
+        "identification": 1005485192
+      },
+      {
+        "name": "DANIEL ALEJANDRO OLARTE SANTAMARIA",
+        "identification": 1005362904
+      },
+      {
+        "name": "EDWIN OSMA ARIZA",
+        "identification": 1005273502
+      },
+      {
+        "name": "KAROL VANESA PARDO RODRIGUEZ",
+        "identification": 1097638300
+      },
+      {
+        "name": "NIDIA KATERINE QUIROGA CASTILLO",
+        "identification": 1101758282
+      },
+      {
+        "name": "JUAN ESTEBAN QUIROGA MENDOZA",
+        "identification": 1096906038
+      },
+      {
+        "name": "JUAN DIEGO RIVERA ROMERO",
+        "identification": 1005341500
+      },
+      {
+        "name": "HAYDER SANTIAGO ROMERO SIERRA",
+        "identification": 1101018498
+      },
+      {
+        "name": "FRANCISCO JAVIER SARMIENTO PACHON",
+        "identification": 1096484768
+      },
+      {
+        "name": "JUAN ESTEBAN TAMAYO CRISTANCHO",
+        "identification": 1002724216
+      },
+      {
+        "name": "YEIMY YOMARA TEUTA GONZALEZ",
+        "identification": 1005196175
+      },
+      {
+        "name": "JOHON FREDY TORRES TELLEZ",
+        "identification": 1095486124
+      },
+      {
+        "name": "ANDRI VIKNEY TRIANA ACUÑA",
+        "identification": 1097638252
+      },
+      {
+        "name": "LAURA VALENTINA UNIGARRO O",
+        "identification": 1101760533
+      },
+      {
+        "name": "JONATHAN ANDRES VELASCO PARRA",
+        "identification": 1192916844
+      }
+    ]
+  },
+  {
+    "id": "68434067536a0320395fe814",
+    "name": "Nocturno",
+    "period": "2025-1",
+    "subject_name": "Legislación empresarial",
+    "created_at": "2025-06-06T19:22:17.753000",
+    "professor_id": "6849edec495fde1d4f74751e",
+    "professor_name": "Ingri Rojas",
+    "students": [
+      {
+        "name": "HEIDI JULIETH ARIZA HERNANDEZ",
+        "identification": 1031650474
+      },
+      {
+        "name": "JENY ANDREA BARBOSA REYES",
+        "identification": 1101752208
+      },
+      {
+        "name": "KAREN YULIETH BUSTOS OSMA",
+        "identification": 1120565527
+      },
+      {
+        "name": "JOHAN SEBASTIAN CORTES MOGOLLON",
+        "identification": 1007477431
+      },
+      {
+        "name": "YORMAN SANTIAGO DIAZ RAMIREZ",
+        "identification": 1102518184
+      },
+      {
+        "name": "KEVIN ALBERTO DOBLADO MATEUS",
+        "identification": 1007477694
+      },
+      {
+        "name": "KAREN DAYANA FLOREZ HURTADO",
+        "identification": 1000365889
+      },
+      {
+        "name": "DIDIER GIOVANNY GARZON CASTRO",
+        "identification": 1099206421
+      },
+      {
+        "name": "BREINER ALEJANDRO GORDILLO PARDO",
+        "identification": 1096906262
+      },
+      {
+        "name": "ANDERSSON SNEIDER GUIZA DUARTE",
+        "identification": 1022937858
+      },
+      {
+        "name": "ANGIE JULIANA HERNANDEZ CHACON",
+        "identification": 1101755202
+      },
+      {
+        "name": "BRIANS STEVEN HERNANDEZ PARDO",
+        "identification": 1234789934
+      },
+      {
+        "name": "SHAROL VANESSA MARIN ARIZA",
+        "identification": 1098679288
+      },
+      {
+        "name": "STEFANY KATHERIN MARTINEZ DUARTE",
+        "identification": 1100948899
+      },
+      {
+        "name": "DANIEL FELIPE MUNEVAR RODRIGUEZ",
+        "identification": 1001184660
+      },
+      {
+        "name": "JAVIER ALBERTO ORTIZ FONTECHA",
+        "identification": 1101754531
+      },
+      {
+        "name": "OMAR SANTIAGO PEÑA RODRIGUEZ",
+        "identification": 1002582430
+      },
+      {
+        "name": "LIZETH GISELLA PEREZ FRANCO",
+        "identification": 1101757343
+      },
+      {
+        "name": "JAIRO ALEXANDER PINZON RODRIGUEZ",
+        "identification": 1097332276
+      },
+      {
+        "name": "RAFAEL ALEJANDRO PINZON RODRIGUEZ",
+        "identification": 1097332277
+      },
+      {
+        "name": "JUAN JOSE RUIZ CAMACHO",
+        "identification": 1097638430
+      },
+      {
+        "name": "KAREN VIVIANA RUIZ LEON",
+        "identification": 1000120386
+      },
+      {
+        "name": "CAMILO ESTEBAN SANTAMARIA SERRANO",
+        "identification": 1101752093
+      },
+      {
+        "name": "PAULA NIKOLS VARGAS FAJARDO",
+        "identification": 1014738845
+      }
+    ]
+  }
+]

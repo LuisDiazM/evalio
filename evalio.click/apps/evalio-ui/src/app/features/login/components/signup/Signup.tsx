@@ -2,6 +2,8 @@ import { useFormik } from 'formik';
 import styles from './signup.module.scss';
 import { useTranslation } from 'react-i18next';
 import { SignupForm, SignupSchema } from '@/features/login/models/signup.form';
+import { signup } from '@/features/login/services';
+import { useNavigate } from 'react-router-dom';
 
 const initialValues: SignupForm = {
   fullName: '',
@@ -12,11 +14,16 @@ const initialValues: SignupForm = {
 
 const Signup = () => {
   const { t } = useTranslation();
-  const submitSignupForm = (values: SignupForm) => {
+  const navigate = useNavigate();
+
+  const submitSignupForm = async (values: SignupForm) => {
     try {
       const isValid = formik.isValid;
       if (isValid) {
-        console.log(values);
+        const status = await signup(values.email, values.password, values.fullName);
+        if(status === 201){
+          navigate('/groups')
+        }
       }
     } catch (err) {
       console.error('[submitSignupForm] error:', err);

@@ -1,0 +1,124 @@
+.container {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+  padding: 1rem;
+  align-items: center;
+}
+
+.tableCard {
+  width: 100%;
+  display: flex;
+  justify-content: center; /* centra la tarjeta en pantallas grandes */
+}
+
+.headerComponent {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: space-around;
+
+  button {
+    padding: 8px 12px;
+    border-radius: 8px;
+    background: var(--accent);
+    color: #fff;
+    border: none;
+  }
+
+  button:hover {
+    background: color-mix(in srgb, var(--accent) 90%, black);
+    cursor: pointer;
+  }
+}
+
+.tableWrapper {
+  overflow-x: auto;
+  -webkit-overflow-scrolling: touch;
+  display: flex;
+  justify-content: center; /* mantiene contenido centrado cuando es más pequeño que el contenedor */
+}
+
+.table {
+  width: 100%;
+  max-width: 1100px; /* evita que la tabla ocupe toda la pantalla en pantallas anchas */
+  border-collapse: collapse;
+  min-width: 640px;
+  box-shadow: 0 0 0 1px rgba(0, 0, 0, 0.04); /* sutil borde alternativo */
+}
+
+.table caption {
+  text-align: left;
+  font-weight: 600;
+  margin-bottom: 0.5rem;
+}
+
+.table th,
+.table td {
+  padding: 0.75rem 1rem;
+  border-bottom: 1px solid var(--border);
+  text-align: left;
+}
+
+.table thead th {
+  font-size: 0.95rem;
+  color: var(--muted);
+}
+
+.table tbody tr:hover {
+  background: color-mix(in srgb, var(--accent) 6%, transparent);
+}
+
+/* Ajustes para celdas que pueden necesitar envoltura o truncado */
+/* Por defecto permitir que las celdas se envuelvan (mejor para móvil) */
+.table td,
+.table th {
+  white-space: normal;
+  text-overflow: clip;
+  overflow: visible;
+  max-width: none;
+}
+
+/* En pantallas anchas usamos truncado para evitar que una celda rompa la tabla */
+@media (min-width: 721px) {
+  .table td,
+  .table th {
+    white-space: nowrap;
+    text-overflow: ellipsis;
+    overflow: hidden;
+    max-width: 320px;
+  }
+}
+/* Mobile: permitir que la tabla ocupe el ancho del viewport pero seguir centrada y legible */
+@media (max-width: 720px) {
+  .table {
+    min-width: 100%;
+    max-width: none;
+  }
+  .table th,
+  .table td {
+    padding: 0.5rem;
+  }
+  .table td,
+  .table th {
+    white-space: normal;
+    max-width: none;
+  }
+  /* Si necesitas un diseño más compacto, podemos apilar celdas con display:block aquí */
+}
+
+/* Añadir padding al wrapper para que no se vea el contenido pegado al borde en móvil */
+.tableWrapper {
+  padding: 0 0.5rem;
+  box-sizing: border-box;
+}
+
+@media (max-width: 720px) {
+  .table {
+    min-width: 100%;
+  }
+  .table th,
+  .table td {
+    padding: 0.5rem;
+  }
+}

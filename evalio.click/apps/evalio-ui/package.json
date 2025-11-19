@@ -3,6 +3,7 @@
   "version": "0.0.1",
   "private": true,
   "dependencies": {
+    "@tanstack/react-query": "^5.90.10",
     "axios": "^1.13.2",
     "dotenv": "^17.2.3",
     "yup": "^1.7.1"

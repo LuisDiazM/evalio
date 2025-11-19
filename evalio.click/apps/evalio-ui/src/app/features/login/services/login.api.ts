@@ -7,13 +7,31 @@ export type AuthResponse = {
 };
 
 export const login = async (email: string, password: string) => {
-  const { data } = await api.post<AuthResponse>(`${config.PUBLIC_URL}/public/login`, {
-    email,
-    password,
-  });
+  const { data } = await api.post<AuthResponse>(
+    `${config.PUBLIC_URL}/public/login`,
+    {
+      email,
+      password,
+    }
+  );
   return data;
 };
 
-export const signup = async (email: string, password: string) => {
-  return await api.post(`${config.PUBLIC_URL}/signup`, { email, password });
+export type SignUpRequest = {
+  email: string;
+  password: string;
+  name: string;
+};
+
+export const signup = async (
+  email: string,
+  password: string,
+  fullName: string
+) => {
+  const signupData: SignUpRequest = { email, password, name: fullName };
+  const { status } = await api.post(
+    `${config.PUBLIC_URL}/public/signup`,
+    signupData
+  );
+  return  status ;
 };
