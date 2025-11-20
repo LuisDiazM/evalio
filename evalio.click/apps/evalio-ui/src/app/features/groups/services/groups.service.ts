@@ -5,6 +5,7 @@ export type Group = {
   id: string;
   name: string;
   period: string;
+  professor_name: string;
   subject_name: string;
   students: Student[];
 };
@@ -50,5 +51,69 @@ export const createGroup = async (payload: CreateGroupPayload) => {
 
   // Try to include server message if provided
   const message = response?.data?.message || `Failed to create group: ${response.status}`;
+  throw new Error(message);
+};
+
+export const fetchGroupById = async (id: string):Promise<Group> => {
+  const url = `/manager/group?id=${id}`;
+  const response = await api.get<Group>(url, { validateStatus: () => true });
+
+  if (response.status >= 200 && response.status < 300) {
+    return response.data;
+  }
+
+  throw new Error(`Failed to fetch group ${id}: ${response.status}`);
+};
+
+export type Template = {
+  id: string;
+  number: number;
+  subject_name: string;
+  period: string;
+  questions: Array<{ question: number; answer: string }>;
+  created_at: string;
+  group_id: string;
+  professor_id: string;
+};
+
+export const fetchTemplatesByGroup = async (groupId: string): Promise<Template[]> => {
+  const url = `/manager/templates?group_id=${groupId}`;
+  const response = await api.get<Template[]>(url, { validateStatus: () => true });
+
+  if (response.status >= 200 && response.status < 300) {
+    return response.data;
+  }
+
+  throw new Error(`Failed to fetch templates for group ${groupId}: ${response.status}`);
+};
+
+export const fetchTemplateById = async (id: string): Promise<Template> => {
+  const url = `/manager/template/${id}`;
+  const response = await api.get<Template>(url, { validateStatus: () => true });
+
+  if (response.status >= 200 && response.status < 300) {
+    return response.data;
+  }
+
+  throw new Error(`Failed to fetch template ${id}: ${response.status}`);
+};
+
+export type CreateTemplatePayload = {
+  group_id: string;
+  number: number;
+  period: string;
+  subject_name: string;
+  questions: Array<{ question: number; answer: string }>;
+};
+
+export const createTemplate = async (payload: CreateTemplatePayload) => {
+  const url = '/manager/template';
+  const response = await api.post(url, payload, { validateStatus: () => true });
+
+  if (response.status >= 200 && response.status < 300) {
+    return response.data;
+  }
+
+  const message = response?.data?.message || `Failed to create template: ${response.status}`;
   throw new Error(message);
 };

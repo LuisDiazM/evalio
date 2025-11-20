@@ -3,6 +3,7 @@ import { useTranslation } from 'react-i18next';
 import { useFormik } from 'formik';
 import { LoginForm, LoginSchema } from '@/features/login/models/login.form';
 import { login } from '../../services';
+import { useNavigate } from 'react-router-dom';
 
 const initialValues: LoginForm = {
   email: '',
@@ -11,13 +12,14 @@ const initialValues: LoginForm = {
 
 const Login = () => {
   const { t } = useTranslation();
-
+  const navigate = useNavigate();
   const submitLoginForm = async (values: LoginForm) => {
     const isValid = LoginSchema.isValidSync(values);
     if (isValid) {
       const response = await login(values.email, values.password);
       if (response?.token) {
         localStorage.setItem('access_token', response.token);
+        navigate('/groups');
       }
     }
   };

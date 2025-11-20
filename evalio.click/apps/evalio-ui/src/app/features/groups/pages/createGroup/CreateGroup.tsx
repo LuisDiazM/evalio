@@ -6,6 +6,7 @@ import {
 } from '@/features/groups/models/createGroup.form';
 import styles from './createGroup.module.scss';
 import { useNavigate } from 'react-router-dom';
+import BackButton from '@/shared/components/BackButton/BackButton';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { createGroup } from '@/features/groups/services/groups.service';
 
@@ -65,11 +66,7 @@ const CreateGroup: React.FC = () => {
   return (
     <div className={styles.container}>
       <div className={styles.header}>
-        <button type="button" aria-label="Volver a grupos" className={styles.backBtn} onClick={handleBack}>
-          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true" focusable="false">
-            <polyline points="15 18 9 12 15 6" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
-          </svg>
-        </button>
+        <BackButton onClick={handleBack} />
         <h2 className={styles.title}>Crear Nuevo Grupo</h2>
       </div>
       <form onSubmit={formik.handleSubmit} className={styles.form}>

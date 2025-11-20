@@ -38,11 +38,20 @@ const ListGroupPage: React.FC = () => {
             </thead>
             <tbody>
               {(groups || []).map((g: Group) => (
-                <tr key={g.id}>
-                  <td>{g.subject_name}</td>
-                  <td>{g.period}</td>
-                  <td>{g.students ? g.students.length : 0}</td>
-                  <td>{g.name}</td>
+                <tr
+                  key={g?.id}
+                  role="button"
+                  tabIndex={0}
+                  onClick={() => navigate(`/group/${g.id}`)}
+                  onKeyDown={(e) => {
+                    if (e.key === 'Enter' || e.key === ' ') navigate(`/group/${g.id}`);
+                  }}
+                  style={{ cursor: 'pointer' }}
+                >
+                  <td>{g?.subject_name}</td>
+                  <td>{g?.period}</td>
+                  <td>{g?.students ? g.students.length : 0}</td>
+                  <td>{g?.name}</td>
                 </tr>
               ))}
             </tbody>
