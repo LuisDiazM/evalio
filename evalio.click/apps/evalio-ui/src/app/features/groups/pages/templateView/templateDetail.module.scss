@@ -19,18 +19,27 @@
 
 .grid {
   display: grid;
-  grid-template-columns: 1fr 320px;
+  /* left: 1 part (≈1/3), right: 2 parts (≈2/3) to prioritize table width */
+  grid-template-columns: 1fr 2fr;
   gap: 16px;
+  align-items: start;
 }
 
 .left {
   display: flex;
   flex-direction: column;
-  align-items: center;
+  align-items: center; /* center the sheet in the left column */
+  width: 100%;
+  padding-right: 8px;
 }
 
 .right {
   min-height: 120px;
+  min-width: 220px;
+  width: 100%;
+  align-self: start;
+  /* let content expand; avoid internal scrolling which clipped the table */
+  overflow: visible;
 }
 
 .backWrapper {
@@ -54,9 +63,17 @@
   border-radius: 8px;
   padding: 12px;
   box-shadow: 0 1px 2px rgba(0,0,0,0.04);
-  /* limit width to the content (index + A-D options) */
-  width: max-content;
-  min-width: 240px;
+  /* fit the left column: full width of column but constrain for readability */
+  width: 100%;
+  max-width: 480px;
+  min-width: 220px;
+  box-sizing: border-box;
+}
+
+.actionsRow {
+  margin-top: 12px;
+  display: flex;
+  gap: 8px;
 }
 
 .questionRow {
@@ -101,4 +118,26 @@
 .optLabel {
   font-size: 12px;
   color: inherit;
+}
+
+@media (max-width: 900px) {
+  .grid {
+    grid-template-columns: 1fr;
+  }
+
+  .left {
+    align-items: stretch;
+  }
+
+  .right {
+    max-height: none;
+    overflow: visible;
+    min-width: auto;
+    margin-top: 12px;
+  }
+
+  .sheet {
+    max-width: 100%;
+    padding: 10px;
+  }
 }

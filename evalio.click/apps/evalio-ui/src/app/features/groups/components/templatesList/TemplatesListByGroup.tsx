@@ -30,7 +30,7 @@ const TemplatesListByGroup: React.FC<Props> = ({ groupId }) => {
 
   return (
     <div className={styles.container}>
-      <h3>Plantillas</h3>
+      <h3>Parciales</h3>
       <div className={styles.card}>
         <table className={styles.table}>
           <thead>

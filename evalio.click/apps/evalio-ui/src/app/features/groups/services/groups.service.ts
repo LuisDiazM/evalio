@@ -117,3 +117,43 @@ export const createTemplate = async (payload: CreateTemplatePayload) => {
   const message = response?.data?.message || `Failed to create template: ${response.status}`;
   throw new Error(message);
 };
+
+export type SummaryStudent = {
+  score: number;
+  student_name: string;
+  student_identification: number | string;
+  exam_path?: string;
+};
+
+export type TemplateSummary = {
+  group_id: string;
+  number: number;
+  id: string;
+  period: string;
+  template_id: string;
+  created_at: string;
+  updated_at: string;
+  students: SummaryStudent[];
+};
+
+export const fetchSummaryByTemplate = async (templateId: string): Promise<TemplateSummary> => {
+  const url = `/manager/summary?template_id=${templateId}`;
+  const response = await api.get<TemplateSummary>(url, { validateStatus: () => true });
+
+  if (response.status >= 200 && response.status < 300) {
+    return response.data;
+  }
+
+  throw new Error(`Failed to fetch summary for template ${templateId}: ${response.status}`);
+};
+
+export const fetchTemplateFile = async (groupId: string, templateId: string): Promise<Blob> => {
+  const url = `/manager/template?group_id=${groupId}&template_id=${templateId}`;
+  const response = await api.get(url, { responseType: 'blob', validateStatus: () => true });
+
+  if (response.status >= 200 && response.status < 300) {
+    return response.data as Blob;
+  }
+
+  throw new Error(`Failed to fetch template file: ${response.status}`);
+};

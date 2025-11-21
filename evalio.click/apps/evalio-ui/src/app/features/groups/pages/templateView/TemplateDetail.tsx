@@ -4,6 +4,11 @@ import useTemplate from '@/features/groups/hooks/useTemplate';
 import { useNavigate } from 'react-router-dom';
 import styles from './templateDetail.module.scss';
 import BackButton from '@/shared/components/BackButton/BackButton';
+import QualificationsList from '@/features/groups/components/qualificationsList/QualificationsList';
+import { DownloadTemplate } from '@/features/groups/components/downloadTemplate/DownloadTemplate';
+
+
+
 
 const TemplateDetail: React.FC = () => {
   const { id } = useParams();
@@ -52,10 +57,14 @@ const TemplateDetail: React.FC = () => {
               </div>
             ))}
           </div>
+          <div className={styles.actionsRow}>
+            <DownloadTemplate template={template} />
+          </div>
         </div>
 
         <div className={styles.right}>
-          {/* Actions placeholder - reserved for future controls */}
+          <h2>Calificaciones</h2>
+          <QualificationsList groupId={groupId} templateId={id} />
           <div />
         </div>
       </div>
