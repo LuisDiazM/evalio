@@ -18,10 +18,5 @@ export const config: Config = {
   NODE_ENV: NODE_ENV,
 };
 
-// Log final configuration (only in development)
-console.log('[config] Final environment configuration:', {
-  PUBLIC_URL: config.PUBLIC_URL,
-  NODE_ENV: config.NODE_ENV,
-});
 
 export default config;

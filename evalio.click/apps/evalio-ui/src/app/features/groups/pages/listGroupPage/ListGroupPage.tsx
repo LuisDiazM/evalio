@@ -3,6 +3,7 @@ import { useNavigate } from 'react-router-dom';
 import styles from '@/features/groups/pages/listGroupPage/listGroupPage.module.scss';
 import useGroups from '@/features/groups/hooks/useGroups';
 import { Group } from '@/features/groups/services/groups.service';
+import DeleteGroupButton from '@/features/groups/components/deleteGroup/DeleteGroupButton';
 
 
 const ListGroupPage: React.FC = () => {
@@ -34,6 +35,7 @@ const ListGroupPage: React.FC = () => {
                 <th>Periodo académico</th>
                 <th>Cantidad de estudiantes</th>
                 <th>Nombre del grupo</th>
+                <th>Eliminar</th>
               </tr>
             </thead>
             <tbody>
@@ -52,6 +54,9 @@ const ListGroupPage: React.FC = () => {
                   <td>{g?.period}</td>
                   <td>{g?.students ? g.students.length : 0}</td>
                   <td>{g?.name}</td>
+                  <td onClick={(e) => e.stopPropagation()}>
+                    <DeleteGroupButton groupId={g.id} />
+                  </td>
                 </tr>
               ))}
             </tbody>

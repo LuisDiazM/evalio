@@ -20,7 +20,7 @@ export const isTokenValid = (token: string): boolean => {
 
 export const verifyTokenWithBackend = async (token: string): Promise<boolean> => {
   try {
-    const response = await axios.get(config.AUTH_URL, {
+    const response = await axios.get(`${config.PUBLIC_URL}/auth`, {
       headers: {
         'Content-Type': 'application/json',
         'Authorization': `Bearer ${token}`,

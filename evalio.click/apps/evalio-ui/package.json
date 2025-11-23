@@ -4,8 +4,10 @@
   "private": true,
   "dependencies": {
     "@tanstack/react-query": "^5.90.10",
+    "@yudiel/react-qr-scanner": "^2.4.1",
     "axios": "^1.13.2",
     "dotenv": "^17.2.3",
+    "react-webcam": "^7.2.0",
     "yup": "^1.7.1"
   }
 }

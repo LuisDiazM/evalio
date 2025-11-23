@@ -1,6 +1,7 @@
 import React from 'react';
 import styles from './qualificationsList.module.scss';
 import useSummary from '@/features/groups/hooks/useSummary';
+import ExportCSVButton from '@/features/groups/components/ExportCSVButton/ExportCSVButton';
 
 type Props = { groupId?: string; templateId?: string };
 
@@ -12,6 +13,9 @@ const QualificationsList: React.FC<Props> = ({ groupId, templateId }) => {
   if (status === 'error') return <div className={styles.container}>Error: {(error as Error)?.message}</div>;
   if (!data || !data.students || data.students.length === 0) return <div className={styles.container}>No hay calificaciones</div>;
 
+  // only show export when there is valid data and templateId
+  const showExport = Boolean(templateId && data && data.students && data.students.length > 0);
+
   const openExam = (path?: string) => {
     if (!path) return;
     const url = path.startsWith('http') ? path : `${window.location.origin}/${path}`;
@@ -21,6 +25,11 @@ const QualificationsList: React.FC<Props> = ({ groupId, templateId }) => {
   return (
     <div className={styles.container}>
       <div className={styles.card}>
+        {showExport && (
+          <div style={{ display: 'flex', justifyContent: 'flex-end', marginBottom: 8 }}>
+            <ExportCSVButton templateId={String(templateId)} />
+          </div>
+        )}
         <table className={styles.table}>
           <thead>
             <tr>

@@ -3,6 +3,7 @@ import { useTranslation } from 'react-i18next';
 import { useFormik } from 'formik';
 import { LoginForm, LoginSchema } from '@/features/login/models/login.form';
 import { login } from '../../services';
+import { useUser } from '@/shared/context/UserContext';
 import { useNavigate } from 'react-router-dom';
 
 const initialValues: LoginForm = {
@@ -13,12 +14,19 @@ const initialValues: LoginForm = {
 const Login = () => {
   const { t } = useTranslation();
   const navigate = useNavigate();
+  const { setUserFromToken } = useUser();
   const submitLoginForm = async (values: LoginForm) => {
     const isValid = LoginSchema.isValidSync(values);
     if (isValid) {
       const response = await login(values.email, values.password);
       if (response?.token) {
         localStorage.setItem('access_token', response.token);
+        // populate global user context from token
+        try {
+          setUserFromToken(response.token);
+        } catch (e) {
+          console.debug('setUserFromToken failed', e);
+        }
         navigate('/groups');
       }
     }

@@ -8,6 +8,7 @@ import (
 
 func ProfessorRouter(app fiber.Router, service professors.IProfessorService) {
 	app.Put("/professor", handlers.UpdateProfessor(service))
+	// app.Get("/professor", handlers.GetProfesorByEmail(service))
 }
 
 func PublicRoutes(app fiber.Router, service professors.IProfessorService) {

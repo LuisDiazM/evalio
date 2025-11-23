@@ -15,7 +15,7 @@ services:
       - "traefik.http.routers.forward-auth.middlewares=forward-auth-cors"
       - "traefik.http.middlewares.forward-auth-cors.headers.accesscontrolallowmethods=GET,OPTIONS,PUT,POST,DELETE,PATCH"
       - "traefik.http.middlewares.forward-auth-cors.headers.accesscontrolallowheaders=Origin, Content-Type, Accept, Authorization, X-Requested-With, X-User-Id, X-User-Email"
-      - "traefik.http.middlewares.forward-auth-cors.headers.accesscontrolalloworiginlist=http://localhost:5173,http://evalio.click,https://evalio.click,http://192.168.1.34:5173"
+      - "traefik.http.middlewares.forward-auth-cors.headers.accesscontrolalloworiginlist=http://localhost:5173,http://evalio.click,https://evalio.click,http://localhost:5000"
       - "traefik.http.middlewares.forward-auth-cors.headers.accesscontrolmaxage=100"
       - "traefik.http.middlewares.forward-auth-cors.headers.addvaryheader=true"
       - "traefik.http.middlewares.forward-auth-cors.headers.accesscontrolallowcredentials=true"

@@ -49,10 +49,10 @@ func main() {
 	appLogger.Info(ctx, "Starting server on port 3000")
 
 	api := app.Group("/users-manager")
+	routers.ProfessorRouter(api, professorService)
 
 	public := app.Group("/public")
 	routers.PublicRoutes(public, professorService)
-	routers.ProfessorRouter(api, professorService)
 	defer cancel()
 	port := os.Getenv("PORT")
 	if port == "" {

@@ -22,6 +22,8 @@ const Signup = () => {
       if (isValid) {
         const status = await signup(values.email, values.password, values.fullName);
         if(status === 201){
+          // signup endpoint currently returns status only; if it returned a token, we would set user here
+          // Example: setUserFromToken(response.token)
           navigate('/groups')
         }
       }
@@ -29,6 +31,7 @@ const Signup = () => {
       console.error('[submitSignupForm] error:', err);
     }
   };
+  // signup currently doesn't return a token; no-op for now
   const formik = useFormik({
     initialValues: initialValues,
     onSubmit: submitSignupForm,

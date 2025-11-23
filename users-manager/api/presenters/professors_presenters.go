@@ -1,5 +1,7 @@
 package presenters
 
+import "time"
+
 type ProfessorRequest struct {
 	Email    string `json:"email"`
 	Name     string `json:"name"`
@@ -22,4 +24,12 @@ type LoginRequest struct {
 type LoginResponse struct {
 	Token     string `json:"token"`
 	ExpiresAt string `json:"expires_at"`
+}
+
+type ProfessorInfo struct {
+	ID        string    `json:"id"`
+	CreatedAt time.Time `json:"created_at,omitempty"`
+	UpdatedAt time.Time `json:"updated_at,omitempty" `
+	Email     string    `json:"email,omitempty"`
+	Name      string    `json:"name,omitempty"`
 }

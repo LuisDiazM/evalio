@@ -5,6 +5,7 @@ import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import App from './app/app';
 import '@/styles/theme.module.scss';
 import '../src/app/i18n/i18n';
+import { UserProvider } from '@/shared/context/UserContext';
 
 const queryClient = new QueryClient();
 
@@ -13,10 +14,12 @@ const root = ReactDOM.createRoot(
 );
 root.render(
   <StrictMode>
+    <UserProvider>
     <QueryClientProvider client={queryClient}>
       <BrowserRouter>
         <App />
       </BrowserRouter>
     </QueryClientProvider>
+    </UserProvider>
   </StrictMode>
 );

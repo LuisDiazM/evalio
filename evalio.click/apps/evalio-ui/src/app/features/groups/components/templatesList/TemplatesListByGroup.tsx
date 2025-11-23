@@ -3,6 +3,7 @@ import { useNavigate } from 'react-router-dom';
 import useTemplatesByGroup from '@/features/groups/hooks/useTemplatesByGroup';
 import styles from './templatesList.module.scss';
 import { formatDate } from '@/shared/functions/formatDate';
+import DeleteTemplateButton from '@/features/groups/components/deleteTemplate/DeleteTemplateButton';
 
 type Props = { groupId?: string };
 
@@ -38,6 +39,7 @@ const TemplatesListByGroup: React.FC<Props> = ({ groupId }) => {
               <th>Cantidad de preguntas</th>
               <th>Creado</th>
               <th>Corte</th>
+              <th>Acciones</th>
             </tr>
           </thead>
           <tbody>
@@ -56,6 +58,9 @@ const TemplatesListByGroup: React.FC<Props> = ({ groupId }) => {
                 <td>{t.questions?.length ?? 0}</td>
                 <td>{formatDate(t.created_at)}</td>
                 <td> {t.number}</td>
+                <td onClick={(e) => e.stopPropagation()}>
+                  <DeleteTemplateButton templateId={t.id} />
+                </td>
               </tr>
             ))}
           </tbody>

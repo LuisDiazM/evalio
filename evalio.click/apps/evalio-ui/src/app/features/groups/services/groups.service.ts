@@ -157,3 +157,27 @@ export const fetchTemplateFile = async (groupId: string, templateId: string): Pr
 
   throw new Error(`Failed to fetch template file: ${response.status}`);
 };
+
+export const deleteGroup = async (groupId: string) => {
+  const url = `/manager/group?group_id=${groupId}`;
+  const response = await api.delete(url, { validateStatus: () => true });
+
+  if (response.status >= 200 && response.status < 300) {
+    return response.data;
+  }
+
+  const message = response?.data?.message || `Failed to delete group: ${response.status}`;
+  throw new Error(message);
+};
+
+export const deleteTemplate = async (templateId: string) => {
+  const url = `/manager/template?template_id=${templateId}`;
+  const response = await api.delete(url, { validateStatus: () => true });
+
+  if (response.status >= 200 && response.status < 300) {
+    return response.data;
+  }
+
+  const message = response?.data?.message || `Failed to delete template: ${response.status}`;
+  throw new Error(message);
+};
