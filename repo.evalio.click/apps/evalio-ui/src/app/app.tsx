@@ -7,7 +7,7 @@ import { Route, Routes, Link } from 'react-router-dom';
 export function App() {
   return (
     <div>
-      <NxWelcome title="front/admin" />
+      <NxWelcome title="evalio-ui" />
 
       {/* START: routes */}
       {/* These routes and navigation have been generated for you */}

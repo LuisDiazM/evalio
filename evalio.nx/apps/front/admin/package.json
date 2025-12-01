@@ -1,8 +1,0 @@
-{
-  "name": "@evalio.nx/front/admin",
-  "version": "0.0.1",
-  "private": true,
-  "nx": {
-    "name": "front/admin"
-  }
-}

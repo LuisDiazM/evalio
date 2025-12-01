@@ -7,12 +7,9 @@
       "!{projectRoot}/.eslintrc.json",
       "!{projectRoot}/eslint.config.mjs"
     ],
-    "sharedGlobals": [
-      "{workspaceRoot}/.github/workflows/ci.yml",
-      "{workspaceRoot}/go.mod"
-    ]
+    "sharedGlobals": ["{workspaceRoot}/.github/workflows/ci.yml"]
   },
-  "nxCloudId": "692a12719fdb553d8637649c",
+  "nxCloudId": "692cd41ca2281875722508fe",
   "plugins": [
     {
       "plugin": "@nx/js/typescript",
@@ -54,8 +51,7 @@
       "options": {
         "targetName": "lint"
       }
-    },
-    "@nx-go/nx-go"
+    }
   ],
   "generators": {
     "@nx/react": {
