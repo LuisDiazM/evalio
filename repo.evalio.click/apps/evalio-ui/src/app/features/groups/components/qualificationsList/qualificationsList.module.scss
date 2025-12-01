@@ -1,0 +1,60 @@
+.container {
+  max-width: 100%;
+}
+
+.card {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-md);
+  padding: var(--space-sm);
+  box-shadow: var(--shadow-sm);
+  overflow: visible;
+}
+
+.table {
+  width: 100%;
+  border-collapse: collapse;
+  table-layout: auto;
+  white-space: normal;
+}
+
+.table th, .table td {
+  padding: 0.5rem 0.75rem;
+  border-bottom: 1px solid var(--border);
+  text-align: left;
+  vertical-align: top;
+}
+
+.table td:nth-child(2) {
+  /* name column: allow wrapping and keep reasonable max width */
+  max-width: 220px;
+  word-wrap: break-word;
+}
+
+.table thead th {
+  color: var(--muted);
+}
+
+.viewBtn {
+  background: transparent;
+  border: none;
+  cursor: pointer;
+  padding: 4px;
+  border-radius: 4px;
+}
+
+.viewBtn:hover, .viewBtn:focus {
+  background: rgba(0,0,0,0.04);
+}
+
+/* small screens: allow horizontal scroll if table is wide */
+@media (max-width: 700px) {
+  .card {
+    overflow-x: auto;
+  }
+}
+
+.icon {
+  display: inline-flex;
+  vertical-align: middle;
+}

@@ -1,0 +1,186 @@
+.container {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  background: transparent;
+}
+
+.form {
+  max-width: 400px;
+  margin: 4rem auto 0;
+  width: 100%;
+  /* increase overall padding so title, fields and button have more room */
+  padding: var(--space-md, 1.25rem);
+}
+
+.title {
+  text-align: center;
+  font-weight: 700;
+  font-size: 2rem;
+  /* add extra space under the title */
+  margin-bottom: calc(var(--space-lg, 2rem) + 0.5rem);
+  color: var(--text);
+}
+
+.field {
+  /* give inputs more vertical spacing */
+  margin-bottom: calc(var(--space-md, 1rem) + 0.25rem);
+}
+
+.fieldSmall {
+  margin-bottom: calc(var(--space-sm, 0.5rem) + 0.25rem);
+}
+
+.label {
+  display: block;
+  margin-bottom: calc(var(--space-sm) / 2);
+  font-weight: 600;
+  color: var(--text);
+}
+
+.input {
+  width: 100%;
+  padding: 0.75rem 1rem;
+  border-radius: var(--radius-md);
+  border: 1px solid var(--border);
+  margin-bottom: 1rem;
+  font-size: 1rem;
+  box-sizing: border-box;
+  background: var(--surface);
+  color: var(--text);
+  transition: box-shadow 160ms ease, border-color 160ms ease;
+}
+
+.input:focus {
+  outline: none;
+  border-color: var(--accent);
+  box-shadow: 0 6px 18px rgba(37,99,235,0.08);
+}
+
+.forgot {
+  color: var(--muted);
+  font-size: 0.875rem;
+  text-decoration: underline;
+}
+
+.submit {
+  width: 50%;
+  padding: 1rem 0;
+  border-radius: var(--radius-md);
+  background: var(--accent);
+  color: #fff;
+  font-weight: 700;
+  font-size: 1.05rem;
+  margin-right: 1rem;
+  border: none;
+  cursor: pointer;
+  transition: background-color 160ms ease, transform 120ms ease;
+}
+
+.submit:hover {
+  background: var(--accent-600);
+  transform: translateY(-1px);
+}
+
+.submit:focus-visible {
+  box-shadow: 0 0 0 4px color-mix(in srgb, var(--accent) 18%, transparent);
+}
+
+.right {
+  text-align: right;
+  /* push the submit/button row further from inputs */
+  margin-top: var(--space-md, 1rem);
+}
+
+.signup {
+  color: var(--muted);
+  font-size: 0.95rem;
+  text-decoration: underline;
+}
+
+.error {
+  color: var(--danger);
+  font-size: 0.875rem;
+  margin-top: calc(var(--space-sm) / 2);
+}
+
+/* Responsive layout ---------------------------------------------------- */
+/* Mobile first: labels stacked above inputs (already the default) */
+
+@media (min-width: 720px) {
+  .form {
+    max-width: 700px;
+    padding: calc(var(--space-md, 1.25rem) + 1rem);
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: var(--space-lg, 2rem);
+  }
+
+  /* Make fields a two-column row: label (fixed) + input (fluid) */
+  .field {
+    display: grid;
+    grid-template-columns: 160px 1fr;
+    align-items: center;
+    gap: 1rem;
+    margin-bottom: calc(var(--space-md, 1rem) + 0.5rem);
+  }
+
+  .label {
+    margin-bottom: 0; /* remove stacked spacing */
+    text-align: right;
+    padding-right: 0.5rem;
+    font-size: 0.95rem;
+  }
+
+  .input {
+    margin-bottom: 0; /* inputs sit on the same row as labels */
+  }
+
+  /* Actions row: submit + optional links */
+  .right {
+    display: flex;
+    justify-content: flex-end;
+    align-items: center;
+    gap: 1rem;
+    margin-top: calc(var(--space-lg, 2rem));
+  }
+
+  .submit {
+    width: auto;
+    padding: 0.85rem 1.25rem;
+    min-width: 160px;
+  }
+
+  .signup {
+    margin-left: 0.5rem;
+    text-decoration: none;
+  }
+}
+
+@media (min-width: 1024px) {
+  .form {
+    max-width: 500px;
+    grid-template-columns: 1fr;
+  }
+
+  .field {
+    grid-template-columns: 200px 1fr;
+  }
+}
+
+/* Small screens: make the submit full-width and stack actions */
+@media (max-width: 719px) {
+  .submit {
+    width: 100%;
+    margin-right: 0;
+    margin-top: 0.75rem;
+  }
+
+  .right {
+    display: flex;
+    flex-direction: column;
+    align-items: stretch;
+    gap: 0.5rem;
+    margin-top: var(--space-md, 1rem);
+  }
+}

@@ -44,8 +44,13 @@ module.exports = {
   output: {
     path: join(__dirname, 'dist'),
   },
+ resolve: {
+    alias: {
+      '@': join(__dirname, 'src/app'),
+    },
+  },
   devServer: {
-    port: 4200,
+    port: 5000,
     historyApiFallback: {
       index: '/index.html',
       disableDotRule: true,
