@@ -88,27 +88,27 @@ services:
 
 
 
-  users-manager:
-    build: users-manager/.
-    image: users-manager:v1
-    restart: always
-    env_file:
-      - users-manager/.env.dev
-    labels:
-      - "traefik.enable=true"
-      - "traefik.http.routers.users-manager.rule=Host(`evalio.click`) && (PathPrefix(`/users-manager`) || PathPrefix(`/public`))"
-      - "traefik.http.routers.users-manager.entrypoints=web"
-      - "traefik.http.routers.users-manager.service=users-manager"
-      - "traefik.http.services.users-manager.loadbalancer.server.port=3000"
-      - "traefik.http.routers.users-manager.middlewares=forward-auth"
-      - "traefik.http.middlewares.forward-auth.forwardauth.address=http://forward-auth:1337/auth"
-      - "traefik.http.middlewares.forward-auth.forwardauth.trustForwardHeader=true"
-      - "traefik.http.middlewares.forward-auth.forwardauth.authResponseHeaders=X-User-Id,X-User-Email"
-      - "traefik.http.middlewares.testheader.headers.accesscontrolallowmethods=GET,OPTIONS,PUT,POST,DELETE,PATCH"
-      - "traefik.http.middlewares.testheader.headers.accesscontrolallowheaders=*"
-      - "traefik.http.middlewares.testheader.headers.accesscontrolalloworiginlist=*"
-      - "traefik.http.middlewares.testheader.headers.accesscontrolmaxage=100"
-      - "traefik.http.middlewares.testheader.headers.addvaryheader=true"
+  # users-manager:
+  #   build: users-manager/.
+  #   image: users-manager:v1
+  #   restart: always
+  #   env_file:
+  #     - users-manager/.env.dev
+  #   labels:
+  #     - "traefik.enable=true"
+  #     - "traefik.http.routers.users-manager.rule=Host(`evalio.click`) && (PathPrefix(`/users-manager`) || PathPrefix(`/public`))"
+  #     - "traefik.http.routers.users-manager.entrypoints=web"
+  #     - "traefik.http.routers.users-manager.service=users-manager"
+  #     - "traefik.http.services.users-manager.loadbalancer.server.port=3000"
+  #     - "traefik.http.routers.users-manager.middlewares=forward-auth"
+  #     - "traefik.http.middlewares.forward-auth.forwardauth.address=http://forward-auth:1337/auth"
+  #     - "traefik.http.middlewares.forward-auth.forwardauth.trustForwardHeader=true"
+  #     - "traefik.http.middlewares.forward-auth.forwardauth.authResponseHeaders=X-User-Id,X-User-Email"
+  #     - "traefik.http.middlewares.testheader.headers.accesscontrolallowmethods=GET,OPTIONS,PUT,POST,DELETE,PATCH"
+  #     - "traefik.http.middlewares.testheader.headers.accesscontrolallowheaders=*"
+  #     - "traefik.http.middlewares.testheader.headers.accesscontrolalloworiginlist=*"
+  #     - "traefik.http.middlewares.testheader.headers.accesscontrolmaxage=100"
+  #     - "traefik.http.middlewares.testheader.headers.addvaryheader=true"
 
 
   evalio-analyzer:
