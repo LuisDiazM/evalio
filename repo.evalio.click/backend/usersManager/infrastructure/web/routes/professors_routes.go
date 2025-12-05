@@ -1,8 +1,12 @@
 package routes
 
-import "github.com/gofiber/fiber/v2"
+import (
+	"github.com/LuisDiazM/evalio/backend/usersManager/domain/professors/usecases"
+	"github.com/LuisDiazM/evalio/backend/usersManager/infrastructure/web/handlers"
+	"github.com/gofiber/fiber/v2"
+)
 
-func PublicRoutes(app fiber.Router) {
-	app.Post("/signup", nil)
-	app.Post("/login", nil)
+func PublicRoutes(app fiber.Router, service usecases.IProfessorService) {
+	app.Post("/signup", handlers.CreateProfessor(service))
+	app.Post("/login", handlers.Login(service))
 }
