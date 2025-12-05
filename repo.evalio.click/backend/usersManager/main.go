@@ -77,6 +77,11 @@ func RegisterPublicRoutes(app *fiber.App, service usecases.IProfessorService) {
 	routes.PublicRoutes(public, service)
 }
 
+func RegisterPrivateRoutes(app *fiber.App, service usecases.IProfessorService) {
+	private := app.Group("/users-manager")
+	routes.PrivateRoutes(private, service)
+}
+
 func StartServer(lc fx.Lifecycle, app *fiber.App) {
 	port := os.Getenv("PORT")
 	if port == "" {
@@ -113,6 +118,7 @@ func main() {
 		fx.Provide(NewProfessorUsecase),
 		// route registration and lifecycle
 		fx.Invoke(RegisterPublicRoutes),
+		fx.Invoke(RegisterPrivateRoutes),
 		fx.Invoke(StartServer),
 	)
 

@@ -10,3 +10,8 @@ func PublicRoutes(app fiber.Router, service usecases.IProfessorService) {
 	app.Post("/signup", handlers.CreateProfessor(service))
 	app.Post("/login", handlers.Login(service))
 }
+
+func PrivateRoutes(app fiber.Router, service usecases.IProfessorService) {
+	app.Put("/professor", handlers.UpdateProfessor(service))
+
+}
