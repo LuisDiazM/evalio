@@ -14,6 +14,7 @@ from admin.domain.manager.repositories.db_template_repo import (
 from admin.domain.manager.usecases.exams_usecase import ExamsUsecase
 from admin.domain.manager.usecases.groups_usecase import GroupUsecase
 from admin.domain.manager.usecases.summary_usecase import SummaryUsecase
+from admin.domain.manager.usecases.templates_usecase import TemplateUsecase
 from admin.infrastructure.database.mongo_imp import Mongo
 from admin.infrastructure.messaging.nats_publisher import (
     EVENT_PROCESS_EXAM,
@@ -112,4 +113,18 @@ async def get_exam_usecase(
         exam_repo=exam_repo,
         storage_repo=storage_repo,
         group_repo=group_repo,
+    )
+
+
+async def get_template_usecase(
+    group_repo=get_group_repo_dep,
+    template_repo=get_template_repo_dep,
+    storage_repo=get_storage_repo_dep,
+    exam_repo=get_exam_repo_dep,
+):
+    return TemplateUsecase(
+        group_repo=group_repo,
+        template_repo=template_repo,
+        storage_repo=storage_repo,
+        exam_repo=exam_repo,
     )
