@@ -1,4 +1,7 @@
+import os
+
 from fastapi import Depends
+from nats.aio.client import Client as NATS
 
 from admin.domain.manager.repositories.db_exams_summary_repo import ExamsRepository
 from admin.domain.manager.repositories.db_group_repo import GroupRepository
@@ -8,9 +11,15 @@ from admin.domain.manager.repositories.db_summary_repo import (
 from admin.domain.manager.repositories.db_template_repo import (
     TemplateResponsesRepository,
 )
+from admin.domain.manager.usecases.exams_usecase import ExamsUsecase
 from admin.domain.manager.usecases.groups_usecase import GroupUsecase
 from admin.domain.manager.usecases.summary_usecase import SummaryUsecase
 from admin.infrastructure.database.mongo_imp import Mongo
+from admin.infrastructure.messaging.nats_publisher import (
+    EVENT_PROCESS_EXAM,
+    STREAM_NAME,
+    NatsPublisher,
+)
 from admin.infrastructure.storage.cloud_storage_gcp import GCPStorageRepository
 
 
@@ -23,9 +32,22 @@ async def get_storage_repo():
     return GCPStorageRepository()
 
 
+async def get_nats():
+    nc = NATS()
+    host = os.getenv("NATS_URL")
+    if host is None:
+        raise ValueError("NATS_URL environment variable is not set")
+    await nc.connect(host)
+    js = nc.jetstream()
+
+    await js.add_stream(name=STREAM_NAME, subjects=[EVENT_PROCESS_EXAM])
+    return NatsPublisher(nc)
+
+
 # Module-level Depends variables to avoid function calls in default arguments (B008)
 get_mongo_dep = Depends(get_mongo)
 get_storage_repo_dep = Depends(get_storage_repo)
+get_nats_dep = Depends(get_nats)
 
 
 # respositories/adapters
@@ -76,4 +98,18 @@ async def get_summary_usecase(
     return SummaryUsecase(
         db_summary_repo=summary_repo,
         storage_repo=storage_repo,
+    )
+
+
+async def get_exam_usecase(
+    exam_repo=get_exam_repo_dep,
+    storage_repo=get_storage_repo_dep,
+    nats_publisher=get_nats_dep,
+    group_repo=get_group_repo_dep,
+):
+    return ExamsUsecase(
+        event_publisher=nats_publisher,
+        exam_repo=exam_repo,
+        storage_repo=storage_repo,
+        group_repo=group_repo,
     )
