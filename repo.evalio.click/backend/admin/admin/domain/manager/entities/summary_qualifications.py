@@ -1,6 +1,6 @@
-from typing import List
-from pydantic import BaseModel
 from datetime import datetime
+
+from pydantic import BaseModel
 from pytz import timezone
 
 
@@ -19,4 +19,4 @@ class SummaryQualifications(BaseModel):
     template_id: str
     created_at: datetime = datetime.now(timezone("America/Bogota"))
     updated_at: datetime = datetime.now(timezone("America/Bogota"))
-    students: List[Grade] = []
+    students: list[Grade] = []

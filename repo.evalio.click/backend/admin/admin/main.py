@@ -1,10 +1,11 @@
 import os
-from admin.infrastructure.web.middlewares.jwt_extractor import JWTExtractorMiddleware
-from fastapi import APIRouter, FastAPI
+
 import uvicorn
 from dotenv import load_dotenv
-
+from fastapi import APIRouter, FastAPI
 from fastapi.middleware.cors import CORSMiddleware
+
+from admin.infrastructure.web.middlewares.jwt_extractor import JWTExtractorMiddleware
 from admin.infrastructure.web.routes.groups_routes import group_router
 
 origins = ["*"]

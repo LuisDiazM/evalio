@@ -1,7 +1,5 @@
-from abc import ABC, abstractmethod
-from typing import List
 import concurrent.futures
-
+from abc import ABC, abstractmethod
 
 from admin.domain.manager.entities.group import Group
 from admin.domain.manager.repositories.db_exams_summary_repo import IExamRepository
@@ -19,7 +17,7 @@ class IGroupUsecase(ABC):
         pass
 
     @abstractmethod
-    def get_groups(self, professor_id: str) -> List[Group]:
+    def get_groups(self, professor_id: str) -> list[Group]:
         pass
 
     @abstractmethod
@@ -62,7 +60,8 @@ class GroupUsecase(IGroupUsecase):
         with concurrent.futures.ThreadPoolExecutor() as executor:
             futures = [
                 executor.submit(self.group_db.delete_group, group_id),
-                executor.submit(self.template_db.delete_templates_by_group, group_id),
+                executor.submit(
+                    self.template_db.delete_templates_by_group, group_id),
                 executor.submit(self.exam_db.delete_exams_by_group, group_id),
                 executor.submit(
                     self.summary_db.delete_qualification_by_group, group_id

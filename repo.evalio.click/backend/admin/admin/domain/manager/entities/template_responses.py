@@ -1,7 +1,7 @@
-from typing import List
-from pydantic import BaseModel
 from datetime import datetime
+
 import pytz
+from pydantic import BaseModel
 
 
 class Question(BaseModel):
@@ -11,7 +11,7 @@ class Question(BaseModel):
 
 class TemplateResponses(BaseModel):
     created_at: datetime = datetime.now(pytz.timezone("America/Bogota"))
-    questions: List[Question]
+    questions: list[Question]
     subject_name: str
     period: str
     number: int

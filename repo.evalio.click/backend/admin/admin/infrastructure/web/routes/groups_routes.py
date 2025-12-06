@@ -1,5 +1,9 @@
 from io import BytesIO
-from typing import Annotated, List
+from typing import Annotated
+
+import pandas as pd
+from fastapi import APIRouter, Depends, Form, HTTPException, Request, UploadFile, status
+
 from admin.di import get_group_usecase
 from admin.domain.manager.entities.group import Group, Student
 from admin.domain.manager.usecases.groups_usecase import IGroupUsecase
@@ -9,8 +13,6 @@ from admin.shared.file_operations import (
     validate_columns_csv,
     validate_file,
 )
-from fastapi import APIRouter, Depends, Form, HTTPException, Request, UploadFile, status
-import pandas as pd
 
 group_router = APIRouter(tags=["groups"])
 
@@ -71,15 +73,16 @@ async def create_students_group(
         usecase.create(group)
         return group
     except Exception as e:
+        # Propagate as HTTPException but keep original message for traceability
         raise HTTPException(
             status_code=status.HTTP_500_INTERNAL_SERVER_ERROR, detail=str(e)
-        )
+        ) from e
 
 
 @group_router.get("/groups", description="get the groups by professor id")
 async def get_groups_by_professor(
     usecase: Annotated[IGroupUsecase, Depends(get_group_usecase)], request: Request
-) -> List[Group]:
+) -> list[Group]:
     professor_id = request.headers.get("x-professor-id") or ""
     if professor_id == "":
         raise HTTPException(
@@ -105,6 +108,6 @@ async def get_group_by_id(
 @group_router.delete("/group", description="delete an specific group")
 async def delete_group(group_id: str,
                        usecase: Annotated[IGroupUsecase, Depends(get_group_usecase)],
-                      ):
+                       ):
     usecase.delete_group(group_id)
     raise HTTPException(status_code=status.HTTP_204_NO_CONTENT)

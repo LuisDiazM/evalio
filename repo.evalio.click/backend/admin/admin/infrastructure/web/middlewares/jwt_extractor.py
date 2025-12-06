@@ -1,6 +1,7 @@
-from fastapi import Request
 import base64
 import json
+
+from fastapi import Request
 from starlette.middleware.base import BaseHTTPMiddleware
 
 
@@ -34,7 +35,6 @@ class JWTExtractorMiddleware(BaseHTTPMiddleware):
                         (b"x-professor-name", professor_name.encode()),
                     )
             except Exception:
-                # If there's any error in processing the token, continue without the header
                 pass
 
         # Continue with the request

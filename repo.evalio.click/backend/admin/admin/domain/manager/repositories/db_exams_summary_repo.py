@@ -1,4 +1,5 @@
 from abc import ABC, abstractmethod
+
 from admin.domain.manager.entities.exams import Exam
 from admin.infrastructure.database.mongo_imp import Mongo
 
@@ -46,7 +47,7 @@ class ExamsRepository(IExamRepository):
                 )
                 return str(result["_id"])
         except Exception as e:
-            raise ValueError(f"error creating exam {str(e)}")
+            raise ValueError(f"error creating exam {str(e)}") from e
 
     def get_exams_by_template(self, template_id: str) -> list[Exam]:
         filter = {"template_id": template_id}
@@ -63,11 +64,12 @@ class ExamsRepository(IExamRepository):
             filter = {"template_id": template_id}
             self.coll.delete_many(filter)
         except Exception as e:
-            raise ValueError(f"error deleting exams by template {str(e)}")
+            raise ValueError(
+                f"error deleting exams by template {str(e)}") from e
 
     def delete_exams_by_group(self, group_id: str):
         try:
             filter = {"group_id": group_id}
             self.coll.delete_many(filter)
         except Exception as e:
-            raise ValueError(f"error deleting exams by group {str(e)}")
+            raise ValueError(f"error deleting exams by group {str(e)}") from e

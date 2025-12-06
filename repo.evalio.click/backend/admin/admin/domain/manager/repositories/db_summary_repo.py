@@ -3,7 +3,6 @@ from abc import ABC, abstractmethod
 from admin.domain.manager.entities.summary_qualifications import SummaryQualifications
 from admin.infrastructure.database.mongo_imp import Mongo
 
-
 SUMMARY_COLLECTION = "summary_qualifications"
 
 
@@ -32,10 +31,11 @@ class SummaryQualificationsRepository(ISummaryQualificationsRepository):
                 return
             return SummaryQualifications(id=str(result.get("_id")), **result)
         except Exception as e:
-            raise ValueError(f"error getting qualification {str(e)}")
+            raise ValueError(f"error getting qualification {str(e)}") from e
 
     def delete_qualification_by_group(self, group_id: str) -> None:
         try:
             self.coll.delete_one({"group_id": group_id})
         except Exception as e:
-            raise ValueError(f"error deleting qualification by group {str(e)}")
+            raise ValueError(
+                f"error deleting qualification by group {str(e)}") from e

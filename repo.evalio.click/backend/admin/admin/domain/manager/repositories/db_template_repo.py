@@ -1,8 +1,9 @@
 from abc import ABC, abstractmethod
 
+from bson import ObjectId
+
 from admin.domain.manager.entities.template_responses import TemplateResponses
 from admin.infrastructure.database.mongo_imp import Mongo
-from bson import ObjectId
 
 TEMPLATES_COLLECTION = "template_responses"
 

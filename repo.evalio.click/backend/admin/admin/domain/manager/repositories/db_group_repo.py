@@ -1,9 +1,9 @@
 from abc import ABC, abstractmethod
-from typing import List
+
+from bson import ObjectId
 
 from admin.domain.manager.entities.group import Group
 from admin.infrastructure.database.mongo_imp import Mongo
-from bson import ObjectId
 
 GROUPS_COLLECTION = "groups"
 
@@ -18,7 +18,7 @@ class IGroupDbRepo(ABC):
         pass
 
     @abstractmethod
-    def get_groups(self, professor_id: str) -> List[Group]:
+    def get_groups(self, professor_id: str) -> list[Group]:
         pass
 
     @abstractmethod
@@ -41,8 +41,8 @@ class GroupRepository(IGroupDbRepo):
         if result:
             try:
                 return Group(**result)
-            except Exception:
-                pass
+            except Exception as e:
+                raise ValueError(f"error getting group: {str(e)}") from e
         return
 
     def create_group(self, group: Group) -> bool:
@@ -61,16 +61,16 @@ class GroupRepository(IGroupDbRepo):
                 self.coll.insert_one(data)
             return True
         except Exception as e:
-            return False
+            raise ValueError("error creating group") from e
 
-    def get_groups(self, professor_id: str) -> List[Group]:
+    def get_groups(self, professor_id: str) -> list[Group]:
         try:
             cursor = self.coll.find({"professor_id": professor_id})
             results = []
             for data in cursor:
                 results.append(Group(id=str(data.get("_id")), **data))
             return results
-        except Exception as e:
+        except Exception:
             return []
 
     def delete_group(self, group_id: str) -> None:

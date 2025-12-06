@@ -1,8 +1,10 @@
 import os
 from typing import Optional
-from admin.domain.shared.storage_repo import IStorageRepository
+
 from google.cloud import storage
 from google.cloud.exceptions import NotFound
+
+from admin.domain.shared.storage_repo import IStorageRepository
 
 
 class GCPStorageRepository(IStorageRepository):
@@ -31,7 +33,7 @@ class GCPStorageRepository(IStorageRepository):
             blob.upload_from_filename(file_path)
             return destination_blob_name
 
-        except Exception as e:
+        except Exception:
             return None
 
     def upload_binary(
@@ -52,7 +54,7 @@ class GCPStorageRepository(IStorageRepository):
             blob.upload_from_string(binary_data, content_type=content_type)
             return destination_blob_name
 
-        except Exception as e:
+        except Exception:
             return None
 
     def delete_file(self, blob_name: str) -> bool:
@@ -68,7 +70,7 @@ class GCPStorageRepository(IStorageRepository):
 
         except NotFound:
             return False
-        except Exception as e:
+        except Exception:
             return False
 
     def delete_folder(self, folder_path: str) -> bool:
@@ -83,7 +85,8 @@ class GCPStorageRepository(IStorageRepository):
                 folder_path += "/"
 
             # List all blobs in the folder
-            blobs = self.client.list_blobs(self.bucket_name, prefix=folder_path)
+            blobs = self.client.list_blobs(
+                self.bucket_name, prefix=folder_path)
             blob_list = list(blobs)
 
             if not blob_list:
@@ -96,7 +99,7 @@ class GCPStorageRepository(IStorageRepository):
 
             return True
 
-        except Exception as e:
+        except Exception:
             return False
 
     def get_file_url(self, blob_name: str) -> Optional[str]:
@@ -113,7 +116,7 @@ class GCPStorageRepository(IStorageRepository):
             else:
                 return None
 
-        except Exception as e:
+        except Exception:
             return None
 
     def generate_signed_url(
@@ -138,5 +141,5 @@ class GCPStorageRepository(IStorageRepository):
             else:
                 return ""
 
-        except Exception as e:
+        except Exception:
             return ""
