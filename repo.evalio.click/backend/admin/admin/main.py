@@ -1,18 +1,17 @@
 import os
+from admin.infrastructure.web.middlewares.jwt_extractor import JWTExtractorMiddleware
 from fastapi import APIRouter, FastAPI
 import uvicorn
+from dotenv import load_dotenv
 
 from fastapi.middleware.cors import CORSMiddleware
+from admin.infrastructure.web.routes.groups_routes import group_router
 
-origins = [
-    "*"
-]
+origins = ["*"]
 
 root_router = APIRouter(prefix="/manager")
 
-app = FastAPI(docs_url="/docs",
-              redoc_url="/redoc",
-              openapi_url="/openapi.json")
+app = FastAPI(docs_url="/docs", redoc_url="/redoc", openapi_url="/openapi.json")
 
 app.add_middleware(
     CORSMiddleware,
@@ -23,9 +22,20 @@ app.add_middleware(
 )
 
 
+app.add_middleware(JWTExtractorMiddleware)
+
+# routers
+root_router.include_router(group_router)
+
+
 app.include_router(root_router)
+
+
 def run_fastapi():
+    # Load .env if present, but don't override existing environment variables
+    load_dotenv(override=False)
     port = int(os.getenv("PORT", 8081))
+    print(os.getenv("MONGO_URL"))
     config = uvicorn.Config(
         "main:app",
         host="0.0.0.0",
@@ -36,6 +46,7 @@ def run_fastapi():
     )
     server = uvicorn.Server(config)
     server.run()
+
 
 if __name__ == "__main__":
     run_fastapi()
