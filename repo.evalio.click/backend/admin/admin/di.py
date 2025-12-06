@@ -9,6 +9,7 @@ from admin.domain.manager.repositories.db_template_repo import (
     TemplateResponsesRepository,
 )
 from admin.domain.manager.usecases.groups_usecase import GroupUsecase
+from admin.domain.manager.usecases.summary_usecase import SummaryUsecase
 from admin.infrastructure.database.mongo_imp import Mongo
 from admin.infrastructure.storage.cloud_storage_gcp import GCPStorageRepository
 
@@ -64,5 +65,15 @@ async def get_group_usecase(
         template_db=template_repo,
         summary_db=summary_repo,
         exam_db=exam_repo,
+        storage_repo=storage_repo,
+    )
+
+
+async def get_summary_usecase(
+    summary_repo=get_summary_repo_dep,
+    storage_repo=get_storage_repo_dep,
+):
+    return SummaryUsecase(
+        db_summary_repo=summary_repo,
         storage_repo=storage_repo,
     )

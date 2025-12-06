@@ -60,8 +60,7 @@ class GroupUsecase(IGroupUsecase):
         with concurrent.futures.ThreadPoolExecutor() as executor:
             futures = [
                 executor.submit(self.group_db.delete_group, group_id),
-                executor.submit(
-                    self.template_db.delete_templates_by_group, group_id),
+                executor.submit(self.template_db.delete_templates_by_group, group_id),
                 executor.submit(self.exam_db.delete_exams_by_group, group_id),
                 executor.submit(
                     self.summary_db.delete_qualification_by_group, group_id

@@ -85,8 +85,7 @@ class GCPStorageRepository(IStorageRepository):
                 folder_path += "/"
 
             # List all blobs in the folder
-            blobs = self.client.list_blobs(
-                self.bucket_name, prefix=folder_path)
+            blobs = self.client.list_blobs(self.bucket_name, prefix=folder_path)
             blob_list = list(blobs)
 
             if not blob_list:

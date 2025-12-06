@@ -37,5 +37,4 @@ class SummaryQualificationsRepository(ISummaryQualificationsRepository):
         try:
             self.coll.delete_one({"group_id": group_id})
         except Exception as e:
-            raise ValueError(
-                f"error deleting qualification by group {str(e)}") from e
+            raise ValueError(f"error deleting qualification by group {str(e)}") from e

@@ -106,8 +106,9 @@ async def get_group_by_id(
 
 
 @group_router.delete("/group", description="delete an specific group")
-async def delete_group(group_id: str,
-                       usecase: Annotated[IGroupUsecase, Depends(get_group_usecase)],
-                       ):
+async def delete_group(
+    group_id: str,
+    usecase: Annotated[IGroupUsecase, Depends(get_group_usecase)],
+):
     usecase.delete_group(group_id)
     raise HTTPException(status_code=status.HTTP_204_NO_CONTENT)

@@ -64,8 +64,7 @@ class ExamsRepository(IExamRepository):
             filter = {"template_id": template_id}
             self.coll.delete_many(filter)
         except Exception as e:
-            raise ValueError(
-                f"error deleting exams by template {str(e)}") from e
+            raise ValueError(f"error deleting exams by template {str(e)}") from e
 
     def delete_exams_by_group(self, group_id: str):
         try:
