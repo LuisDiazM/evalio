@@ -1,6 +1,6 @@
 go 1.23.11
 
 use (
-	./repo.evalio.click/backend/forwardAuth
-	./repo.evalio.click/backend/usersManager
+	./backend/forwardAuth
+	./backend/usersManager
 )
