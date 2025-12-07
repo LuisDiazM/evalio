@@ -1,0 +1,51 @@
+{
+  "name": "evalio-ui",
+  "$schema": "../../node_modules/nx/schemas/project-schema.json",
+  "projectType": "application",
+  "sourceRoot": "apps/evalio-ui/src",
+  "tags": [],
+  "targets": {
+    "build": {
+      "executor": "@nx/rspack:rspack",
+      "outputs": ["{workspaceRoot}/dist/apps/evalio-ui"],
+      "defaultConfiguration": "production",
+      "options": {
+        "target": "web",
+        "outputPath": "dist/apps/evalio-ui",
+        "rspackConfig": "apps/evalio-ui/rspack.config.js"
+      },
+      "configurations": {
+        "development": {},
+        "production": {}
+      }
+    },
+    "serve": {
+      "executor": "@nx/rspack:dev-server",
+      "defaultConfiguration": "development",
+      "options": {
+        "buildTarget": "evalio-ui:build"
+      },
+      "configurations": {
+        "development": {
+          "buildTarget": "evalio-ui:build:development"
+        },
+        "production": {
+          "buildTarget": "evalio-ui:build:production"
+        }
+      }
+    },
+    "lint": {
+      "executor": "@nx/eslint:lint",
+      "outputs": ["{options.outputFile}"],
+      "options": {
+        "lintFilePatterns": ["apps/evalio-ui/**/*.{ts,tsx,js,jsx}"]
+      }
+    },
+    "typecheck": {
+      "executor": "nx:run-commands",
+      "options": {
+        "command": "tsc --noEmit -p apps/evalio-ui/tsconfig.app.json"
+      }
+    }
+  }
+}

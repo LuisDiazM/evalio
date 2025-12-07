@@ -41,6 +41,9 @@ function buildProcessEnvDefinitions(envVars) {
 }
 const envVars = loadEnvFiles();
 module.exports = {
+  entry: {
+    main: join(__dirname, 'src/main.tsx'),
+  },
   output: {
     path: join(__dirname, 'dist'),
   },
