@@ -6,8 +6,6 @@ from nats.aio.client import Client as NATS
 
 from grader_analyzer.domain.shared.event_subscriber import EventSubscriber
 
-STREAM_NAME = "cv-grader-analyzer"
-
 
 class NatsSubscriber(EventSubscriber):
     def __init__(self, nc: NATS):

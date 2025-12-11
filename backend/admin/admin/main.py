@@ -41,14 +41,13 @@ def run_fastapi():
     # Load .env if present, but don't override existing environment variables
     load_dotenv(override=False)
     port = int(os.getenv("PORT", 8081))
-    print(os.getenv("MONGO_URL"))
     config = uvicorn.Config(
         "main:app",
         host="0.0.0.0",
         port=port,
         log_level="info",
         reload=False,
-        access_log=True,
+        access_log=False,
     )
     server = uvicorn.Server(config)
     server.run()

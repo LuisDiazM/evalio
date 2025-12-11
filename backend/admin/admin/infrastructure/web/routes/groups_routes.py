@@ -1,8 +1,18 @@
+import contextlib
 from io import BytesIO
 from typing import Annotated
 
 import pandas as pd
-from fastapi import APIRouter, Depends, Form, HTTPException, Request, UploadFile, status
+from fastapi import (
+    APIRouter,
+    BackgroundTasks,
+    Depends,
+    Form,
+    HTTPException,
+    Request,
+    UploadFile,
+    status,
+)
 
 from admin.di import get_group_usecase
 from admin.domain.manager.entities.group import Group, Student
@@ -109,6 +119,21 @@ async def get_group_by_id(
 async def delete_group(
     group_id: str,
     usecase: Annotated[IGroupUsecase, Depends(get_group_usecase)],
+    background_tasks: BackgroundTasks,
+    request: Request,
 ):
-    usecase.delete_group(group_id)
+    # run deletion in background so HTTP request returns immediately
+    professor_id = request.headers.get("x-professor-id") or ""
+    if professor_id == "":
+        raise HTTPException(
+            status_code=status.HTTP_403_FORBIDDEN,
+            detail="Missing professor ID in headers",
+        )
+
+    def _delete():
+        with contextlib.suppress(Exception):
+            usecase.delete_group(group_id, professor_id)
+
+    background_tasks.add_task(_delete)
+    usecase.delete_group(group_id, professor_id)
     raise HTTPException(status_code=status.HTTP_204_NO_CONTENT)

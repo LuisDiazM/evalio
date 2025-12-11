@@ -135,10 +135,12 @@ async def get_template_usecase(
     template_repo=get_template_repo_dep,
     storage_repo=get_storage_repo_dep,
     exam_repo=get_exam_repo_dep,
+    summary_repo=get_summary_repo_dep,
 ):
     return TemplateUsecase(
         group_repo=group_repo,
         template_repo=template_repo,
         storage_repo=storage_repo,
         exam_repo=exam_repo,
+        summary_repo=summary_repo,
     )

@@ -9,6 +9,9 @@ from admin.domain.manager.entities.template_responses import Question, TemplateR
 from admin.domain.manager.repositories.db_exams_summary_repo import IExamRepository
 from admin.domain.manager.repositories.db_group_repo import IGroupDbRepo
 from admin.domain.manager.repositories.db_template_repo import ITemplateRepository
+from admin.domain.manager.usecases.groups_usecase import (
+    ISummaryQualificationsRepository,
+)
 from admin.domain.shared.storage_repo import IStorageRepository
 from admin.shared.template_generator import render_page
 
@@ -33,7 +36,7 @@ class ITemplatesUsecase(ABC):
         pass
 
     @abstractmethod
-    def delete_template(self, template_id: str):
+    def delete_template(self, template_id: str, professor_id: str):
         pass
 
 
@@ -44,11 +47,13 @@ class TemplateUsecase(ITemplatesUsecase):
         template_repo: ITemplateRepository,
         exam_repo: IExamRepository,
         storage_repo: IStorageRepository,
+        summary_repo: ISummaryQualificationsRepository,
     ):
         self.group_db = group_repo
         self.template_db = template_repo
         self.exam_repo = exam_repo
         self.storage_repo = storage_repo
+        self.summary_repo = summary_repo
 
     def generate_template(self, input) -> str:
         try:
@@ -120,19 +125,20 @@ class TemplateUsecase(ITemplatesUsecase):
     def get_templates_by_group(self, group_id: str) -> list[TemplateResponses]:
         return self.template_db.get_templates_by_group(group_id)
 
-    def delete_template(self, template_id: str):
+    def delete_template(self, template_id: str, professor_id: str):
         try:
-            # Obtener el template para obtener el group_id
             template = self.template_db.get_template_by_id(template_id)
-            if template:
-                group_id = template.group_id
-                # Eliminar carpeta del cloud storage si no estamos en modo local
-                if os.getenv("ENVIRONMENT", "local") != "local":
-                    folder_path = f"exams/{group_id}/{template_id}/"
-                    self.storage_repo.delete_folder(folder_path)
-
-            # Eliminar de la base de datos
-            self.template_db.delete_template_response(template_id)
+            if template is None:
+                raise ValueError(f"Template {template_id} not found")
+            if template.professor_id != professor_id:
+                raise ValueError(
+                    f"professor {professor_id} denied \
+                      to delete this template {template_id}"
+                )
             self.exam_repo.delete_exams_by_template(template_id)
+            self.summary_repo.delete_qualification_by_template(template_id)
+            self.template_db.delete_template_response(template_id)
+            group_id = template.group_id
+            self.storage_repo.delete_folder(f"exams/{group_id}/{template_id}/")
         except Exception as e:
             raise ValueError(f"Error deleting template {template_id}: {str(e)}") from e

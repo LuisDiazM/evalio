@@ -14,3 +14,4 @@ class Exam(BaseModel):
     period: str = ""
     status: str
     group_name: str = ""
+    professor_id: str = ""

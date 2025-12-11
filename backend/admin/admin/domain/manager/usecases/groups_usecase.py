@@ -1,4 +1,3 @@
-import concurrent.futures
 from abc import ABC, abstractmethod
 
 from admin.domain.manager.entities.group import Group
@@ -21,7 +20,7 @@ class IGroupUsecase(ABC):
         pass
 
     @abstractmethod
-    def delete_group(self, group_id: str):
+    def delete_group(self, group_id: str, professor_id: str) -> None:
         pass
 
     @abstractmethod
@@ -53,17 +52,15 @@ class GroupUsecase(IGroupUsecase):
     def get_group_by_id(self, group_id: str):
         return self.group_db.get_group_by_id(group_id)
 
-    def delete_group(self, group_id: str):
+    def delete_group(self, group_id: str, professor_id: str):
+        group = self.group_db.get_group_by_id(group_id)
+        if group is None or group.professor_id != professor_id:
+            raise ValueError("Group not found or access denied")
         templates = self.template_db.get_templates_by_group(group_id)
         for template in templates:
             self.storage_repo.delete_folder(f"exams/{group_id}/{template.id}")
-        with concurrent.futures.ThreadPoolExecutor() as executor:
-            futures = [
-                executor.submit(self.group_db.delete_group, group_id),
-                executor.submit(self.template_db.delete_templates_by_group, group_id),
-                executor.submit(self.exam_db.delete_exams_by_group, group_id),
-                executor.submit(
-                    self.summary_db.delete_qualification_by_group, group_id
-                ),
-            ]
-            concurrent.futures.wait(futures)
+        self.group_db.delete_group(group_id)
+        self.template_db.delete_templates_by_group(group_id)
+        self.exam_db.delete_exams_by_group(group_id)
+        self.summary_db.delete_qualification_by_group(group_id)
+

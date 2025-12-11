@@ -17,6 +17,10 @@ class ISummaryQualificationsRepository(ABC):
     def delete_qualification_by_group(self, group_id: str) -> None:
         pass
 
+    @abstractmethod
+    def delete_qualification_by_template(self, template_id: str) -> None:
+        pass
+
 
 class SummaryQualificationsRepository(ISummaryQualificationsRepository):
     def __init__(self, mongo: Mongo):
@@ -38,3 +42,11 @@ class SummaryQualificationsRepository(ISummaryQualificationsRepository):
             self.coll.delete_one({"group_id": group_id})
         except Exception as e:
             raise ValueError(f"error deleting qualification by group {str(e)}") from e
+
+    def delete_qualification_by_template(self, template_id: str) -> None:
+        try:
+            self.coll.delete_one({"template_id": template_id})
+        except Exception as e:
+            raise ValueError(
+                f"error deleting qualification by template {str(e)}"
+            ) from e

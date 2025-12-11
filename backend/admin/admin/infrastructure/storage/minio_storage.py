@@ -1,9 +1,9 @@
 import os
+from io import BytesIO
 from typing import Optional
 
 from minio import Minio
 from minio.error import S3Error
-from io import BytesIO
 
 from admin.domain.shared.storage_repo import IStorageRepository
 
@@ -72,7 +72,6 @@ class MinIOStorageRepository(IStorageRepository):
         :return: Object name if successful, None otherwise
         """
         try:
-
             data_stream = BytesIO(binary_data)
             data_length = len(binary_data)
 
@@ -85,8 +84,7 @@ class MinIOStorageRepository(IStorageRepository):
             )
             return destination_blob_name
         except S3Error as e:
-            print(f"Error uploading binary to MinIO: {e}")
-            return None
+            raise ValueError(f"Error uploading binary data to MinIO: {e}") from e
 
     def delete_file(self, blob_name: str) -> bool:
         """
@@ -98,8 +96,7 @@ class MinIOStorageRepository(IStorageRepository):
             self.client.remove_object(self.bucket_name, blob_name)
             return True
         except S3Error as e:
-            print(f"Error deleting file from MinIO: {e}")
-            return False
+            raise ValueError(f"Error deleting file from MinIO: {e}") from e
 
     def delete_folder(self, folder_path: str) -> bool:
         """
@@ -122,14 +119,13 @@ class MinIOStorageRepository(IStorageRepository):
             for obj in objects:
                 try:
                     if obj.object_name:
-                      self.client.remove_object(self.bucket_name, obj.object_name)
+                        self.client.remove_object(self.bucket_name, obj.object_name)
                 except S3Error as e:
                     delete_errors.append(str(e))
 
             return len(delete_errors) == 0
         except S3Error as e:
-            print(f"Error deleting folder from MinIO: {e}")
-            return False
+            raise ValueError(f"Error deleting folder from MinIO: {e}") from e
 
     def get_file_url(self, blob_name: str, expiry_seconds: int = 3600) -> Optional[str]:
         """

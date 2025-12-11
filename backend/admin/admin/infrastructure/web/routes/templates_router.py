@@ -1,8 +1,9 @@
+import contextlib
 import os
 from pathlib import Path
 from typing import Annotated
 
-from fastapi import APIRouter, HTTPException, Request, Response, status
+from fastapi import APIRouter, BackgroundTasks, HTTPException, Request, Response, status
 from fastapi.params import Depends
 
 from admin.di import get_template_usecase
@@ -89,5 +90,18 @@ async def get_templates(
 async def delete_template(
     template_id: str,
     usecase: Annotated[ITemplatesUsecase, Depends(get_template_usecase)],
+    background_tasks: BackgroundTasks,
+    request: Request,
 ):
-    usecase.delete_template(template_id)
+    professor_id = request.headers.get("x-professor-id") or ""
+    if professor_id == "":
+        raise HTTPException(
+            status_code=status.HTTP_403_FORBIDDEN,
+            detail="Missing professor ID in headers",
+        )
+
+    def _delete():
+        with contextlib.suppress(Exception):
+            usecase.delete_template(template_id, professor_id)
+
+    background_tasks.add_task(_delete)

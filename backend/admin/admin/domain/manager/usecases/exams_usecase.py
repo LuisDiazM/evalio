@@ -1,8 +1,5 @@
 import json
-import os
 from abc import ABC, abstractmethod
-
-from fastapi import Path
 
 from admin.domain.manager.entities.exams import Exam
 from admin.domain.manager.repositories.db_exams_summary_repo import IExamRepository
@@ -78,7 +75,9 @@ class ExamsUsecase:
                 return
 
             # Generar nombre único para el archivo en storage
-            file_extension = self.__get_file_extension_from_binary(binary_data, filename)
+            file_extension = self.__get_file_extension_from_binary(
+                binary_data, filename
+            )
             cloud_storage_path = (
                 f"exams/{group_id}/{template_id}/{student_id}{file_extension}"
             )
@@ -105,6 +104,7 @@ class ExamsUsecase:
                 student_name=student_name,
                 group_name=group.name,
                 period=group.period,
+                professor_id=group.professor_id,
             )
         except Exception as e:
             raise ValueError(f"Error creating exam: {str(e)}") from e
