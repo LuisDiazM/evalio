@@ -1,12 +1,30 @@
-import React from 'react';
+import React, { useCallback, useState } from 'react';
 import styles from './qualificationsList.module.scss';
 import useSummary from '@/features/groups/hooks/useSummary';
 import ExportCSVButton from '@/features/groups/components/ExportCSVButton/ExportCSVButton';
+import ModalImageViewer from './ModalImageViewer';
 
 type Props = { groupId?: string; templateId?: string };
 
 const QualificationsList: React.FC<Props> = ({ groupId, templateId }) => {
   const { data, status, error } = useSummary(templateId);
+
+  const [selectedImage, setSelectedImage] = useState<string | null>(null);
+
+  const resolveUrl = useCallback((path?: string) => {
+    if (!path) return null;
+    return path.startsWith('http') ? path : `${window.location.origin}/${path}`;
+  }, []);
+
+  const openExam = (path?: string) => {
+    const url = resolveUrl(path);
+    if (!url) return;
+    setSelectedImage(url);
+  };
+
+  const closeModal = useCallback(() => setSelectedImage(null), []);
+
+  // modal behavior is handled by ModalImageViewer
 
   if (!templateId) return <div className={styles.container}>No template selected</div>;
   if (status === 'pending') return <div className={styles.container}>Cargando resumen...</div>;
@@ -15,12 +33,6 @@ const QualificationsList: React.FC<Props> = ({ groupId, templateId }) => {
 
   // only show export when there is valid data and templateId
   const showExport = Boolean(templateId && data && data.students && data.students.length > 0);
-
-  const openExam = (path?: string) => {
-    if (!path) return;
-    const url = path.startsWith('http') ? path : `${window.location.origin}/${path}`;
-    window.open(url, '_blank');
-  };
 
   return (
     <div className={styles.container}>
@@ -65,6 +77,13 @@ const QualificationsList: React.FC<Props> = ({ groupId, templateId }) => {
           </tbody>
         </table>
       </div>
+      {selectedImage && (
+        <ModalImageViewer
+          src={selectedImage}
+          alt="Examen"
+          onClose={closeModal}
+        />
+      )}
     </div>
   );
 };

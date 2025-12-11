@@ -49,8 +49,8 @@ class ExamsUsecase:
                 return
             await self.event_publisher.publish(data=json.dumps({"exam_id": exam_id}))  # type: ignore
             return exam
-        except Exception:
-            # self.logger_repo.error(f"Error creating exam: {str(e)}")
+        except Exception as e:
+            print(e)
             pass
 
     def __make_exam(self, exam_data: dict) -> Exam | None:
@@ -59,10 +59,8 @@ class ExamsUsecase:
             template_id = exam_data.get("template_id")
             group_id = exam_data.get("group_id")
             student_name = exam_data.get("student_name")
-            file_location = exam_data.get("exam_path") or ""
-            binary_data = (
-                exam_data.get("exam_binary") or b""
-            )  # Nuevo campo para datos binarios
+            binary_data = exam_data.get("exam_binary") or b""
+            filename = exam_data.get("filename", "exam")
 
             if (
                 group_id is None
@@ -79,49 +77,30 @@ class ExamsUsecase:
             if group is None:
                 return
 
-            # Generar nombre único para el archivo en cloud storage
-            file_extension = self.__get_file_extension(file_location, binary_data)
+            # Generar nombre único para el archivo en storage
+            file_extension = self.__get_file_extension_from_binary(binary_data, filename)
             cloud_storage_path = (
                 f"exams/{group_id}/{template_id}/{student_id}{file_extension}"
             )
 
-            if os.getenv("ENVIRONMENT", "local") == "local":
-                # Modo local: mantener archivo local
-                if file_location is None:
-                    return
-                location = Path(str(file_location))
-                abs_path = os.path.abspath(location)
-                if abs_path is None:
-                    return
-                abs_path = str(abs_path)
-            else:
-                # Modo producción: subir a cloud storage
-                if binary_data is not None:
-                    # Subir datos binarios directamente
-                    cloud_url = self.storage_repo.upload_binary(
-                        binary_data=binary_data,
-                        destination_blob_name=cloud_storage_path,
-                        content_type=self.__get_content_type(file_extension),
-                    )
-                elif file_location is not None:
-                    # Subir archivo desde ruta local
-                    cloud_url = self.storage_repo.upload_file(
-                        file_path=file_location,
-                        destination_blob_name=cloud_storage_path,
-                    )
-                else:
-                    return
+            # Subir a storage (MinIO o GCP según STORAGE_PROVIDER)
+            if not binary_data:
+                return
 
-                if cloud_url is None:
-                    return
+            storage_url = self.storage_repo.upload_binary(
+                binary_data=binary_data,
+                destination_blob_name=cloud_storage_path,
+                content_type=self.__get_content_type(file_extension),
+            )
 
-                abs_path = cloud_url
+            if storage_url is None:
+                return
 
             return Exam(
                 group_id=group_id,
                 student_identification=int(student_id),
                 status="pending",
-                exam_path=abs_path,
+                exam_path=storage_url,
                 template_id=template_id,
                 student_name=student_name,
                 group_name=group.name,
@@ -130,23 +109,26 @@ class ExamsUsecase:
         except Exception as e:
             raise ValueError(f"Error creating exam: {str(e)}") from e
 
-    def __get_file_extension(self, file_location: str, binary_data: bytes) -> str:
+    def __get_file_extension_from_binary(
+        self, binary_data: bytes, filename: str
+    ) -> str:
         """
-        Get file extension from file location or infer from binary data
+        Get file extension from filename or infer from binary data
         """
-        if file_location:
-            return Path(file_location).suffix
-        elif binary_data:
-            # Inferir extensión basado en los primeros bytes (magic numbers)
+        # Try to get extension from filename first
+        if filename and "." in filename:
+            return "." + filename.split(".")[-1].lower()
+
+        # Inferir extensión basado en los primeros bytes (magic numbers)
+        if binary_data:
             if binary_data.startswith(b"\xff\xd8\xff"):
                 return ".jpg"
             elif binary_data.startswith(b"\x89PNG\r\n\x1a\n"):
                 return ".png"
             elif binary_data.startswith(b"%PDF"):
                 return ".pdf"
-            else:
-                return ".bin"  # Default extension
-        return ".bin"
+
+        return ".bin"  # Default extension
 
     def __get_content_type(self, file_extension: str) -> str:
         """

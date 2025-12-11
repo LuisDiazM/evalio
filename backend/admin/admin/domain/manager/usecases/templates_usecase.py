@@ -69,8 +69,24 @@ class TemplateUsecase(ITemplatesUsecase):
                     "date": input.date,
                 }
                 students.append(data)
+            # Build output path: use env var TEMPLATES_OUTPUT_DIR or system temp (/tmp)
+            base_dir = os.getenv("TEMPLATES_OUTPUT_DIR", None)
+            if base_dir is None:
+                # prefer /tmp for microservices, fallback to temp directory
+                base_dir = os.getenv("TMPDIR", "/tmp")
+
+            # create a folder per group to avoid collisions
+            group_folder = os.path.join(base_dir, "templates", str(group.id))
+            os.makedirs(group_folder, exist_ok=True)
+
+            # unique filename: include template id and timestamp
+            import time
+
+            timestamp = int(time.time())
+            filename = f"responses_sheet_{input.template_id}_{timestamp}.pdf"
+            output_path = os.path.join(group_folder, filename)
+
             # Canvas reference to make pdf
-            output_path = "temp/responses_sheet.pdf"
             c = canvas.Canvas(output_path, pagesize=letter)
             students_group = [
                 tuple(students[i : i + 3]) for i in range(0, len(students), 3)
@@ -79,8 +95,11 @@ class TemplateUsecase(ITemplatesUsecase):
                 render_page(c, list(student_group))
                 c.showPage()
             c.save()
-            return output_path
-        except Exception:
+            # return absolute path to the generated PDF
+            return os.path.abspath(output_path)
+        except Exception as e:
+            # bubble up or log accordingly
+            print(e)
             return ""
 
     def get_template_by_id(self, template_id: str) -> TemplateResponses | None:

@@ -22,6 +22,7 @@ from admin.infrastructure.messaging.nats_publisher import (
     NatsPublisher,
 )
 from admin.infrastructure.storage.cloud_storage_gcp import GCPStorageRepository
+from admin.infrastructure.storage.minio_storage import MinIOStorageRepository
 
 
 # infrastructure
@@ -30,7 +31,20 @@ async def get_mongo():
 
 
 async def get_storage_repo():
-    return GCPStorageRepository()
+    """
+    Get the storage repository based on STORAGE_PROVIDER environment variable.
+    Supported values: 'gcp' (default), 'minio'
+    """
+    provider = os.getenv("STORAGE_PROVIDER", "gcp").lower()
+
+    if provider == "minio":
+        return MinIOStorageRepository()
+    elif provider == "gcp":
+        return GCPStorageRepository()
+    else:
+        raise ValueError(
+            f"Unsupported STORAGE_PROVIDER: {provider}. Use 'gcp' or 'minio'"
+        )
 
 
 async def get_nats():

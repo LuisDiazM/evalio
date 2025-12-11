@@ -12,6 +12,7 @@ export const DownloadTemplate: React.FC<{ template: Template }> = ({ template })
 
   const handleClick = async () => {
     try {
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const blob = await mutation.mutateAsync({ groupId: template.group_id, templateId: (template as any).template_id || template.id });
       const url = URL.createObjectURL(blob);
       window.open(url, '_blank');

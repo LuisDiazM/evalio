@@ -61,12 +61,10 @@ export const UserProvider: React.FC<{ children: React.ReactNode }> = ({ children
     try {
       localStorage.removeItem(tokenKey);
     } catch (e) {
-      // ignore
+      console.error(e);
     }
-    // optionally reload or navigate away handled by callers
   };
 
-  // on mount, try to hydrate from existing token
   useEffect(() => {
     try {
       const token = localStorage.getItem(tokenKey);

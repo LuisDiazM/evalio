@@ -1,4 +1,6 @@
 import os
+import time
+from pathlib import Path
 from typing import Annotated
 
 from fastapi import APIRouter, HTTPException, UploadFile, status
@@ -23,31 +25,16 @@ async def create_exam(
     # Leer el contenido del archivo como bytes
     file_content = await file.read()
 
-    # Determinar si estamos en modo local o producción
-    environment = os.getenv("ENVIRONMENT", "local")
-
-    if environment == "local":
-        # Modo local: guardar archivo temporalmente
-        file_location = f"shared/{file.filename}"
-        with open(file_location, "wb") as buffer:
-            buffer.write(file_content)
-
-        request = {
-            "student_identification": student_id,
-            "template_id": template_response_id,
-            "group_id": group_id,
-            "student_name": student_name,
-            "exam_path": str(file_location),
-        }
-    else:
-        # Modo producción: enviar datos binarios directamente
-        request = {
-            "student_identification": student_id,
-            "template_id": template_response_id,
-            "group_id": group_id,
-            "student_name": student_name,
-            "exam_binary": file_content,
-        }
+    # Siempre usar storage (MinIO o GCP según STORAGE_PROVIDER)
+    # El usecase se encarga de subir el archivo
+    request = {
+        "student_identification": student_id,
+        "template_id": template_response_id,
+        "group_id": group_id,
+        "student_name": student_name,
+        "exam_binary": file_content,
+        "filename": file.filename or f"upload_{int(time.time())}",
+    }
 
     exam = await usecase.create_exam(request)
 

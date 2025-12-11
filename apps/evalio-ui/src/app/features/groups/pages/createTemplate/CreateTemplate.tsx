@@ -10,6 +10,7 @@ type Props = {
   group_id?: string;
   period?: string;
   subject_name?: string;
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   onCreated?: (data?: any) => void;
   onCancel?: () => void;
 };
