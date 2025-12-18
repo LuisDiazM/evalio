@@ -14,6 +14,7 @@ function loadEnvFiles() {
     join(repoRoot, '.env.local'),
     join(appDir, '.env'),
     join(appDir, '.env.local'),
+    join(appDir, '.env.prod'),
   ];
   const env = {};
   for (const file of envFiles) {
@@ -47,7 +48,7 @@ module.exports = {
   output: {
     path: join(__dirname, '../../dist/apps/evalio-ui'),
   },
- resolve: {
+  resolve: {
     alias: {
       '@': join(__dirname, 'src/app'),
     },

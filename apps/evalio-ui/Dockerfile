@@ -37,7 +37,7 @@ ENV CI=true
 
 # Build the app (production)
 # Build the app (production)
-RUN bunx nx build evalio-ui --configuration=development \
+RUN bunx nx build evalio-ui --configuration=production \
   && ls -R dist || true \
   && test -d dist/apps/evalio-ui
 

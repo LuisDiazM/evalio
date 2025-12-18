@@ -1,4 +1,5 @@
 import os
+from datetime import timedelta
 from io import BytesIO
 from typing import Optional
 
@@ -154,7 +155,6 @@ class MinIOStorageRepository(IStorageRepository):
         :return: Presigned URL or None if failed
         """
         try:
-            from datetime import timedelta
 
             url = self.client.presigned_get_object(
                 self.bucket_name,
