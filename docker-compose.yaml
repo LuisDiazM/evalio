@@ -1,24 +1,28 @@
 services:
 
-  # forward-auth:
-  #   build: forward-auth/.
-  #   image: forward-auth:v1
-  #   restart: always
-  #   volumes:
-  #     - ./forward-auth/public.pem:/app/public.pem:ro
-  #   labels:
-  #     - "traefik.enable=true"
-  #     - "traefik.http.routers.forward-auth.rule=Host(`evalio.click`)"
-  #     - "traefik.http.routers.forward-auth.entrypoints=web"
-  #     - "traefik.http.routers.forward-auth.service=forward-auth"
-  #     - "traefik.http.services.forward-auth.loadbalancer.server.port=1337"
-  #     - "traefik.http.routers.forward-auth.middlewares=forward-auth-cors"
-  #     - "traefik.http.middlewares.forward-auth-cors.headers.accesscontrolallowmethods=GET,OPTIONS,PUT,POST,DELETE,PATCH"
-  #     - "traefik.http.middlewares.forward-auth-cors.headers.accesscontrolallowheaders=Origin, Content-Type, Accept, Authorization, X-Requested-With, X-User-Id, X-User-Email"
-  #     - "traefik.http.middlewares.forward-auth-cors.headers.accesscontrolalloworiginlist=http://localhost:5173,http://evalio.click,https://evalio.click,http://localhost:5000"
-  #     - "traefik.http.middlewares.forward-auth-cors.headers.accesscontrolmaxage=100"
-  #     - "traefik.http.middlewares.forward-auth-cors.headers.addvaryheader=true"
-  #     - "traefik.http.middlewares.forward-auth-cors.headers.accesscontrolallowcredentials=true"
+  forward-auth:
+    build:
+      context: backend/forwardAuth
+      dockerfile: Dockerfile
+    image: forward-auth:v1
+    restart: always
+    env_file:
+      - backend/forwardAuth/.env.dev
+    volumes:
+      - ./configs/certs:/certs:ro
+    labels:
+      - "traefik.enable=true"
+      - "traefik.http.routers.forward-auth.rule=Host(`api.evalio.click`)"
+      - "traefik.http.routers.forward-auth.entrypoints=web"
+      - "traefik.http.routers.forward-auth.service=forward-auth"
+      - "traefik.http.services.forward-auth.loadbalancer.server.port=1337"
+      - "traefik.http.routers.forward-auth.middlewares=forward-auth-cors"
+      - "traefik.http.middlewares.forward-auth-cors.headers.accesscontrolallowmethods=GET,OPTIONS,PUT,POST,DELETE,PATCH"
+      - "traefik.http.middlewares.forward-auth-cors.headers.accesscontrolallowheaders=Origin, Content-Type, Accept, Authorization, X-Requested-With, X-User-Id, X-User-Email"
+      - "traefik.http.middlewares.forward-auth-cors.headers.accesscontrolalloworiginlist=http://localhost:5173,http://evalio.click,https://evalio.click,http://localhost:5000"
+      - "traefik.http.middlewares.forward-auth-cors.headers.accesscontrolmaxage=100"
+      - "traefik.http.middlewares.forward-auth-cors.headers.addvaryheader=true"
+      - "traefik.http.middlewares.forward-auth-cors.headers.accesscontrolallowcredentials=true"
 
   mongo:
     image: mongo:8.0
@@ -58,34 +62,35 @@ services:
       volumes:
         - ./volumes/minio-data:/data
 
-  # reverse-proxy:
-  #   # The official v3 Traefik docker image
-  #   image: traefik:v3.4
-  #   ports:
-  #     # The HTTP port
-  #     - "0.0.0.0:80:80"
-  #     # The Web UI (enabled by --api.insecure=true)
-  #     - "8080:8080"
-  #     - "0.0.0.0:443:443"  # Puerto para HTTPS
-  #   volumes:
-  #     # So that Traefik can listen to the Docker events
-  #     - /var/run/docker.sock:/var/run/docker.sock
-  #     - ./volumes/certs:/etc/traefik/certs:ro  # Monta los certificados
-  #     - ./traefik.yml:/etc/traefik/traefik.yml:ro
+  reverse-proxy:
+    image: traefik:v3.4
+    ports:
+      # The HTTP port
+      - "0.0.0.0:80:80"
+      # The Web UI (enabled by --api.insecure=true)
+      - "8080:8080"
+      - "0.0.0.0:443:443"  # Puerto para HTTPS
+    volumes:
+      # So that Traefik can listen to the Docker events
+      - /var/run/docker.sock:/var/run/docker.sock
+      - ./volumes/certs:/etc/traefik/certs:ro  # Monta los certificados
+      - ./traefik.yml:/etc/traefik/traefik.yml:ro
+
   # evalio-manager:
-  #   build: evalio-manager/.
+  #   build:
+  #     context: backend/admin
+  #     dockerfile: Dockerfile
   #   image: evalio-manager:v1
   #   labels:
   #     - "traefik.enable=true"
-  #     - "traefik.http.routers.evalio-manager.rule=Host(`evalio.click`) && PathPrefix(`/manager`)"
+  #     - "traefik.http.routers.evalio-manager.rule=Host(`api.evalio.click`) && PathPrefix(`/manager`)"
   #     - "traefik.http.routers.evalio-manager.entrypoints=web"
   #     - "traefik.http.routers.evalio-manager.service=evalio-manager"
-  #     - "traefik.http.services.evalio-manager.loadbalancer.server.port=5455"
+  #     - "traefik.http.services.evalio-manager.loadbalancer.server.port=8081"
   #     - "traefik.http.routers.evalio-manager.middlewares=forward-auth"
   #     - "traefik.http.middlewares.forward-auth.forwardauth.address=http://forward-auth:1337/auth"
   #     - "traefik.http.middlewares.forward-auth.forwardauth.trustForwardHeader=true"
   #     - "traefik.http.middlewares.forward-auth.forwardauth.authResponseHeaders=X-User-Id,X-User-Email"
-
   #     - "traefik.http.middlewares.testheader.headers.accesscontrolallowmethods=GET,OPTIONS,PUT,POST,DELETE,PATCH"
   #     - "traefik.http.middlewares.testheader.headers.accesscontrolallowheaders=*"
   #     - "traefik.http.middlewares.testheader.headers.accesscontrolalloworiginlist=*"
@@ -93,60 +98,57 @@ services:
   #     - "traefik.http.middlewares.testheader.headers.addvaryheader=true"
   #   restart: always
   #   env_file:
-  #     - evalio-manager/.env.dev
-  #   volumes:
-  #     - ./volumes/shared-data:/evalio-manager/shared
-  #     - ./volumes/service-accounts/evalio-backend.json:/evalio-manager/shared/evalio-backend.json
+  #     - backend/admin/admin/.env
 
 
 
-  # users-manager:
-  #   build: users-manager/.
-  #   image: users-manager:v1
-  #   restart: always
-  #   env_file:
-  #     - users-manager/.env.dev
-  #   labels:
-  #     - "traefik.enable=true"
-  #     - "traefik.http.routers.users-manager.rule=Host(`evalio.click`) && (PathPrefix(`/users-manager`) || PathPrefix(`/public`))"
-  #     - "traefik.http.routers.users-manager.entrypoints=web"
-  #     - "traefik.http.routers.users-manager.service=users-manager"
-  #     - "traefik.http.services.users-manager.loadbalancer.server.port=3000"
-  #     - "traefik.http.routers.users-manager.middlewares=forward-auth"
-  #     - "traefik.http.middlewares.forward-auth.forwardauth.address=http://forward-auth:1337/auth"
-  #     - "traefik.http.middlewares.forward-auth.forwardauth.trustForwardHeader=true"
-  #     - "traefik.http.middlewares.forward-auth.forwardauth.authResponseHeaders=X-User-Id,X-User-Email"
-  #     - "traefik.http.middlewares.testheader.headers.accesscontrolallowmethods=GET,OPTIONS,PUT,POST,DELETE,PATCH"
-  #     - "traefik.http.middlewares.testheader.headers.accesscontrolallowheaders=*"
-  #     - "traefik.http.middlewares.testheader.headers.accesscontrolalloworiginlist=*"
-  #     - "traefik.http.middlewares.testheader.headers.accesscontrolmaxage=100"
-  #     - "traefik.http.middlewares.testheader.headers.addvaryheader=true"
+  users-manager:
+    build:
+      context: backend/usersManager
+      dockerfile: Dockerfile
+    image: users-manager:v1
+    restart: always
+    env_file:
+      - backend/usersManager/.env.dev
+    labels:
+      - "traefik.enable=true"
+      - "traefik.http.routers.users-manager.rule=Host(`api.evalio.click`) && (PathPrefix(`/users-manager`) || PathPrefix(`/public`))"
+      - "traefik.http.routers.users-manager.entrypoints=web"
+      - "traefik.http.routers.users-manager.service=users-manager"
+      - "traefik.http.services.users-manager.loadbalancer.server.port=3000"
+      - "traefik.http.routers.users-manager.middlewares=forward-auth"
+      - "traefik.http.middlewares.forward-auth.forwardauth.address=http://forward-auth:1337/auth"
+      - "traefik.http.middlewares.forward-auth.forwardauth.trustForwardHeader=true"
+      - "traefik.http.middlewares.forward-auth.forwardauth.authResponseHeaders=X-User-Id,X-User-Email"
+      - "traefik.http.middlewares.testheader.headers.accesscontrolallowmethods=GET,OPTIONS,PUT,POST,DELETE,PATCH"
+      - "traefik.http.middlewares.testheader.headers.accesscontrolallowheaders=*"
+      - "traefik.http.middlewares.testheader.headers.accesscontrolalloworiginlist=*"
+      - "traefik.http.middlewares.testheader.headers.accesscontrolmaxage=100"
+      - "traefik.http.middlewares.testheader.headers.addvaryheader=true"
 
+    volumes:
+      - ./configs/certs:/certs:ro
 
   # evalio-analyzer:
-  #   build: cv-grader-analyzer/.
+  #   build:
+  #     context: backend/grader_analyzer
+  #     dockerfile: Dockerfile
   #   image: cv-grader-analyzer:v1
   #   restart: always
   #   env_file:
-  #     - cv-grader-analyzer/.env.dev
+  #     - backend/grader_analyzer/grader_analyzer/.env
   #   volumes:
   #     - ./volumes/shared-data:/grader-analyzer/shared
-  #     - ./volumes/service-accounts/evalio-backend.json:/grader-analyzer/shared/evalio-backend.json
 
   # evalio-front:
-  #   build: evalio-ui/.
+  #   build:
+  #     context: .
+  #     dockerfile: apps/evalio-ui/Dockerfile
   #   image: evalio-ui:v1
   #   restart: always
-  #   volumes:
-  #       - ./evalio-ui:/app
-  #   #   - ./evalio-ui/dist:/usr/share/nginx/html:ro
-  #   #   - ./evalio-ui/nginx.conf:/etc/nginx/nginx.conf:ro
   #   labels:
   #     - "traefik.enable=true"
-  #     - "traefik.http.routers.evalio-front.rule=Host(`evalio.click`)|| Host(`192.168.1.34`)"
-  #     - "traefik.http.routers.evalio-front.entrypoints=websecure"
-  #     - "traefik.http.routers.evalio-front.tls=true"  # Habilita TLS
-  #     - "traefik.http.services.evalio-front.loadbalancer.server.port=5173"
-  #     - "traefik.http.routers.evalio-front-http.middlewares=redirect-to-https"
-  #     - "traefik.http.middlewares.redirect-to-https.redirectscheme.scheme=https"
+  #     - "traefik.http.routers.evalio-front.rule=Host(`evalio.click`)"
+  #     - "traefik.http.routers.evalio-front.entrypoints=web"
+  #     - "traefik.http.services.evalio-front.loadbalancer.server.port=5000"
 
