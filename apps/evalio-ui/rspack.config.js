@@ -45,7 +45,7 @@ module.exports = {
     main: join(__dirname, 'src/main.tsx'),
   },
   output: {
-    path: join(__dirname, 'dist'),
+    path: join(__dirname, '../../dist/apps/evalio-ui'),
   },
  resolve: {
     alias: {
