@@ -1,0 +1,62 @@
+.container {
+  max-width: 980px;
+  margin: 0 auto;
+  padding: var(--space-lg);
+}
+
+.heading {
+  margin-bottom: var(--space-md);
+}
+
+.meta {
+  color: var(--muted);
+  margin-bottom: var(--space-md);
+}
+
+.studentsCard {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-md);
+  padding: var(--space-md);
+  box-shadow: var(--shadow-sm);
+}
+
+.studentsTable {
+  width: 100%;
+  border-collapse: collapse;
+}
+.studentsTable th, .studentsTable td { padding: 0.75rem 1rem; border-bottom: 1px solid var(--border); text-align: left; }
+.studentsTable thead th { color: var(--muted); }
+
+.empty { color: var(--muted); padding: 12px; }
+
+/* Two-column layout for detail + templates */
+.grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: var(--space-lg);
+  align-items: start;
+}
+
+.left {}
+.right {}
+
+.createBtnRow {
+  display: flex;
+  justify-content: flex-end;
+  margin-bottom: 8px;
+
+  button {
+    background: var(--accent);
+    color: white;
+    padding: 0.5rem 0.75rem;
+    border-radius: 10px;
+    cursor: pointer;
+  }
+}
+
+@media (max-width: 800px) {
+  .grid {
+    grid-template-columns: 1fr;
+  }
+}

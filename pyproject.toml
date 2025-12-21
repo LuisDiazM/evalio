@@ -1,0 +1,16 @@
+[project]
+name = "nx-workspace"
+version = "1.0.0"
+dependencies = [ "admin", "grader_analyzer" ]
+
+[tool.uv.workspace]
+members = [ "backend/admin", "backend/grader_analyzer" ]
+
+[tool.uv.sources.admin]
+workspace = true
+
+[tool.uv.sources.grader_analyzer]
+workspace = true
+
+[dependency-groups]
+dev = [ ]

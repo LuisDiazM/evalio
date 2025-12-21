@@ -1,0 +1,20 @@
+# Exclude large and local-only folders from Docker build context
+volumes/
+shared-data/
+shared/
+volumes/**
+node_modules
+**/node_modules
+dist
+**/dist
+.git
+.vscode
+.venv
+coverage
+__pycache__
+.nx
+
+# Optionally exclude logs, temporary files
+*.log
+*.sqlite
+*.env

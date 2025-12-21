@@ -1,6 +1,6 @@
-go 1.22.5
+go 1.23.11
 
 use (
-	./forward-auth
-	./users-manager
+	./backend/forwardAuth
+	./backend/usersManager
 )

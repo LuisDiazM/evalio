@@ -1,0 +1,4 @@
+volumes/
+cv-grader-analyzer/outputs/
+backend/admin/temp/
+.nx/

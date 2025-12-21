@@ -8,7 +8,9 @@ providers:
     exposedByDefault: false
 api:
   insecure: true
-tls:
-  certificates:
-    - certFile: /etc/traefik/certs/traefik.crt
-      keyFile: /etc/traefik/certs/traefik.key
+# tls:
+#   certificates:
+#     # - certFile: /etc/traefik/certs/traefik.crt
+#     #   keyFile: /etc/traefik/certs/traefik.key
+#     - certFile: /etc/traefik/certs/evalio.click.crt
+#       keyFile: /etc/traefik/certs/evalio.click.key
