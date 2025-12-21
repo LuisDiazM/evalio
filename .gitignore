@@ -43,3 +43,10 @@ Thumbs.db
 *.pdf
 
 volumes/*
+*.tfstate
+*.terraform
+.terraform.lock.hcl
+terraform.tfstate.backup
+terraform.tfvars
+terraform/modules/cloud_run/certs/public.pem
+terraform/modules/cloud_run/certs/private.pem
