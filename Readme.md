@@ -92,8 +92,7 @@ Evalio se compone de los siguientes recursos de infraestructura en Google Cloud 
 - 1 CDN para manejo de caché para distribuir contenido
 - 1 DNS cloud para agregar las rutas hacia el load balancer y el backend para el reverse proxy
 
-La infraestructura completa del proyecto se encuentra definia como IaC usando terraform y se puede observar en el siguiente repositorio https://github.com/LuisDiazM/evalio-infrastructure
-
+La infraestructura completa del proyecto se encuentra definia como IaC dentro de la carpeta llamada terraform
 **NOTA** por temas de costos en esta configuración, se decidió compartir la máquina de NATS y mongoDB en una sóla.
 
 ### 3.4. Vista de desarrollo
@@ -142,6 +141,7 @@ El proceso usa CI mediante pipelines de github actions que se encargan de genera
 Para entender el proceso de despligue se tiene el siguiente diagrama donde se separa el CI que aplica directamente hacia este repositorio llamado evalio y su función es generar las imágenes de los contenedores. Para la etapa de CD se tiene un repositorio aparte de toda la infraestructura en terraform donde se actualizan los tags de las imágenes generadas por el artifact registry para que con terraform se apliquen los cambios y por ende el despliegue.
 
 ![diagram](/docs/despliegue.png)
+Al final la estrategia completa no se implementó porque se quería dejar todo en un solo lugar, es decir, el CD no se hizo automático sino subiendo las imágenes directamente al artifact registry con docker push y modificando en terraform la versión para desplegar con terraform apply.
 
 En GCP se creó una cuenta de servicio para que sea manejada únicamente para administrar el artifact registry (almacenamiento de contenedores) y la conexión con github actions se utilizó Workload Identity Federation (WIF), esta es una característica que ofrece ventajas respecto a métodos tradicionales como generar las claves de la cuenta de servicio y almacenarlas en secretos dentro del proyecto ya que estas claves de la manera tradicional son de larga duración, con WIF se emiten claves de corta duración (1 hora defecto) con la cuenta de servicio. El siguiente articulo explica la conexión de WIF con github https://cloud.google.com/blog/products/identity-security/enabling-keyless-authentication-from-github-actions
 
@@ -225,8 +225,6 @@ A continuación se muestran los pasos seguidos para lograr la conexión WIF y gi
     - Valor: La región de tu Artifact Registry.
     - Ejemplo: us-central1
 
-Adicionalmente el pipeline de despliegue cambiará los certificados ya que estos se proveen en el
-repositorio para temas de correr en local, pero para correr en cloud es importante tener otros certificados
 
 ### 3.6. Vista de datos
 
@@ -338,138 +336,3 @@ Los logs no se tiene estrategia de estandard implementada, pero como temas pract
 - El proyecto es más una práctica basado en una pasión personal y se llevó al punto de hacerlo lo más parecido a un producto completo que cubriera el ciclo de vida de desarrollo del software.
 
 - También se quiere explorar el uso de LLMs para tareas de clasificación y probar su eficacia costo/beneficio, esto podrá expandir los tipos de respuestas ya que actualmente sólo está limitado a 4 opciones de respuesta A,B,C o D.
-
-## 10. Roadmap de Evolución
-
-### 10.1. Características
-
-## 11. Correr localmente
-
-Debido a que el objetivo principal es poder usar la cámara del navegador
-
-Como requisito debería tener docker instalado, también una herramienta
-para autofirmar certificados SSL (para correr el sistema en una red interna)
-
-Generar el certificado para su dirección IP o si puede exponer un servidor dns dentro de la red interna donde va "\<IP>" reemplaza el valor
-
-```bash
-openssl req -x509 -newkey rsa:4096 -keyout traefik.key -out traefik.crt -days 365 -nodes -subj "/CN=<IP>"
-```
-
-Clone the project
-
-```bash
-  git clone https://link-to-project
-```
-
-Go to the project directory
-
-```bash
-  cd my-project
-```
-
-Install dependencies
-
-```bash
-  npm install
-```
-
-Start the server
-
-```bash
-  npm run start
-```
-
-## Anexos
-
-### Definición de tareas
-
-✅ Definir requisitos del sistema que se convertirán en casos de uso
-
-✅ Definir los procesos que tiene el sistema
-
-✅ Diseñar la solución como vista lógica de componentes
-
-✅ Diseñar los modelos de datos de la solución
-
-✅ Crear el boilerplate de los componentes de la vista lógica
-
-1. ✅ Trabajar el servicio princial de manera jerarquica a nivel de dominios y exponer APIS
-
-   ✅ grupos
-
-   ✅ plantillas de hojas de respuestas
-
-   ✅ examenes de los estudiantes
-
-   ✅ generador de resumenes de calificaciones
-
-2. ✅ Trabajar en el servicio que se encarga de analizar imágenes por OMR
-   estudiar la teoría, pipeline para procesar imagenes y definición y ajuste del proceso
-
-3. ✅ Comunicar el servicio general con el que analiza imágenes
-
-4. ✅ Diseñar como sería la experiencia de usuario con base a los procesos definidos
-5. ✅ Trabajar en el front Diseñando su interfaz con mocks de datos
-6. ✅ Conectar el front con el backend
-
-✅ Crear los contenedores de los servicios
-
-✅ Administrar los contenedores mediante un docker compose de manera local
-
-✅ compartir el volumen entre los ms para gestionar examenes subidos
-
-✅ agregar traefik como reverse proxy
-
-✅ agregar traefik con ssl autofirmado red local
-
-✅ agregar docker del front (por temas de pruebas)
-
-✅ capturar fotos desde la app corriendo por contenedores
-
-✅ empezar a ajustar el grader analyzer con las fotos reales
-
-✅ Crear el servicio de administración de usuarios golang fiber, CRUD completo incluido login, registro (rutas públicas) duración finita de suscripción
-
-✅ Crear el servicio de forwardAuth para validar los token de acceso
-
-✅ Integrar servicio usuarios y forwardAuth con traefik
-
-✅ Agregar login y registro de usuario interactuando el back y el front
-
-✅ implementar storage GCP dentro del código y firmar urls
-
-✅ Diseñar la infraestructura en el cloud seleccionado GCP
-
-✅ En el front mostrar la evaluación detectada por el sistema
-
-✅ Crear el pipeline en github actions
-
-✅ Definir el artifact registry para las imagenes en terraform
-
-- Definir la infraestructura como código usando terraform parte por parte
-
-- Ajustar infraestructura y probar APP
-- Definir como monitorear el sistema que herramientas se usarán
-- Unificar logs
-
-Mejoras para el sistema:
-
-- Hay estudiantes que se retiran, al generar parciales esas hojas se pierden
-- En la lista de parciales mostrar información del grupo
-- En las hojas que se imprimen de respuestas colocar el nombre del grupo
-- Agregar navegación hacia atrás y mejorar estilos
-
-### Videos del sistema
-
-## Para IaC
-
-- Tener un proyecto de GCP
-- Hacer login con `gcloud auth login`
-
-Para subir las imagenes al repositorio de artifact registry de manera manual
-se deben crear las imagenes de los containers, puede consultar cada docker file para hacer el build
-
-docker login
-
-docker tag <image_name> us-central1-docker.pkg.dev/<PROJECT_ID>/evalio-containers/<ms_name>

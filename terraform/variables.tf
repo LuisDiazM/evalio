@@ -30,7 +30,7 @@ variable "db_password" {
 variable "allowed_ip_ranges" {
   description = "IP ranges allowed to connect to the runner services"
   type        = list(string)
-  default     = ["0.0.0.0/0"]
+  default     = ["10.0.1.0/24","10.8.0.0/28"]
 }
 
 variable "bucket_name" {
