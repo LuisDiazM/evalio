@@ -13,6 +13,7 @@ output "database_internal_ip" {
   value       = module.compute_broker_db.internal_ip
 }
 
+
 output "forward_auth_url" {
   description = "The URL of the forward-auth service"
   value       = module.cloud_run.forward_auth_url

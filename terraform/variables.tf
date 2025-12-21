@@ -55,3 +55,9 @@ variable "manager_version" {
   type        = string
   default     = "latest"
 }
+
+variable "grader_analyzer_version" {
+  description = "The version tag for grader_analyzer image"
+  type        = string
+  default     = "latest"
+}

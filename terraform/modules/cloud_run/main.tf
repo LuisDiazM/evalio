@@ -82,7 +82,7 @@ resource "google_cloud_run_v2_service" "forward_auth" {
       min_instance_count = 0
       max_instance_count = 15
     }
-    
+
     volumes {
       name = "public-key"
       secret {
@@ -114,7 +114,7 @@ resource "google_cloud_run_v2_service" "forward_auth" {
       }
     }
   }
-  
+
   depends_on = [google_secret_manager_secret_iam_member.forward_auth_public_key_accessor]
 }
 
@@ -170,7 +170,7 @@ resource "google_cloud_run_v2_service" "users" {
           memory = "512Mi"
         }
       }
-      
+
       volume_mounts {
         name       = "public-key"
         mount_path = "/etc/secrets/public-key"
@@ -311,7 +311,7 @@ resource "google_cloud_run_v2_service" "manager" {
           memory = "512Mi"
         }
       }
-      
+
       volume_mounts {
         name       = "gcp-key"
         mount_path = "/etc/gcp"
@@ -331,7 +331,7 @@ resource "google_cloud_run_v2_service" "manager" {
       }
       env {
         name  = "STORAGE_PROVIDER"
-        value = "cloud"
+        value = "gcp"
       }
       env {
         name  = "GCP_BUCKET_NAME"

@@ -1,7 +1,7 @@
 terraform {
   required_providers {
     google = {
-      source = "hashicorp/google"
+      source  = "hashicorp/google"
       version = "7.11.0"
     }
   }
@@ -57,6 +57,12 @@ resource "google_project_service" "deploymentmanager" {
   disable_dependent_services = true
 }
 
+locals {
+  docker_images = {
+    grader_analyzer = "${var.region}-docker.pkg.dev/${var.project_id}/evalio-containers/grader_analyzer:${var.grader_analyzer_version}"
+  }
+}
+
 module "storage" {
   source      = "./modules/storage"
   bucket_name = var.bucket_name
@@ -102,5 +108,19 @@ module "cloud_run" {
   forward_auth_version = var.forward_auth_version
   users_version        = var.users_version
   manager_version      = var.manager_version
+}
+
+module "compute_grader" {
+  source                  = "./modules/compute_grader"
+  project_id              = var.project_id
+  zone                    = var.zone
+  db_user                 = var.db_user
+  db_password             = var.db_password
+  bucket_name             = var.bucket_name
+  subnetwork_name         = module.vpc.subnet_name
+  db_internal_ip          = module.compute_broker_db.internal_ip
+  region                  = var.region
+  grader_analyzer_version = var.grader_analyzer_version
+  docker_image            = local.docker_images.grader_analyzer
 }
 

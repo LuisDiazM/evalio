@@ -684,6 +684,7 @@ name = "grader-analyzer"
 version = "1.0.0"
 source = { editable = "backend/grader_analyzer" }
 dependencies = [
+    { name = "google-cloud-storage" },
     { name = "minio" },
     { name = "nats-py" },
     { name = "opencv-python" },
@@ -691,6 +692,7 @@ dependencies = [
     { name = "pydantic" },
     { name = "pymongo" },
     { name = "python-dotenv" },
+    { name = "pytz" },
 ]
 
 [package.optional-dependencies]
@@ -707,6 +709,7 @@ dev = [
 
 [package.metadata]
 requires-dist = [
+    { name = "google-cloud-storage", specifier = "==2.14.0" },
     { name = "minio", specifier = ">=7.2.20" },
     { name = "nats-py", specifier = "==2.10.0" },
     { name = "opencv-python", specifier = "==4.11.0.86" },
@@ -715,6 +718,7 @@ requires-dist = [
     { name = "pymongo", specifier = "==4.15.5" },
     { name = "pytest", marker = "extra == 'dev'", specifier = ">=7.0" },
     { name = "python-dotenv", specifier = ">=1.2.1" },
+    { name = "pytz", specifier = ">=2025.2" },
     { name = "ruff", marker = "extra == 'dev'", specifier = ">=0.13.0" },
 ]
 provides-extras = ["dev"]

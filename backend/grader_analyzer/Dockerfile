@@ -5,7 +5,9 @@ FROM python:3.12-slim
 # - run as non-root user
 
 ENV PYTHONUNBUFFERED=1 \
-    PYTHONDONTWRITEBYTECODE=1
+    PYTHONDONTWRITEBYTECODE=1 \
+    UV_RUN_NO_SYNC=1 \
+    UV_COMPILE_BYTECODE=1
 
 WORKDIR /app
 
@@ -37,7 +39,7 @@ RUN pip install --upgrade pip hatchling \
 COPY . /app
 
 # Install the package (this will install dependencies declared in pyproject.toml)
-RUN uv sync
+RUN uv sync --no-dev
 
 # Ensure app files are owned by non-root user
 RUN chown -R appuser:appgroup /app
@@ -45,7 +47,7 @@ RUN chown -R appuser:appgroup /app
 USER appuser
 
 # Use `uv` to run the app (assumes `uv` is declared in pyproject dependencies)
-CMD ["uv", "run", "grader_analyzer/main.py"]
+CMD ["uv", "run", "--no-sync", "grader_analyzer/main.py"]
 
 ## Notes:
 # docker build -f backend/grader_analyzer/Dockerfile -t grader-analyzer:latest backend/grader_analyzer

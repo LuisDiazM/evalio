@@ -90,7 +90,7 @@ func main() {
 	app := fiber.New()
 	app.Use(logger.New())
 	app.Use(cors.New(cors.Config{
-		AllowOrigins:     "http://localhost:5000,https://evalio.click,http://evalio.click",
+		AllowOrigins:     "http://localhost:5000,https://evalio.click,http://evalio.click,https://evalio-firebase.web.app",
 		AllowMethods:     "GET,POST,HEAD,PUT,DELETE,PATCH,OPTIONS",
 		AllowHeaders:     "Origin, Content-Type, Accept, Authorization, X-Requested-With, X-User-Id, X-User-Email",
 		ExposeHeaders:    "Content-Length, X-User-Id, X-User-Email",
