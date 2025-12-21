@@ -21,6 +21,42 @@ resource "google_project_service" "iam_credentials" {
   disable_dependent_services = true
 }
 
+resource "google_project_service" "compute" {
+  project                    = var.project_id
+  service                    = "compute.googleapis.com"
+  disable_dependent_services = true
+}
+
+resource "google_project_service" "vpcaccess" {
+  project                    = var.project_id
+  service                    = "vpcaccess.googleapis.com"
+  disable_dependent_services = true
+}
+
+resource "google_project_service" "run" {
+  project                    = var.project_id
+  service                    = "run.googleapis.com"
+  disable_dependent_services = true
+}
+
+resource "google_project_service" "artifactregistry" {
+  project                    = var.project_id
+  service                    = "artifactregistry.googleapis.com"
+  disable_dependent_services = true
+}
+
+resource "google_project_service" "secretmanager" {
+  project                    = var.project_id
+  service                    = "secretmanager.googleapis.com"
+  disable_dependent_services = true
+}
+
+resource "google_project_service" "deploymentmanager" {
+  project                    = var.project_id
+  service                    = "deploymentmanager.googleapis.com"
+  disable_dependent_services = true
+}
+
 module "storage" {
   source      = "./modules/storage"
   bucket_name = var.bucket_name
