@@ -123,6 +123,14 @@ async def ensure_stream(js):
 
 async def main():
     load_dotenv(override=False)
+
+    # Sanitize GOOGLE_APPLICATION_CREDENTIALS if it points to a non-existent file
+    # This prevents local paths from leaking into the container or empty strings from breaking the auth lib
+    creds_path = os.getenv("GOOGLE_APPLICATION_CREDENTIALS")
+    if creds_path and not os.path.exists(creds_path):
+        logger.warning(f"Removing invalid GOOGLE_APPLICATION_CREDENTIALS path: {creds_path}")
+        del os.environ["GOOGLE_APPLICATION_CREDENTIALS"]
+
     nc = NATS()
     host = os.getenv("NATS_URL", "")
     if host == "":

@@ -43,7 +43,6 @@ RUN uv sync --no-dev
 
 # Ensure app files are owned by non-root user
 RUN chown -R appuser:appgroup /app
-
 USER appuser
 
 # Use `uv` to run the app (assumes `uv` is declared in pyproject dependencies)

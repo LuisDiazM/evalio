@@ -20,7 +20,7 @@ class MinIOStorageRepository(IStorageRepository):
         endpoint = os.getenv("MINIO_ENDPOINT", "localhost:9000")
         access_key = os.getenv("MINIO_ACCESS_KEY", "minioadmin")
         secret_key = os.getenv("MINIO_SECRET_KEY", "minioadmin")
-        self.bucket_name = os.getenv("MINIO_BUCKET_NAME", "evalio-multimedia")
+        self.bucket_name = os.getenv("MINIO_BUCKET_NAME", "evalio-bucket")
         secure = os.getenv("MINIO_SECURE", "false").lower() == "true"
 
         self.client = Minio(

@@ -17,3 +17,4 @@ __pycache__
 # Optionally exclude logs, temporary files
 *.log
 *.sqlite
+*.env

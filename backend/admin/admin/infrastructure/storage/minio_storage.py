@@ -23,7 +23,7 @@ class MinIOStorageRepository(IStorageRepository):
         endpoint = os.getenv("MINIO_ENDPOINT")
         access_key = os.getenv("MINIO_ACCESS_KEY")
         secret_key = os.getenv("MINIO_SECRET_KEY")
-        self.bucket_name = os.getenv("MINIO_BUCKET_NAME", "evalio-multimedia")
+        self.bucket_name = os.getenv("MINIO_BUCKET_NAME", "evalio-bucket")
         secure = os.getenv("MINIO_SECURE", "false").lower() == "true"
         if endpoint is None or access_key is None or secret_key is None:
             raise ValueError("MinIO configuration environment variables are not set")

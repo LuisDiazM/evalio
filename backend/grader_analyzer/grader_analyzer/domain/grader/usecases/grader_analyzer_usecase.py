@@ -102,9 +102,9 @@ class GraderAnalyzerUsecase(IGraderAnalyzerUseCase):
         try:
             # Get bucket name from environment
             if os.getenv("STORAGE_PROVIDER", "gcp").lower() == "minio":
-                bucket = os.getenv("MINIO_BUCKET_NAME", "evalio-multimedia")
+                bucket = os.getenv("MINIO_BUCKET_NAME", "evalio-bucket")
             else:
-                bucket = os.getenv("GCP_BUCKET_NAME", "evalio-multimedia-pdn")
+                bucket = os.getenv("GCP_BUCKET_NAME", "evalio-bucket")
 
             # Extract filename from path
             filename = os.path.basename(path)
@@ -149,7 +149,7 @@ class GraderAnalyzerUsecase(IGraderAnalyzerUseCase):
         """
         # Get bucket name from environment
         bucket = os.getenv("MINIO_BUCKET_NAME") or os.getenv(
-            "GCP_BUCKET_NAME", "evalio-multimedia-pdn"
+            "GCP_BUCKET_NAME", "evalio-bucket"
         )
 
         # Generate blob name for visualization in storage

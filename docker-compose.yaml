@@ -140,22 +140,22 @@ services:
     volumes:
       - ./configs/certs:/certs:ro
 
-  evalio-analyzer:
-    network_mode: host
-    build:
-      context: backend/grader_analyzer
-      dockerfile: Dockerfile
-    image: cv-grader-analyzer:v1
-    restart: always
-    env_file:
-      - backend/grader_analyzer/grader_analyzer/.env.dev
+  # evalio-analyzer:
+  #   network_mode: host
+  #   build:
+  #     context: backend/grader_analyzer
+  #     dockerfile: Dockerfile
+  #   image: cv-grader-analyzer:v1
+  #   restart: always
+  #   env_file:
+  #     - backend/grader_analyzer/grader_analyzer/.env.dev
 
 
-  evalio-front:
-    build:
-      context: .
-      dockerfile: apps/evalio-ui/Dockerfile
-    image: evalio-ui:v1
-    restart: always
-    ports:
-      - "5000:5000"
+  # evalio-front:
+  #   build:
+  #     context: .
+  #     dockerfile: apps/evalio-ui/Dockerfile
+  #   image: evalio-ui:v1
+  #   restart: always
+  #   ports:
+  #     - "5000:5000"
